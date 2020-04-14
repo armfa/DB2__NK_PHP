@@ -17,34 +17,34 @@
 
 class Kurs extends Dbh {
 
-    public function getKurses(){
+    protected function getKurses(){
         $sql = "SELECT * FROM Kurs";
         $stmt = $this->connect()->query($sql);
         $kurses = $stmt->fetch();
         return $kurses;
     }
 
-    public function getKuresfromBenutzerStmt($benutzer){
+    protected function getKuresfromBenutzerStmt($benutzer){
         $sql = "SELECT k.* FROM kurs k,freischalten f, fragebogen fr, benutzer b WHERE k.Kursname = f.Kursname AND f.Kuerzel = fr.Kuerzel AND fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$benutzer]);
-        $student = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $student;
+        $kursname = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $kursname;
     }
 
-    public function setKursStmt($Kursname){
+    protected function setKursStmt($Kursname){
         $sql = "INSERT INTO kurs (Kursname) VALUES (?)";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$Kursname]);
     }
 
-    public function deleteKursStmt($Kursname){
+    protected function deleteKursStmt($Kursname){
         $sql = "DELETE FROM kurs WHERE Kursname = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$Kursname]);
     }
 
-    public function getStudentenVonKursStmt($Kursname){
+    protected function getStudentenVonKursStmt($Kursname){
         $sql = "SELECT * FROM student WHERE Kursname = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$Kursname]);
@@ -52,13 +52,13 @@ class Kurs extends Dbh {
         return $student;
     }
 
-    public function setStudentStmt($Matrikelnummer, $Studentenname, $Kursname){
+    protected function setStudentStmt($Matrikelnummer, $Studentenname, $Kursname){
         $sql = "INSERT INTO student (Matrikelnummer, Studentenname, Kursname) VALUES (?, ?, ?)";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$Matrikelnummer, $Studentenname, $Kursname, ]);
     }
 
-    public function deleteStudentStmt($Matrikelnummer){
+    protected function deleteStudentStmt($Matrikelnummer){
         $sql = "DELETE FROM student WHERE Matrikelnummer = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$Matrikelnummer]);
