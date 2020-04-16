@@ -10,10 +10,11 @@
 include_once 'classes/exceptionMessage.php';
 include_once 'error.php';
 
+
 class Dbh
 {
   private $host = "localhost";
-  private $user = "root";
+  private $user = "roo";
   private $pwd = "";
   private $dbName = "o8egavzh9f";
 
