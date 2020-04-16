@@ -1,4 +1,5 @@
 <?php
+//Fabrice Armbruster
 
 class kursController extends kurs{
 
@@ -20,8 +21,4 @@ class kursController extends kurs{
     {
         return $this->checkIfKursExists($matrikelnummer);
     }
-
-
-
-
 }

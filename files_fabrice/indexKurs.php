@@ -1,4 +1,6 @@
 <?php
+//Fabrice Armbruster
+
 include_once 'classes/dbh.class.php';
 include_once 'classes/kurs.class.php';
 include_once 'classes/kursController.php';
@@ -103,11 +105,9 @@ if (isset($_POST['studentAnlegen'])) {
 //Kurs
 if (!isset($_GET['k'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-    exit();
 } else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
     $kurserstellen = $_GET['k'];
-    echo $kurserstellen;
     //Then we check if the GET value is equal to a specific string
     if ($kurserstellen == "empty") {
         //If it is we create an error or success message!
@@ -128,7 +128,6 @@ if (!isset($_GET['k'])) {
 //Student
 if (!isset($_GET['s'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-    exit();
 } else{
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
     $studentstellen = $_GET['s'];

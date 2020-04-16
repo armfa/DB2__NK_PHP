@@ -1,4 +1,5 @@
 <?php
+
   include_once 'includes/class-autoload.inc.php';
   include_once 'classes/dbh.class.php';
   include_once 'classes/kurs.class.php';
