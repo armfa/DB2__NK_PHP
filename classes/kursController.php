@@ -1,4 +1,5 @@
 <?php
+//Fabrice Armbruster
 
 class kursController extends kurs{
 
@@ -11,5 +12,13 @@ class kursController extends kurs{
         $this->setStudentStmt($matrikelnummer, $studentenname, $kursname);
     }
 
+    public function checkStudent($matrikelnummer)
+    {
+        return $this->checkIfStudentExists($matrikelnummer);
+    }
 
+    public function checkKurs($matrikelnummer)
+    {
+        return $this->checkIfKursExists($matrikelnummer);
+    }
 }
