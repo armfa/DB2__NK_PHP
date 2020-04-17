@@ -20,9 +20,10 @@
        <a href="indexKurs.php">Kurs anlegen</a>
     </div>
     <div>
-        <a href="indexLogin.php">Kurs anlegen</a>
+          <a href="indexLogin.php">Login</a>
     </div>
     <div>
+        <a href="indexErgebnis.php">Ergebnis</a>
     </div>
   
 </body>
