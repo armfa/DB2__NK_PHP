@@ -12,7 +12,7 @@ class Dbh {
   private $host = "localhost";
   private $user = "root";
   private $pwd = "";
-  private $dbName = "dhbw";
+  private $dbName = "o8egavzh9f";
 
   protected function connect() {
     $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;

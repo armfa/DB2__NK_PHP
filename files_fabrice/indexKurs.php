@@ -47,7 +47,7 @@ if(isset($_POST['studentAnlegen'])){
                 //Dropdownauswahl des Kurses
                 //ToDo: aktueller Benuttzer Übergeben     
                 $benutzerObject = new KursView();
-                $benutzerObject->showKursesfromBenutzer('user1');
+                $benutzerObject->showKursesfromBenutzer('Benutzer2');
             ?>
         </select></br>
         <input type="text" name="matrikelnummer" placeholder="Matrikelnummer" maxlength="7"></br>
