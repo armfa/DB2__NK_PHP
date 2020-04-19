@@ -15,7 +15,7 @@ $befragungsobjekt = new BefragungView();
 
 if ((isset($_POST['naechsteFrage']) == false) && (isset($_POST['vorherigeFrage']) == false)) {
     $_SESSION["aktuelleSeite"] = 1;
-    $_SESSION["anzahlSeiten"] = 1 + $befragungsobjekt->showAnzahlFragenFragebogenStmt("1")[0];
+    $_SESSION["anzahlSeiten"] = 1 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"] )[0];
 }
 if (isset($_POST['naechsteFrage'])) {
     $_SESSION["aktuelleSeite"]++;
@@ -27,7 +27,9 @@ if (isset($_POST['fragebogen'])) {
     $_SESSION["kuerzel"] = $_POST['fragebogen'];
 }
 
-$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt("1");        //ToDo-> Fragebogenkürzel aus auswahl übergeben. 
+
+
+$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);        //ToDo-> Fragebogenkürzel aus auswahl übergeben. 
 ?>
 
 <html>
@@ -40,21 +42,21 @@ $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt("1");        //ToDo-> Fra
         print_r($_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["InhaltFrage"]);
     } else
         echo "<p>Wir freuen uns auf Ihren Kommentar!</p></br>
-    <textarea id='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'>
+    <textarea name='kommentar' id='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'>
     </textarea>"
     ?>
     <form action="" method="post">
         <?php if ($_SESSION["aktuelleSeite"] !=  $_SESSION["anzahlSeiten"])
             echo '<fieldset>
-    <input type="radio" id="1" name="Antwort" value="1">
+    <input type="radio" id="1" name="Antwort1" value="1">
     <label for="1"> sehr gut</label> 
-    <input type="radio" id="2" name="Antwort" value="2">
+    <input type="radio" id="2" name="Antwort2" value="2">
     <label for="2"> eher gut</label>
-    <input type="radio" id="3" name="Antwort" value="3">
+    <input type="radio" id="3" name="Antwort3" value="3">
     <label for="3"> ausgeglichen</label> 
-    <input type="radio" id="4" name="Antwort" value="4">
+    <input type="radio" id="4" name="Antwort4" value="4">
     <label for="4"> eher schlecht</label> 
-    <input type="radio" id="5" name="Antwort" value="5">
+    <input type="radio" id="5" name="Antwort5" value="5">
     <label for="5"> sehr schlecht</label> 
   </fieldset>';
 

@@ -13,13 +13,6 @@ include_once 'classes/befragungView.php';
 
 <body>
     <h1>Welche Umfrage möchten Sie starten?</h1>
-<?php
-    $bContr = new BefragungView();
-    
-
-
-
-?>
 
 <form action="indexBefragung.php" method="post">
         <label>Kurs</label>
@@ -28,7 +21,7 @@ include_once 'classes/befragungView.php';
             //Dropdownauswahl des Fragebogens, welcher für diesen Student freigeschalten ist. 
             //ToDo: aktueller Benutzer Übergeben     
             $bContr = new BefragungView();
-            $bContr->showFragebogenfromBenutzer('Benutzer2');
+            $bContr->showFragebogenfromBenutzer('Benutzer2'); //ToDo: benutzer einbinden
             ?>
         </select></br>
         <button type="submit" name="umfrageStarten">Umfrage starten</button>
