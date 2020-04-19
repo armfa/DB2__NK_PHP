@@ -1,0 +1,145 @@
+<?php
+//Isabelle Scheffler
+//14.04.2020
+
+    //ToDo: Error Handling is missing 
+
+
+class Fragebogen extends Dbh {
+
+    protected function getFragebogen(){
+        try{
+            $sql = "SELECT * FROM fragebogen";
+            $stmt = $this->connect()->query($sql);
+            $stmt->execute([$titelFragebogen]);
+            $fragebogen = $stmt->fetch;
+            return $fragebogen;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function checkObFragebogenExistiert($titelFragebogen)
+    {
+        try {
+            $sql = "SELECT * from fragebogen Where Titel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$titelFragebogen]);
+            $fragebogen = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $fragebogen;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function getInhaltFrage($inhaltFrage){
+        try{
+            $sql = "SELECT InhaltFrage FROM frage where Titel = ?";
+            $stmt = $this->connect()->query($sql);
+            $frage = $stmt->fetch();
+            return $frage;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function getKuerzelVonFrage($inhaltFrage){
+        try{
+            $sql = "SELECT Kuerzel FROM frage where InhaltFrage = ?";
+            $stmt = $this->connect()->query($sql);
+            $kuerzel = $stmt->fetch();
+            return $kuerzel;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function getFragebogenVonBenutzerStmt($benutzer){
+        try{
+            $sql = "SELECT fr.* FROM fragebogen fr, benutzer b WHERE fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$benutzer]);
+            $fragebogen = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $fragebogen;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function setFragebogenStmt($fragebogen, $benutzername){
+        try{
+            $sql = "INSERT INTO fragebogen (Titel, Benutzername) VALUES (?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$fragebogen, $benutzername]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function deleteFragebogenStmt($fragebogen){
+        try{
+            $sql = "DELETE FROM fragebogen WHERE Titel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$fragebogen]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }        
+    }
+
+    protected function getFragenVonFragebogenStmt($fragebogen){
+        try{
+            $sql = "SELECT * FROM fragen WHERE Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$fragebogen]);
+            $fragen = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $fragen;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function checkObFrageExistiert($inhaltFrage){
+        {
+            try {
+                $sql = "SELECT * from fragen Where InhaltFrage = ?";
+                $stmt = $this->connect()->prepare($sql);
+                $stmt->execute([$inhaltFrage]);
+                $frage = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $frage;
+            } catch (PDOException $e) {
+                $exceptionMessage = new exceptionMessage();
+                $exceptionMessage->displayException($e);
+            }
+        }
+    }
+
+    protected function setFrageStmt($inhaltFrage, $kuerzel){
+        try{
+            $sql = "INSERT INTO fragen (InhaltFrage, Kuerzel) VALUES (?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$inhaltFrage, $Kuerzel]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function deleteFrageStmt($fragenummer){
+        try{
+            $sql = "DELETE FROM fragen WHERE Fragenummer = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$fragenummer]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+}
