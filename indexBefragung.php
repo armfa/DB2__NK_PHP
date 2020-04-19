@@ -23,6 +23,9 @@ if (isset($_POST['naechsteFrage'])) {
 if (isset($_POST['vorherigeFrage'])) {
     $_SESSION["aktuelleSeite"]--;
 }
+if (isset($_POST['fragebogen'])) {
+    $_SESSION["kuerzel"] = $_POST['fragebogen'];
+}
 
 $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt("1");        //ToDo-> Fragebogenkürzel aus auswahl übergeben. 
 ?>
@@ -30,7 +33,7 @@ $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt("1");        //ToDo-> Fra
 <html>
 
 <body>
-    <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt("1")['Titel']; ?></h1>
+    <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt( $_SESSION["kuerzel"])['Titel']; ?></h1>
     <?php
     //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
     if ($_SESSION["aktuelleSeite"] < $_SESSION["anzahlSeiten"]) {
@@ -54,7 +57,6 @@ $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt("1");        //ToDo-> Fra
     <input type="radio" id="5" name="Antwort" value="5">
     <label for="5"> sehr schlecht</label> 
   </fieldset>';
-
 
         //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
         echo "Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"];

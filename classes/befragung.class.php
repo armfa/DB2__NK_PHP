@@ -2,7 +2,20 @@
 
 class Befragung extends Dbh{
 
-    public function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
+    protected function getFragebogenfromBenutzer($benutzer){
+        try {
+            $sql = "SELECT * FROM fragebogen"; //ToDo: Nur für benutzer freigfeschaltete Fragebögen
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$benutzer]);
+            $Frageboegen = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $Frageboegen;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
             try {
                 $sql = "SELECT COUNT(Kuerzel) FROM fragen WHERE Kuerzel = ?";
                 $stmt = $this->connect()->prepare($sql);
@@ -55,6 +68,8 @@ class Befragung extends Dbh{
     protected function getFrageAntwortStmt($Fragebogenkuerzel, $Fragenummer, $Student){
 
     }
+
+
 
 
 
