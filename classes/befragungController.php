@@ -7,7 +7,4 @@ class BefragungController extends Befragung{
         $this->setFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort);
     }
 
-    public function setFragebogenAbgeschlossen(){
-        
-    }
 }

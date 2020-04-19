@@ -27,9 +27,8 @@ if (isset($_POST['fragebogen'])) {
     $_SESSION["kuerzel"] = $_POST['fragebogen'];
 }
 
-
-
-$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);        //ToDo-> Fragebogenkürzel aus auswahl übergeben. 
+$_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"],2345667); //toDo Benutzer   //Antworten  aus db 
+$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);        
 ?>
 
 <html>

@@ -65,8 +65,17 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getFrageAntwortStmt($Fragebogenkuerzel, $Fragenummer, $Student){
-
+    protected function getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer){
+        try {
+            $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? ORDER BY Fragenummer";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel]);
+            $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $antwortarray;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
     }
 
 
