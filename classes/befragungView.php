@@ -15,5 +15,17 @@ class BefragungView extends Befragung{
         return $this->getFragenStmt($Fragebogenkuerzel);
     }
 
+    public function showFragebogenfromBenutzer($benutzer){
+        $fragebogen = $this->getFragebogenfromBenutzer($benutzer);
+        foreach($fragebogen AS $umfrage){
+            echo "<option value='$umfrage'>$umfrage</option>";
+        break; 
+            } 
+    }
+
+    public function showFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer)
+    {
+       return $this->getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer);  
+    }
 }
 
