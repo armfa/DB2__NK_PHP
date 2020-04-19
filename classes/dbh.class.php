@@ -14,9 +14,9 @@ include_once 'error.php';
 class Dbh
 {
   private $host = "localhost";
-  private $user = "roo";
+  private $user = "root";
   private $pwd = "";
-  private $dbName = "o8egavzh9f";
+  private $dbName = "dhbw";
 
   protected function connect()
   {
