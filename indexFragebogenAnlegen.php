@@ -1,8 +1,8 @@
 <?php
 session_start();
-$_SESSION["anzahlFragen"] = 0;
+$_SESSION["AnzahlFragenSession"] = 0;
 if (isset($_POST['fragebogenAnlegenStarten'])) {
-$_SESSION["anzahlFragen"] = $_POST['anzahlFragen'];
+$_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
 }
 
 
@@ -10,7 +10,7 @@ $_SESSION["anzahlFragen"] = $_POST['anzahlFragen'];
 
 <html>
 <?php
-// kommentieren
+// Eingabe des Titels und der Anzahl der Felder 
 ?>
 <form action="" method="post">
     <label for="TitelFragebogen">Titel Fragebogen:</label>
@@ -22,15 +22,19 @@ $_SESSION["anzahlFragen"] = $_POST['anzahlFragen'];
 <form  action="" method="post">
 <?php
 
-for($i = $_SESSION["anzahlFragen"]; $i > $_SESSION["anzahlFragen"]; $i++){
-    echo '<input type="text" name="inhaltFrage">';
+// Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
+$i = 1;
+while($i <= $_SESSION["AnzahlFragenSession"]){
+    echo '<label for="inhaltFrage"> Frage '.$i.'</label>';
+    echo '<input type="text" name="inhaltFrage'.$i.'"></br>';
+    $i++;
 }
 ?>
 </form>	      
 <?php
 
 //Wenn mindestens eine Frage erstellt werden kann, kann der Fragebogen erstellt und abgeschlossen werden.
-if ($_SESSION['anzahlFragen']>= 1) {
+if ($_SESSION['AnzahlFragenSession']>= 1) {
     echo '<form action="" method="post">
 <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
 </form>';
