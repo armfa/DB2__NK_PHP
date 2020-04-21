@@ -80,9 +80,9 @@ class Befragung extends Dbh{
 
     protected function setFrageAntwortUpdateStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
         try {
-            $sql = "UPDATE beantwortet SET Antwort = ? where Kuerzel = $Fragebogenkuerzel AND Matrikelnummer = $Matrikelnummer AND Fragenummer = $Fragenummer)";
+            $sql = "UPDATE beantwortet SET Antwort = ? where Kuerzel = ? AND Matrikelnummer = ? AND Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$Antwort]);
+            $stmt->execute([$Antwort, $Fragebogenkuerzel, $Matrikelnummer, $Fragenummer]);
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
             $exceptionMessage->displayException($e);
