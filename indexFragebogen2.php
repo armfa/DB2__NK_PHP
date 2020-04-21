@@ -43,7 +43,7 @@
                 <select name="fragebogen">
                 <?php     
                     $frageObject = new FragebogenView();
-                    $frageObject->showFragebogenVonBenutzer($_SESSION['Benutzername']);
+                    $frageObject->showFragebogenVonBenutzer('user1');
                 ?>
                 </select></br><br><br>
 		        <table border="3" cellspacing="5" cellpadding="5">
@@ -77,4 +77,17 @@
 			
 	</body>
 </html>
+
+<?php
+
+    $fragebogenObj = new fragebogenController();
+    if(isset($_POST['loeschen'])){
+        $fragebogenObj->deleteFragebogen($kuerzel);
+    }
+
+    if(isset($_POST['frageLoeschen'])){
+        $fragebogenObj->deleteFrage($fragenummer);
+    }
+
+?>
 

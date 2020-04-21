@@ -13,7 +13,7 @@ class Benutzer extends Dbh {
 			$sql="SELECT * FROM benutzer WHERE Benutzername= ? and Passwort= ?";
 			$stmt = $this->connect()->prepare($sql);
 			$stmt->execute([$Benutzername, $Passwort]);
-			$userdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			md5($userdata = $stmt->fetchAll(PDO::FETCH_ASSOC));
 			return $userdata;
         } catch (PDOException $e) {
 			echo $e;
@@ -25,7 +25,7 @@ class Benutzer extends Dbh {
 			$sql="INSERT INTO benutzer (Benutzername, Passwort) VALUES (?, ?)";
 			$stmt = $this->connect()->prepare($sql);
 			$stmt->execute([$Benutzername, $Passwort]);
-			$userdata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			md5($userdata = $stmt->fetchAll(PDO::FETCH_ASSOC));
 		} catch (PDOException $e) {
 			echo $e;
         }
