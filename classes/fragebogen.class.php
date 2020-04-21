@@ -93,11 +93,11 @@ class Fragebogen extends Dbh {
         }        
     }
 
-    protected function getFragenVonFragebogenStmt($fragebogen){
+    protected function getFragenVonFragebogenStmt($kuerzel){
         try{
             $sql = "SELECT * FROM fragen WHERE Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$fragebogen]);
+            $stmt->execute([$kuerzel]);
             $fragen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragen;
         } catch (PDOException $e) {
@@ -125,7 +125,7 @@ class Fragebogen extends Dbh {
         try{
             $sql = "INSERT INTO fragen (InhaltFrage, Kuerzel) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$inhaltFrage, $Kuerzel]);
+            $stmt->execute([$inhaltFrage, $kuerzel]);
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
             $exceptionMessage->displayException($e);
@@ -137,6 +137,17 @@ class Fragebogen extends Dbh {
             $sql = "DELETE FROM fragen WHERE Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fragenummer]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function setFreischaltungStmt($kuerzel, $kursname){
+        try{
+            $sql = "INSERT INTO freischalten (Kuerzel, Kursname) VALUES (?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kuerzel, $kursname]);
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
             $exceptionMessage->displayException($e);

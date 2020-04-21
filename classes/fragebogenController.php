@@ -18,5 +18,17 @@ class fragebogenController extends Fragebogen{
         return $this->checkObFrageExistiert($titelFrage);
     }
 
+    public function deleteFragebogen($kuerzel){
+        $this->deleteFragebogenStmt($kuerzel);
+    }
+
+    public function deleteFrage($fragenummer){
+        $this->deleteFragebogenStmt($fragenummer);
+    }
+
+    public function fragebogenFreischalten($kuerzel, $kursname){
+        $this->setFreischaltungStmt($kuerzel, $kursname);
+    }
+
 
 }
