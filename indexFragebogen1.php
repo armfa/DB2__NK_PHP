@@ -1,15 +1,13 @@
 <?php
-    session_start();
-  /*session_start();
-  if (isset($_SESSION['name']) == false)
-  { header ('Location: http://localhost/myindex.php');
-  exit; 
-  }*/
+    //session_start();
+
 
   include_once 'classes/dbh.class.php';
   include_once 'classes/fragebogen.class.php';
   include_once 'classes/fragebogenController.php';
   include_once 'classes/fragebogenView.php';
+  include_once 'indexFragebogenAnlegen.php';
+
 ?>
 
 <html>
@@ -21,54 +19,16 @@
 	</head>
 	
 	<body>
-        <header>
-			<div id="logo">
-				<a href="#">
-					<img src="Logo_DHBW.png" alt="Logo" style="width:150px;height:100px;">
-				</a>
-			</div>
-            <nav id="main-nav">
-				<ul>
-					<li><a href="indexStartseite.php">Startseite</a></li>
-				<ul>
-			</nav>
-		</header>
 		
-		<!-- <hr>
-		<section style="background-color:lightgrey;">
-            <br><br>
-
-            <form class='neuerFragebogen-form' action="" method="post">
-			    <label for="TitelFragebogen">Titel Fragebogen:</label>
-				<input type="text" name="titel"> <br><br>
-				<label for="AnzahlFragen">Anzahl Fragen:</label>
-				<input type="text" name="AnzahlFragen">
-                <input type="submit" name="fragebogenAnlegen" value="Fragebogen erstellen"/><br>
-			</form>
-
-			<br><br>
-
-            <a href="indexFragebogen2.php">Fragebogen bearbeiten</a>
-
-            <br><br>
-			
-		</section>
-		
-		<hr>
-		
-		<footer>
-			<p>
-				&copy; 2020 Fabrice Armbruster, Dana Gessler, Isabelle Karin Scheffler DHBW Ravensburg
-		</footer> -->
-
-        <a href="indexFragebogenAnlegen.php">Fragebogen anlegen</a></br>
+        <a href="indexStartseite.php">Startseite</a>
+        <a href="/indexFragebogenAnlegen.php">Fragebogen anlegen</a></br>
         <a href="indexFragebogen2.php">Fragebogen bearbeiten</a></br>
         <a href="indexFragebogen3.php">Fragebogen freischalten</a></br>
 			
 	</body>
 </html>
 <?php
-    $fragebogenObj = new fragebogenController();
+    /* $fragebogenObj = new fragebogenController();
     if(isset($_POST['fragebogenAnlegen'])){
         $fragebogen = $_POST['titel'];
         $anzahlFragen = $_POST['AnzahlFragen'];
@@ -116,6 +76,6 @@
             // echo "<p class='success'>Sie haben den Fragebogen erfolgreich erstellt.!</p>";
             exit();
         }
-    }
+    } */
     
 ?>

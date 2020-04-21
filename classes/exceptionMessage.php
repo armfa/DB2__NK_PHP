@@ -18,8 +18,10 @@ class exceptionMessage extends dbh {
     }
 
     private static function redirectToErrorPage($e, $number){
-        header("Location: http://localhost/DB2__NK_PHP/error.php/");
+       // header("Location: http://localhost/DB2__NK_PHP/error.php/?e=$e");
+        echo $e;
     }
+
 
 }
 
