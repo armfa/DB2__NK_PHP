@@ -78,7 +78,29 @@ class Befragung extends Dbh{
         }
     }
 
+    protected function setFrageAntwortUpdateStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
+        try {
+            $sql = "UPDATE beantwortet SET Antwort = ? where Kuerzel = $Fragebogenkuerzel AND Matrikelnummer = $Matrikelnummer AND Fragenummer = $Fragenummer)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Antwort]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
 
+    protected function getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer){
+        try {
+            $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? and Fragenummer = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel, $Fragenummer]);
+            $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $antwortarray;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
 
 
 

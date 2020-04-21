@@ -12,29 +12,43 @@ session_start();
 //19.04.2020-
 
 $befragungsobjekt = new BefragungView();
+$befragungC = new BefragungController();
+$infoMessage = "";
+$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
 
+if (isset($_POST['fragebogen'])) {
+    $_SESSION["kuerzel"] = $_POST['fragebogen'];
+}
 if ((isset($_POST['naechsteFrage']) == false) && (isset($_POST['vorherigeFrage']) == false)) {
     $_SESSION["aktuelleSeite"] = 1;
-    $_SESSION["anzahlSeiten"] = 1 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"] )[0];
+    $_SESSION["anzahlSeiten"] = 1 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
 }
 if (isset($_POST['naechsteFrage'])) {
-    $_SESSION["aktuelleSeite"]++;
+    //Check Eingaben
+    if (isset($_POST['Antwort'])) {
+        $antwort = $_POST['Antwort'];
+        //Antwort wurde abgegeben
+        // in DB schreiben
+        $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]["Fragenummer"];
+        $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], 2345667, $antwort);      //toDo Benutzer   
+        $_SESSION["aktuelleSeite"]++;
+    } else {
+        $infoMessage =  "<p class='error'>Bitte wählen Sie eine Antwort aus um zur nächsten Frage zu kommen!</p>";
+    }
 }
 if (isset($_POST['vorherigeFrage'])) {
     $_SESSION["aktuelleSeite"]--;
 }
-if (isset($_POST['fragebogen'])) {
-    $_SESSION["kuerzel"] = $_POST['fragebogen'];
-}
 
-$_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"],2345667); //toDo Benutzer   //Antworten  aus db 
-$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);        
+
+$_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], 2345667); //toDo Benutzer   //Antworten  aus db 
+//$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
 ?>
 
 <html>
 
 <body>
-    <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt( $_SESSION["kuerzel"])['Titel']; ?></h1>
+    <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
     <?php
     //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
     if ($_SESSION["aktuelleSeite"] < $_SESSION["anzahlSeiten"]) {
@@ -47,20 +61,20 @@ $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
     <form action="" method="post">
         <?php if ($_SESSION["aktuelleSeite"] !=  $_SESSION["anzahlSeiten"])
             echo '<fieldset>
-    <input type="radio" id="1" name="Antwort1" value="1">
+    <input type="radio" id="1" name="Antwort" value="1">
     <label for="1"> sehr gut</label> 
-    <input type="radio" id="2" name="Antwort2" value="2">
+    <input type="radio" id="2" name="Antwort" value="2">
     <label for="2"> eher gut</label>
-    <input type="radio" id="3" name="Antwort3" value="3">
+    <input type="radio" id="3" name="Antwort" value="3">
     <label for="3"> ausgeglichen</label> 
-    <input type="radio" id="4" name="Antwort4" value="4">
+    <input type="radio" id="4" name="Antwort" value="4">
     <label for="4"> eher schlecht</label> 
-    <input type="radio" id="5" name="Antwort5" value="5">
+    <input type="radio" id="5" name="Antwort" value="5">
     <label for="5"> sehr schlecht</label> 
   </fieldset>';
 
         //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
-        echo "Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"];
+        echo "<div>Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"] . "</div></br>";
         ?>
 
 
@@ -81,6 +95,12 @@ $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
         }
         ?>
     </form>
+
+    <?php
+    if ($infoMessage != "") {
+        echo $infoMessage;
+    }
+    ?>
 
 </body>
 
