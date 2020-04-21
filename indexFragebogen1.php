@@ -34,11 +34,7 @@
 			</nav>
 		</header>
 		
-		<hr>
-               
-        
-		
-		
+		<!-- <hr>
 		<section style="background-color:lightgrey;">
             <br><br>
 
@@ -63,7 +59,11 @@
 		<footer>
 			<p>
 				&copy; 2020 Fabrice Armbruster, Dana Gessler, Isabelle Karin Scheffler DHBW Ravensburg
-		</footer>
+		</footer> -->
+
+        <a href="indexFragebogenAnlegen.php">Fragebogen anlegen</a></br>
+        <a href="indexFragebogen2.php">Fragebogen bearbeiten</a></br>
+        <a href="indexFragebogen3.php">Fragebogen freischalten</a></br>
 			
 	</body>
 </html>
@@ -112,8 +112,10 @@
             echo "<p class='error'>Diesen Fragebogen gibt es schon!</p>";
             exit();
         } elseif ($fragebogenErstellen == "success") {
-            echo "<p class='success'>Sie haben den Fragebogen erfolgreich erstellt.!</p>";
+            header("Location: ../DB2__NK_PHP/indexFrage1.php");
+            // echo "<p class='success'>Sie haben den Fragebogen erfolgreich erstellt.!</p>";
             exit();
         }
     }
+    
 ?>

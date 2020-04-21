@@ -73,3 +73,11 @@
 			
 	</body>
 </html>
+
+<?php
+    $freischaltenObj = new fragebogenController();
+    if(isset($_POST['loeschen'])){
+        $freischaltenObj->fragebogenFreischalten($kuerzel, $kursname);
+    }
+
+?>
