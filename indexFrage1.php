@@ -1,5 +1,6 @@
 <?php
     session_start();
+    $_SESSION['Benutzername'] = "user1";
   /*session_start();
   if (isset($_SESSION['name']) == false)
   { header ('Location: http://localhost/myindex.php');
@@ -15,9 +16,6 @@
 <html>
 	<head>
 		<title>Frage anlegen</title>
-        <?php
-            $_SESSION['Benutzername'] = "user1";
-        ?>
 	</head>
 	
 	<body>
@@ -29,7 +27,7 @@
 			</div>
             <nav id="main-nav">
 				<ul>
-					<li><a href="indexStartseite.php">Startseite</a></li>
+					<li><a href="index.php">Startseite</a></li>
 				<ul>
 			</nav>
 		</header>
@@ -37,16 +35,20 @@
 		<hr>
                
         
-
+        <!-- if(isset($anzahlFragenRichtig)){
+        for($i=0; $i == $anzahlFragen; $i++){
+            echo'<input type="text" name="Frage',$i,'">';
+        }
+        }-->
 		
 		
 		<section style="background-color:lightgrey;">
             <br><br>
 
             <form class='neueFrage-form' action="" method="post">
-                <label for="Frage">Frage:</label>
-				<input type="text" name="inhaltFrage">
-                <input type="submit" name="frageAnlegen" value="Frage hinzufuegen"/><br><br>
+                <label for="Frage">Frage/n:</label><br><br>
+				<input type="text" name="inhaltFrage"><br><br>
+                <input type="submit" name="frageAnlegen" value="Frage/n hinzufuegen"/><br><br>
             </form>	
                 
             <br><br>
