@@ -5,6 +5,9 @@ include_once 'classes/dbh.class.php';
 include_once 'classes/kurs.class.php';
 include_once 'classes/kursController.php';
 include_once 'classes/kursView.php';
+
+$x = new KursView();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +36,7 @@ include_once 'classes/kursView.php';
             //Dropdownauswahl des Kurses
             //ToDo: aktueller Benuttzer Übergeben     
             $benutzerObject = new KursView();
-            $benutzerObject->showKursesfromBenutzer('Benutzer2');
+            $benutzerObject->showKursesfromBenutzer('user1');
             ?>
         </select></br>
         <input type="text" name="matrikelnummer" placeholder="Matrikelnummer" maxlength="7"></br>
@@ -86,7 +89,7 @@ if (isset($_POST['studentAnlegen'])) {
             exit();
         } else {
             //Prüfen, ob Student schon existiert 
-            if ($kursObj->checkStudent($matrikelnummer) == false) {
+            if ($kursObj->checkStudent($matrikelnummer) != false) {
                 header("Location: ../DB2__NK_PHP/indexKurs.php?s=nosuccess");
                 exit();
             } else {

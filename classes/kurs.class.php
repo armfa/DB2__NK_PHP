@@ -51,7 +51,7 @@ class Kurs extends Dbh
             $sql = "SELECT k.* FROM kurs k,freischalten f, fragebogen fr, benutzer b WHERE k.Kursname = f.Kursname AND f.Kuerzel = fr.Kuerzel AND fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$benutzer]);
-            $kursname = $stmt->fetch(PDO::FETCH_ASSOC);
+            $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $kursname;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
@@ -103,7 +103,7 @@ class Kurs extends Dbh
                 $sql = "SELECT * from student Where matrikelnummer = ?";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$matrikelnummer]);
-                $kursname = $stmt->fetch(PDO::FETCH_ASSOC);
+                $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $kursname;
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
