@@ -17,9 +17,10 @@ class BefragungView extends Befragung{
 
     public function showFragebogenfromBenutzer($benutzer){
         $fragebogen = $this->getFragebogenfromBenutzer($benutzer);
-        foreach($fragebogen AS $umfrage){
-            echo "<option value='$umfrage'>$umfrage</option>";
-        break; 
+        $i = 0;
+        while($i < count($fragebogen)){
+            echo "<option value='".$fragebogen[$i]['Kuerzel']."'>".$fragebogen[$i]['Titel']."</option>";
+            $i++;
             } 
     }
 

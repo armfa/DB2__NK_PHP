@@ -4,10 +4,10 @@ class Befragung extends Dbh{
 
     protected function getFragebogenfromBenutzer($benutzer){
         try {
-            $sql = "SELECT * FROM fragebogen"; //ToDo: Nur für benutzer freigfeschaltete Fragebögen
+            $sql = "SELECT * FROM fragebogen WHERE Benutzername = ?"; //ToDo: Nur für benutzer freigfeschaltete Fragebögen
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$benutzer]);
-            $Frageboegen = $stmt->fetch(PDO::FETCH_ASSOC);
+            $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $Frageboegen;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
@@ -102,9 +102,38 @@ class Befragung extends Dbh{
         }
     }
 
+    protected function getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus){
+        try {
+            $sql = "SELECT * FROM bearbeitet WHERE Matrikelnummer = ? AND KUERZEL = ? and Abgabestatus = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel, $Abgabestatus]);
+            $beantwortetarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $beantwortetarray;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
 
+    protected function setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
+        try {
+            $sql = "UPDATE bearbeitet SET Kommentar = ? AND Abgabestatus = ? where Kuerzel = ? AND Matrikelnummer = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kommentar, $Abgabestatus, $Fragebogenkuerzel, $Matrikelnummer]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
 
-
-
-
+    protected function setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
+        try {
+            $sql = "INSERT INTO bearbeitet (Kuerzel, Matrikelnummer, Abgabestatus, Kommentar) VALUES (?, ?, ?, ?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar]);
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
 }
