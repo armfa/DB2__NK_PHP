@@ -4,10 +4,11 @@ class FragebogenView extends Fragebogen{
  
     public function showFragebogenVonBenutzer($benutzer){
     $titel = $this->getFragebogenVonBenutzerStmt($benutzer);
-    foreach($titel AS $fragebogen){
-        echo "<option value='$fragebogen'>$fragebogen</option>";
-    break; 
-        } 
+        $i = 0;
+        while($i < count($titel)){
+            echo "<option value='".$titel[$i]['Kuerzel']."'>".$titel[$i]['Titel']."</option>";
+            $i++;
+            } 
     }
 
     public function showFragenVonFragebogen($fragebogen){
