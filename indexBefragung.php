@@ -42,7 +42,7 @@ if (isset($_POST['vorherigeFrage'])) {
 
 //Kommentar in db speichern und Fragebogen als abgeschlossen markieren
 if (isset($_POST['fragebogenFertig'])) {
-    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], 2345667, 1, "manuallerKommentar");
+    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], 2345667, 1, $_POST['kommentar']);
 }
 
 
@@ -54,16 +54,15 @@ $_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuer
 
 <body>
     <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
+    <form action="" method="post">
     <?php
     //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
     if ($_SESSION["aktuelleSeite"] < $_SESSION["anzahlSeiten"]) {
         print_r($_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["InhaltFrage"]);
     } else
         echo "<p>Wir freuen uns auf Ihren Kommentar!</p></br>
-    <textarea name='kommentar' id='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'>
-    </textarea>"
+    <textarea name='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'></textarea>"
     ?>
-    <form action="" method="post">
         <?php if ($_SESSION["aktuelleSeite"] !=  $_SESSION["anzahlSeiten"])
             echo '<fieldset>
     <input type="radio" id="1" name="Antwort" value="1">

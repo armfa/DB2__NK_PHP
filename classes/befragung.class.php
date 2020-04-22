@@ -117,7 +117,7 @@ class Befragung extends Dbh{
 
     protected function setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
         try {
-            $sql = "UPDATE bearbeitet SET Kommentar = ? AND Abgabestatus = ? where Kuerzel = ? AND Matrikelnummer = ?";
+            $sql = "UPDATE bearbeitet SET Kommentar = ?, Abgabestatus = ? where Kuerzel = ? AND Matrikelnummer = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kommentar, $Abgabestatus, $Fragebogenkuerzel, $Matrikelnummer]);
         } catch (PDOException $e) {
