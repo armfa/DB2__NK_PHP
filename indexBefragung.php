@@ -28,8 +28,8 @@ if (isset($_POST['naechsteFrage'])) {
     if (isset($_POST['Antwort'])) {
         $antwort = $_POST['Antwort'];
         //Antwort wurde abgegeben
-        // in DB schreiben
-        $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]["Fragenummer"];
+        //Antwort in DB schreiben
+        $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["Fragenummer"];
         $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], 2345667, $antwort);      //toDo Benutzer   
         $_SESSION["aktuelleSeite"]++;
     } else {
@@ -38,6 +38,11 @@ if (isset($_POST['naechsteFrage'])) {
 }
 if (isset($_POST['vorherigeFrage'])) {
     $_SESSION["aktuelleSeite"]--;
+}
+
+//Kommentar in db speichern und Fragebogen als abgeschlossen markieren
+if (isset($_POST['fragebogenFertig'])) {
+    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], 2345667, 1, "manuallerKommentar");
 }
 
 
