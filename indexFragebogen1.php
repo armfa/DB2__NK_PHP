@@ -6,27 +6,77 @@
   include_once 'classes/fragebogen.class.php';
   include_once 'classes/fragebogenController.php';
   include_once 'classes/fragebogenView.php';
-  include_once 'indexFragebogenAnlegen.php';
+
+
+session_start();
+$_SESSION["AnzahlFragenSession"] = 0;
+if (isset($_POST['fragebogenAnlegenStarten'])) {
+$_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
+}
 
 ?>
-
 <html>
-	<head>
-		<title>Fragebogen erstellen</title>
-        <?php
-            $_SESSION['Benutzername'] = "user1";
-        ?>
-	</head>
-	
-	<body>
-		
-        <a href="indexStartseite.php">Startseite</a>
-        <a href="/indexFragebogenAnlegen.php">Fragebogen anlegen</a></br>
-        <a href="indexFragebogen2.php">Fragebogen bearbeiten</a></br>
-        <a href="indexFragebogen3.php">Fragebogen freischalten</a></br>
-			
-	</body>
+<h4>Fragebogen anlegen</h4>
+<?php
+// Eingabe des Titels und der Anzahl der Felder 
+?>
+<form action="" method="post">
+    <label for="TitelFragebogen">Titel Fragebogen:</label>
+    <input type="text" name="titel"> <br><br>
+    <label for="AnzahlFragen">Anzahl Fragen:</label>
+    <input type="text" name="anzahlFragen">
+    <input type="submit" name="fragebogenAnlegenStarten" value="Fragebogen erstellen" /><br>
+</form>
+<form  action="" method="post">
+<?php
+
+// Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
+$i = 1;
+while($i <= $_SESSION["AnzahlFragenSession"]){
+    echo '<label for="inhaltFrage"> Frage '.$i.'</label>';
+    echo '<input type="text" name="inhaltFrage'.$i.'"></br>';
+    $i++;
+}
+?>
+</form>	      
+<?php
+
+//Wenn mindestens eine Frage erstellt werden kann, kann der Fragebogen erstellt und abgeschlossen werden.
+if ($_SESSION['AnzahlFragenSession']>= 1) {
+    echo '<form action="" method="post">
+<input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
+</form>';
+}
+?>
+
+<h4>Fragebogen freigeben</h4>
+<section>
+            <br><br>
+
+            <form class='bearbeitenFragebogen-form' action="" method="post" disabled>    
+                <select name="fragebogen">
+                <?php     
+                    $frageObject = new FragebogenView();
+                    $frageObject->showFragebogenVonBenutzer($_SESSION['Benutzername']);
+                ?>
+                </select></br><br><br>
+		        
+                <select name="kurses">
+                <?php
+                    $benutzerObject = new KursView();
+                    $benutzerObject->showKursesfromBenutzer($_SESSION['Benutzername']);
+                ?>
+                </select></br><br><br>
+
+                <input type="submit" name="freigeben" value="Fragebogen freigeben"/>
+
+			</form>
 </html>
+
+
+
+
+
 <?php
     /* $fragebogenObj = new fragebogenController();
     if(isset($_POST['fragebogenAnlegen'])){

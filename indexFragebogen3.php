@@ -1,5 +1,4 @@
 <?php
-    session_start();
   /*session_start();
   if (isset($_SESSION['name']) == false)
   { header ('Location: http://localhost/myindex.php');
