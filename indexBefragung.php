@@ -51,9 +51,22 @@ if (isset($_POST['fragebogenFertig'])) {
     $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], 2345667, 1, $_POST['kommentar']);
 }
 
-
-$_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], 2345667); //toDo Benutzer   //Antworten  aus db 
+//Abgegebene Antworten aus DB laden 
+if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)){
+echo "</br>";
+$check = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], 2345667)[$_SESSION["aktuelleSeite"]-1]['Antwort'];
+switch($check){
+ case 1: $check1 = "checked"; $check2 = $check3 =  $check4 = $check5 = ""; break;
+ case 2: $check2 = "checked"; $check1 = $check3 =  $check4 = $check5 = ""; break;
+ case 3: $check3 = "checked"; $check1 = $check2 =  $check4 = $check5 = ""; break;
+ case 4: $check4 = "checked"; $check1 = $check2 =  $check3 = $check5 = ""; break;
+ case 5: $check5 = "checked"; $check1 = $check2 =  $check3 = $check4 = ""; break;
+ default: $check1 = $check2 =  $check3 = $check4 = $check5 = "";
+}
+echo "</br>";
+//$_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], 2345667); //toDo Benutzer   //Antworten  aus db 
 //$_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
+}
 ?>
 
 <html>
@@ -69,19 +82,20 @@ $_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuer
             echo "<p>Wir freuen uns auf Ihren Kommentar!</p></br><textarea name='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'></textarea>";
         } else
         ?>
-        <?php if ($_SESSION["aktuelleSeite"] <  ($_SESSION["anzahlSeiten"] - 1))
+        <?php if ($_SESSION["aktuelleSeite"] <  ($_SESSION["anzahlSeiten"] - 1)){
         echo '<fieldset>
-            <input type="radio" id="1" name="Antwort" value="1">
+            <input type="radio" id="1" name="Antwort" value="1" '.$check1.'>
             <label for="1"> sehr gut</label> 
-            <input type="radio" id="2" name="Antwort" value="2">
+            <input type="radio" id="2" name="Antwort" value="2" '.$check2.'>
             <label for="2"> eher gut</label>
-            <input type="radio" id="3" name="Antwort" value="3">
+            <input type="radio" id="3" name="Antwort" value="3" '.$check3.'>
             <label for="3"> ausgeglichen</label> 
-            <input type="radio" id="4" name="Antwort" value="4">
+            <input type="radio" id="4" name="Antwort" value="4" '.$check4.'>
             <label for="4"> eher schlecht</label> 
-            <input type="radio" id="5" name="Antwort" value="5">
+            <input type="radio" id="5" name="Antwort" value="5" '.$check5.'>
             <label for="5"> sehr schlecht</label> 
         </fieldset>';
+    }
 
     //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
     echo "<div>Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"] . "</div></br>";
@@ -110,6 +124,7 @@ $_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuer
     if ($infoMessage != "") {
         echo $infoMessage;
     }
+
     ?>
 
 </body>

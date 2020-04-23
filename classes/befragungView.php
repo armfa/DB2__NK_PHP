@@ -28,5 +28,6 @@ class BefragungView extends Befragung{
     {
        return $this->getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer);  
     }
+
 }
 
