@@ -27,5 +27,7 @@ class BefragungController extends Befragung{
         if($this->getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus ) == false){
             $this->setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
         }
+        //Weiterleiten auf Fragebogen-Auswahlseite, erfolgreicher Status mitgeben
+        header("Location: ../DB2__NK_PHP/indexBefragungVorauswahl.php?f=success");
     }
 }

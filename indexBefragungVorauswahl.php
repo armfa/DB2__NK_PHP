@@ -5,7 +5,6 @@ include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
 include_once 'classes/befragungView.php';
 
-
 ?>
 
 <!doctype HTML>
@@ -13,6 +12,12 @@ include_once 'classes/befragungView.php';
 
 <body>
     <h1>Welche Umfrage möchten Sie starten?</h1>
+
+<?php
+    if (!isset($_GET['k'])) {
+        echo "<p class='success'>Sie haben den Fragebogen erfolgreich abgeschickt!</p>";
+    }
+?>
 
 <form action="indexBefragung.php" method="post">
         <label>Fragebogen</label>
@@ -27,6 +32,8 @@ include_once 'classes/befragungView.php';
         <button type="submit" name="umfrageStarten">Umfrage starten</button>
     </form>
 </body>
+
+
 
 
 </html>
