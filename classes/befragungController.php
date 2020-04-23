@@ -15,19 +15,22 @@ class BefragungController extends Befragung{
         }
     }
 
-    public function createKommentarFragebogenFertig($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
-        
-        
-        //Prüfen, Datensatz (Kommentar) bereits in der Datenbank existiert, aber noch nicht agegeben wurde.
-        //Falls ja, dann update Tuppel mit Abgegebn = 1 und dem Kommentar. 
-        if($this->getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, 0)) {
-            $this->setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
-        }
-        //Noch kein Eintrag Vorhanden -> Insert Datensatz 
-        if($this->getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus ) == false){
-            $this->setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
-        }
+    public function createKommentarFragebogenFertig($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){  
+        //Kommentar auf 1 = Abgegeben setzten
+        $this->setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
         //Weiterleiten auf Fragebogen-Auswahlseite, erfolgreicher Status mitgeben
         header("Location: ../DB2__NK_PHP/indexBefragungVorauswahl.php?f=success");
+    }
+
+    public function createOrUpdateKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $kommentar){
+        //Prüfen, Datensatz (Kommentar) bereits in der Datenbank existiert, aber noch nicht agegeben wurde.
+        //Falls ja, dann update Datensatz
+        if($this->getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, 0)) {
+            $this->setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, 0, $kommentar);
+        }
+        //Noch kein Eintrag Vorhanden -> Insert Datensatz 
+        else{
+            $this->setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, 0, $kommentar);
+        }
     }
 }

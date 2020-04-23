@@ -21,20 +21,26 @@ if (isset($_POST['fragebogen'])) {
 }
 if ((isset($_POST['naechsteFrage']) == false) && (isset($_POST['vorherigeFrage']) == false)) {
     $_SESSION["aktuelleSeite"] = 1;
-    $_SESSION["anzahlSeiten"] = 1 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
+    $_SESSION["anzahlSeiten"] = 2 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
 }
 if (isset($_POST['naechsteFrage'])) {
-    //Check Eingaben
+    //Check, ob es vorletzte Frage ist 
+    if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"] - 1)) {
+        $kommentar = $_POST['kommentar'];
+        $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], 2345667, $kommentar);
+        $_SESSION["aktuelleSeite"]++;
+    }
+    //Check, ob Antwort abgegeben wurde
     if (isset($_POST['Antwort'])) {
         $antwort = $_POST['Antwort'];
-        //Antwort wurde abgegeben
         //Antwort in DB schreiben
         $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["Fragenummer"];
         $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], 2345667, $antwort);      //toDo Benutzer   
         $_SESSION["aktuelleSeite"]++;
-    } else {
+        //keine Antwort wurde abgegeben -> Nachricht an Benutzer 
+    }/*  elseif(isset($_POST['Antwort']) == false && $_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
         $infoMessage =  "<p class='error'>Bitte wählen Sie eine Antwort aus um zur nächsten Frage zu kommen!</p>";
-    }
+    } */
 }
 if (isset($_POST['vorherigeFrage'])) {
     $_SESSION["aktuelleSeite"]--;
@@ -55,30 +61,30 @@ $_SESSION["Antworten"] = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuer
 <body>
     <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
     <form action="" method="post">
-    <?php
-    //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
-    if ($_SESSION["aktuelleSeite"] < $_SESSION["anzahlSeiten"]) {
-        print_r($_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["InhaltFrage"]);
-    } else
-        echo "<p>Wir freuen uns auf Ihren Kommentar!</p></br>
-    <textarea name='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'></textarea>"
-    ?>
-        <?php if ($_SESSION["aktuelleSeite"] !=  $_SESSION["anzahlSeiten"])
-            echo '<fieldset>
-    <input type="radio" id="1" name="Antwort" value="1">
-    <label for="1"> sehr gut</label> 
-    <input type="radio" id="2" name="Antwort" value="2">
-    <label for="2"> eher gut</label>
-    <input type="radio" id="3" name="Antwort" value="3">
-    <label for="3"> ausgeglichen</label> 
-    <input type="radio" id="4" name="Antwort" value="4">
-    <label for="4"> eher schlecht</label> 
-    <input type="radio" id="5" name="Antwort" value="5">
-    <label for="5"> sehr schlecht</label> 
-  </fieldset>';
-
+        <?php
         //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
-        echo "<div>Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"] . "</div></br>";
+        if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
+            print_r($_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["InhaltFrage"]);
+        } elseif ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"] - 1)) {
+            echo "<p>Wir freuen uns auf Ihren Kommentar!</p></br><textarea name='kommentar' rows='5' cols='70' placeholder='Hier können Sie noch Lob und weitere Kritik äußern. Vielen Dank!'></textarea>";
+        } else
+        ?>
+        <?php if ($_SESSION["aktuelleSeite"] <  ($_SESSION["anzahlSeiten"] - 1))
+        echo '<fieldset>
+            <input type="radio" id="1" name="Antwort" value="1">
+            <label for="1"> sehr gut</label> 
+            <input type="radio" id="2" name="Antwort" value="2">
+            <label for="2"> eher gut</label>
+            <input type="radio" id="3" name="Antwort" value="3">
+            <label for="3"> ausgeglichen</label> 
+            <input type="radio" id="4" name="Antwort" value="4">
+            <label for="4"> eher schlecht</label> 
+            <input type="radio" id="5" name="Antwort" value="5">
+            <label for="5"> sehr schlecht</label> 
+        </fieldset>';
+
+    //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;
+    echo "<div>Inhalt der Seite " . $_SESSION["aktuelleSeite"] . " von " . $_SESSION["anzahlSeiten"] . "</div></br>";
         ?>
 
 
