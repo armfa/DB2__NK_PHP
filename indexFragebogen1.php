@@ -21,7 +21,7 @@ if (isset($_POST['fragebogenAnlegen'])) {
 
 //Fragebogen Freigeben
 if (isset($_POST['freigeben'])) {
-    $freischaltenObj->fragebogenFreischalten($kuerzel, $kursname);
+    $freischaltenObj->fragebogenFreischalten($_POST['fragebogen'], $_POST['kurses']);
 }
 
 
