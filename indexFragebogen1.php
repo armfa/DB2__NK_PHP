@@ -1,18 +1,34 @@
 <?php
-    //session_start();
+//session_start();
 
 
-  include_once 'classes/dbh.class.php';
-  include_once 'classes/fragebogen.class.php';
-  include_once 'classes/fragebogenController.php';
-  include_once 'classes/fragebogenView.php';
+include_once 'classes/dbh.class.php';
+include_once 'classes/fragebogen.class.php';
+include_once 'classes/fragebogenController.php';
+include_once 'classes/fragebogenView.php';
+include_once 'classes/kursView.php';
+include_once 'classes/kurs.class.php';
+
+$frageObject = new FragebogenView();
+$freischaltenObj = new fragebogenController();
+$benutzerObject = new KursView();
+
+
+
 
 
 session_start();
+//Input-Felder Fragebogen Anlegen laden
 $_SESSION["AnzahlFragenSession"] = 0;
-if (isset($_POST['fragebogenAnlegenStarten'])) {
-$_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
+if (isset($_POST['fragebogenAnlegen'])) {
+    $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
 }
+
+//Fragebogen Freigeben
+if (isset($_POST['freigeben'])) {
+    $freischaltenObj->fragebogenFreischalten($kuerzel, $kursname);
+}
+
 
 ?>
 <html>
@@ -25,52 +41,71 @@ $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
     <input type="text" name="titel"> <br><br>
     <label for="AnzahlFragen">Anzahl Fragen:</label>
     <input type="text" name="anzahlFragen">
-    <input type="submit" name="fragebogenAnlegenStarten" value="Fragebogen erstellen" /><br>
+    <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
 </form>
-<form  action="" method="post">
-<?php
+<form action="" method="post">
+    <?php
 
-// Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
-$i = 1;
-while($i <= $_SESSION["AnzahlFragenSession"]){
-    echo '<label for="inhaltFrage"> Frage '.$i.'</label>';
-    echo '<input type="text" name="inhaltFrage'.$i.'"></br>';
-    $i++;
-}
-?>
-</form>	      
+    // Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
+    $i = 1;
+    while ($i <= $_SESSION["AnzahlFragenSession"]) {
+        echo '<label for="inhaltFrage"> Frage ' . $i . '</label>';
+        echo '<input type="text" name="inhaltFrage' . $i . '"></br>';
+        $i++;
+    }
+    ?>
+</form>
 <?php
 
 //Wenn mindestens eine Frage erstellt werden kann, kann der Fragebogen erstellt und abgeschlossen werden.
-if ($_SESSION['AnzahlFragenSession']>= 1) {
+if ($_SESSION['AnzahlFragenSession'] >= 1) {
     echo '<form action="" method="post">
-<input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
+<input type="submit" name="fragenhinzufuegen" value="Frage/n hinzufügen" /><br>
 </form>';
 }
 ?>
 
 <h4>Fragebogen freigeben</h4>
-<section>
-            <br><br>
+<form action="" method="post" >
+    <select name="fragebogen">
+        <?php
+        $frageObject->showFragebogenVonBenutzer('user1');
+        ?>
+    </select>
 
-            <form class='bearbeitenFragebogen-form' action="" method="post" disabled>    
-                <select name="fragebogen">
-                <?php     
-                    $frageObject = new FragebogenView();
-                    $frageObject->showFragebogenVonBenutzer($_SESSION['Benutzername']);
-                ?>
-                </select></br><br><br>
-		        
-                <select name="kurses">
-                <?php
-                    $benutzerObject = new KursView();
-                    $benutzerObject->showKursesfromBenutzer($_SESSION['Benutzername']);
-                ?>
-                </select></br><br><br>
+    <select name="kurses">
+        <?php
+        $benutzerObject->showKursesfromBenutzer('user1');
+        ?>
+    </select>
+    <input type="submit" name="freigeben" value="Fragebogen freigeben" />
 
-                <input type="submit" name="freigeben" value="Fragebogen freigeben"/>
+</form>
 
-			</form>
+<h4>Fragebogen bearbeiten</h4>
+<form action="" method="post">
+    <select name="fragebogenBearbeiten">
+        <?php
+        $frageObject->showFragebogenVonBenutzer('user1');
+        ?>
+    </select>
+    <input type="submit" name="fragenBearbeiten" value="Fragebogen bearbeiten" />
+</form>
+    <?php
+    //ToDO
+    //Frage löschen
+    //echo $_POST['fragebogenBearbeiten'];
+    if(isset($_Post['fragenBearbeiten'])){
+        $frageObject->showFragenVonFragebogen($_POST['fragebogenBearbeiten']);
+        echo  '<input type="submit" name="frageLoeschen" value="Frage löschen" />';
+    }
+    ?>
+
+    <br><br><br>
+    <input type="submit" name="kopieren" value="Fragebogen kopieren"/>
+    <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
+
+
 </html>
 
 
@@ -78,7 +113,8 @@ if ($_SESSION['AnzahlFragenSession']>= 1) {
 
 
 <?php
-    /* $fragebogenObj = new fragebogenController();
+
+/* $fragebogenObj = new fragebogenController();
     if(isset($_POST['fragebogenAnlegen'])){
         $fragebogen = $_POST['titel'];
         $anzahlFragen = $_POST['AnzahlFragen'];
@@ -127,5 +163,5 @@ if ($_SESSION['AnzahlFragenSession']>= 1) {
             exit();
         }
     } */
-    
+
 ?>
