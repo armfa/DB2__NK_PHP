@@ -1,15 +1,26 @@
 <?php
 //Fabrice Armbruster
-//12.04.2020
+
+//______________________KLASSENBESCHREIBUNG______________________
 //Diese Klasse stellt eine PDO_Verbindung zur Datenbank her. 
 //Zur Einbindung muss auf diese Klasse referenziert werden --> extends Dbh
-//Es nutzt dabei das setAttribute mit fetch_assoc als Standarteinstellung, 
-//weshalb alle daten als Assoziatives Array zurückgegeben werden. 
-//Dies kann bei Bedarf in der entsprechenden Funktion übersteuert werden.  
+//Es nutzt dabei das setAttribute mit fetch_assoc als Standardeinstellung, 
+//weshalb alle Daten als Assoziatives Array zurückgegeben werden. 
+//Dies kann bei Bedarf in der entsprechenden Funktion übersteuert werden, 
+//ebenso wie die die Einstellung FetchAll/Fetch.
 
+
+//Alle includes werden hier angegeben, da durch die Vererbung diese auch in den Sub-Klassen verfügbar sind. 
+//Nur die index*.php-Seiten müssen, da keine Vererbung zu dieser Klasse existiert, in diesen Klassen angegeben werden. 
+
+//Befragung
+include_once 'classes/befragung.class.php';
+include_once 'classes/befragungController.php';
+include_once 'classes/befragungView.php';
+
+//Exception + Error 
 include_once 'classes/exceptionMessage.php';
 include_once 'error.php';
-
 
 class Dbh
 {

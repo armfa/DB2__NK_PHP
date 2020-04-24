@@ -6,11 +6,11 @@ class BefragungController extends Befragung{
     public function createOrUpdateFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
         //Check, ob Antwort auf Frage schon abgegeben wurde in DB
         //Falls ja, dann update, wenn Unterschied
-        if($this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer)[0]['Antwort'] != $Antwort AND $this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer)[0]) {
+        if($this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer)) {
             $this->setFrageAntwortUpdateStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort);
         }
         //Falls Nein, dann Insert 
-        if($this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer)[0] == false){
+        if($this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer) == false){
             $this->setFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort);
         }
     }
@@ -33,4 +33,13 @@ class BefragungController extends Befragung{
             $this->setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, 0, $kommentar);
         }
     }
+
+    public function showSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer){
+        return $this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer);
+    }
+
+    public function showFragenummerStmt($Fragebogenkuerzel, $InhaltFrage){
+        return $this->getFragenummerStmt($Fragebogenkuerzel, $InhaltFrage);
+    }
+
 }

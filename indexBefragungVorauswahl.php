@@ -1,9 +1,7 @@
 <?php
 
 include_once 'classes/dbh.class.php';
-include_once 'classes/befragung.class.php';
-include_once 'classes/befragungController.php';
-include_once 'classes/befragungView.php';
+
 
 ?>
 
@@ -14,10 +12,13 @@ include_once 'classes/befragungView.php';
     <h1>Welche Umfrage möchten Sie starten?</h1>
 
 <?php
-    if (!isset($_GET['k'])) {
+    if (isset($_GET['k'])) {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich abgeschickt!</p>";
     }
+    $bContr = new BefragungView();
+    $bContr->showFragebogenfromBenutzer('user1');
 ?>
+
 
 <form action="indexBefragung.php" method="post">
         <label>Fragebogen</label>

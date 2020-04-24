@@ -2,11 +2,11 @@
 
 class Befragung extends Dbh{
 
-    protected function getFragebogenfromBenutzer($benutzer){
+    protected function getFragebogenfromStudentStnmt($student){
         try {
-            $sql = "SELECT * FROM fragebogen WHERE Benutzername = ?"; //ToDo: Nur für benutzer freigfeschaltete Fragebögen
+            $sql = "SELECT * FROM fragebogen f WHERE Benutzername = ?"; // Freischalten --> fargebogen, die für user freigeschaltet sind, aber nich nicht abgegeben
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$benutzer]);
+            $stmt->execute([$student]);
             $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $Frageboegen;
         } catch (PDOException $e) {
@@ -107,7 +107,7 @@ class Befragung extends Dbh{
             $sql = "SELECT * FROM bearbeitet WHERE Matrikelnummer = ? AND KUERZEL = ? and Abgabestatus = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel, $Abgabestatus]);
-            $beantwortetarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $beantwortetarray = $stmt->fetch(PDO::FETCH_ASSOC);
             return $beantwortetarray;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
@@ -136,4 +136,18 @@ class Befragung extends Dbh{
             $exceptionMessage->displayException($e);
         }
     }
+
+    protected function getFragenummerStmt($Fragebogenkuerzel, $InhaltFrage){
+        try {
+            $sql = "SELECT * FROM fragen WHERE Kuerzel = ? AND InhaltFrage = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogenkuerzel, $InhaltFrage]);
+            $frageNummer = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $frageNummer;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
 }
