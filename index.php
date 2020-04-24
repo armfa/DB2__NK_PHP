@@ -1,9 +1,6 @@
 <?php
 
   include_once 'classes/dbh.class.php';
-  include_once 'classes/kurs.class.php';
-  include_once 'classes/kursController.php';
-  include_once 'classes/kursView.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -7,9 +7,6 @@
   }*/
 
   include_once 'classes/dbh.class.php';
-  include_once 'classes/fragebogen.class.php';
-  include_once 'classes/fragebogenController.php';
-  include_once 'classes/fragebogenView.php';
 ?>
 
 <html>

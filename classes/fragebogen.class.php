@@ -1,6 +1,5 @@
 <?php
 //Isabelle Scheffler
-//14.04.2020
 
     //ToDo: Error Handling is missing 
 
