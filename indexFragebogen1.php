@@ -9,9 +9,9 @@ include_once 'classes/fragebogenView.php';
 include_once 'classes/kursView.php';
 include_once 'classes/kurs.class.php';
 
-$frageObject = new FragebogenView();
-$freischaltenObj = new fragebogenController();
-$benutzerObject = new KursView();
+$fragebogenView = new FragebogenView();
+$fragebogenCon = new FragebogenController();
+$kursView = new KursView();
 
 
 
@@ -24,10 +24,6 @@ if (isset($_POST['fragebogenAnlegen'])) {
     $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
 }
 
-//Fragebogen Freigeben
-if (isset($_POST['freigeben'])) {
-    $freischaltenObj->fragebogenFreischalten($kuerzel, $kursname);
-}
 
 
 ?>
@@ -69,13 +65,13 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
 <form action="" method="post" >
     <select name="fragebogen">
         <?php
-        $frageObject->showFragebogenVonBenutzer('user1');
+        $fragebogenView->showFragebogenVonBenutzer('user1');
         ?>
     </select>
 
-    <select name="kurses">
+    <select name="kurse">
         <?php
-        $benutzerObject->showKursesfromBenutzer('user1');
+        $kursView->showKursesfromBenutzer('user1');
         ?>
     </select>
     <input type="submit" name="freigeben" value="Fragebogen freigeben" />
@@ -86,7 +82,7 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
 <form action="" method="post">
     <select name="fragebogenBearbeiten">
         <?php
-        $frageObject->showFragebogenVonBenutzer('user1');
+        $fragebogenView->showFragebogenVonBenutzer('user1');
         ?>
     </select>
     <input type="submit" name="fragenBearbeiten" value="Fragebogen bearbeiten" />
@@ -94,9 +90,9 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
     <?php
     //ToDO
     //Frage löschen
-    //echo $_POST['fragebogenBearbeiten'];
+    echo $_POST['fragebogenBearbeiten'];
     if(isset($_Post['fragenBearbeiten'])){
-        $frageObject->showFragenVonFragebogen($_POST['fragebogenBearbeiten']);
+        $fragebogenView->showFragenVonFragebogen($_POST['fragebogenBearbeiten']);
         echo  '<input type="submit" name="frageLoeschen" value="Frage löschen" />';
     }
     ?>
@@ -113,11 +109,9 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
 
 
 <?php
-
-/* $fragebogenObj = new fragebogenController();
     if(isset($_POST['fragebogenAnlegen'])){
         $fragebogen = $_POST['titel'];
-        $anzahlFragen = $_POST['AnzahlFragen'];
+        $anzahlFragen = $_POST['anzahlFragen'];
         $benutzername = $_SESSION['Benutzername'];
         //Prüfen, ob Feld "Fragebogen" leer ist
         if ((empty($fragebogen)) or (empty($anzahlFragen))) {
@@ -130,11 +124,11 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
                 exit();
             }
             //Prüfen, ob Fragebogen schon existiert
-            if ($fragebogenObj->checkFragebogen($fragebogen) != false) {
+            if ($fragebogenCon->checkFragebogen($fragebogen) != false) {
                 header("Location: ../DB2__NK_PHP/indexFragebogen1.php?k=nosuccess");
                 exit();
             } else {
-                $fragebogenObj->createFragebogen($fragebogen, $benutzername);
+                $fragebogenCon->createFragebogen($fragebogen, $benutzername);
                 header("Location: ../DB2__NK_PHP/indexFragebogen1.php?k=success");
                 exit();
             }
@@ -158,10 +152,18 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
             echo "<p class='error'>Diesen Fragebogen gibt es schon!</p>";
             exit();
         } elseif ($fragebogenErstellen == "success") {
-            header("Location: ../DB2__NK_PHP/indexFrage1.php");
-            // echo "<p class='success'>Sie haben den Fragebogen erfolgreich erstellt.!</p>";
+           
+            echo "<p class='success'>Sie haben den Fragebogen erfolgreich erstellt.!</p>";
             exit();
         }
-    } */
+    }
+
+
+    //Fragebogen Freigeben
+    if (isset($_POST['freigeben'])) {
+        $kuerzel = $_POST['fragebogen'];
+        $kursname = $_POST['kurse'];
+        $fragebogenCon->fragebogenFreischalten($kuerzel, $kursname);
+    }
 
 ?>

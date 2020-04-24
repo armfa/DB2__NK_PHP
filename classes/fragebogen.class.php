@@ -95,7 +95,7 @@ class Fragebogen extends Dbh {
 
     protected function getFragenVonFragebogenStmt($kuerzel){
         try{
-            $sql = "SELECT * FROM fragen WHERE Kuerzel = ?";
+            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragen = $stmt->fetchAll(PDO::FETCH_ASSOC);

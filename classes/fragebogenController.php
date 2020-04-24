@@ -1,6 +1,6 @@
 <?php
 
-class fragebogenController extends Fragebogen{
+class FragebogenController extends Fragebogen{
 
     public function createFragebogen($fragebogen, $benutzername){
         $this->setFragebogenStmt($fragebogen, $benutzername);     
