@@ -1,6 +1,5 @@
 <?php
 //Fabrice Armbruster
-//13.04.2020
 
 //Diese Klasse beinhaltet alle Funktionen bezüglich des "Kurses".
 //Hierzu zählen die Funktionen

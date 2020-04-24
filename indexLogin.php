@@ -2,12 +2,9 @@
 
 
 //Dana Geßler	
-//16.04.2020
 
-include_once 'classes/benutzer.class.php';
-include_once 'classes/benutzerController.php';
-include_once 'classes/benutzerView.php';
-include_once 'classes/home.php';
+include_once 'classes/dbh.class.php';
+
 ?>
 
 <!DOCTYPE html>
