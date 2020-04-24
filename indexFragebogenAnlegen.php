@@ -41,6 +41,4 @@ if ($_SESSION['AnzahlFragenSession']>= 1) {
 }
 ?>
 
-
-
 </html>

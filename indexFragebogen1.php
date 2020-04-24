@@ -1,34 +1,120 @@
 <?php
-    //session_start();
+//session_start();
 
 
-  include_once 'classes/dbh.class.php';
-  include_once 'classes/fragebogen.class.php';
-  include_once 'classes/fragebogenController.php';
-  include_once 'classes/fragebogenView.php';
-  include_once 'indexFragebogenAnlegen.php';
+include_once 'classes/dbh.class.php';
+include_once 'classes/fragebogen.class.php';
+include_once 'classes/fragebogenController.php';
+include_once 'classes/fragebogenView.php';
+include_once 'classes/kursView.php';
+include_once 'classes/kurs.class.php';
+
+$frageObject = new FragebogenView();
+$freischaltenObj = new fragebogenController();
+$benutzerObject = new KursView();
+
+
+
+
+
+session_start();
+//Input-Felder Fragebogen Anlegen laden
+$_SESSION["AnzahlFragenSession"] = 0;
+if (isset($_POST['fragebogenAnlegen'])) {
+    $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
+}
+
+//Fragebogen Freigeben
+if (isset($_POST['freigeben'])) {
+    $freischaltenObj->fragebogenFreischalten($kuerzel, $kursname);
+}
+
 
 ?>
-
 <html>
-	<head>
-		<title>Fragebogen erstellen</title>
-        <?php
-            $_SESSION['Benutzername'] = "user1";
-        ?>
-	</head>
-	
-	<body>
-		
-        <a href="indexStartseite.php">Startseite</a>
-        <a href="/indexFragebogenAnlegen.php">Fragebogen anlegen</a></br>
-        <a href="indexFragebogen2.php">Fragebogen bearbeiten</a></br>
-        <a href="indexFragebogen3.php">Fragebogen freischalten</a></br>
-			
-	</body>
-</html>
+<h4>Fragebogen anlegen</h4>
 <?php
-    /* $fragebogenObj = new fragebogenController();
+// Eingabe des Titels und der Anzahl der Felder 
+?>
+<form action="" method="post">
+    <label for="TitelFragebogen">Titel Fragebogen:</label>
+    <input type="text" name="titel"> <br><br>
+    <label for="AnzahlFragen">Anzahl Fragen:</label>
+    <input type="text" name="anzahlFragen">
+    <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
+</form>
+<form action="" method="post">
+    <?php
+
+    // Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
+    $i = 1;
+    while ($i <= $_SESSION["AnzahlFragenSession"]) {
+        echo '<label for="inhaltFrage"> Frage ' . $i . '</label>';
+        echo '<input type="text" name="inhaltFrage' . $i . '"></br>';
+        $i++;
+    }
+    ?>
+</form>
+<?php
+
+//Wenn mindestens eine Frage erstellt werden kann, kann der Fragebogen erstellt und abgeschlossen werden.
+if ($_SESSION['AnzahlFragenSession'] >= 1) {
+    echo '<form action="" method="post">
+<input type="submit" name="fragenhinzufuegen" value="Frage/n hinzufügen" /><br>
+</form>';
+}
+?>
+
+<h4>Fragebogen freigeben</h4>
+<form action="" method="post" >
+    <select name="fragebogen">
+        <?php
+        $frageObject->showFragebogenVonBenutzer('user1');
+        ?>
+    </select>
+
+    <select name="kurses">
+        <?php
+        $benutzerObject->showKursesfromBenutzer('user1');
+        ?>
+    </select>
+    <input type="submit" name="freigeben" value="Fragebogen freigeben" />
+
+</form>
+
+<h4>Fragebogen bearbeiten</h4>
+<form action="" method="post">
+    <select name="fragebogenBearbeiten">
+        <?php
+        $frageObject->showFragebogenVonBenutzer('user1');
+        ?>
+    </select>
+    <input type="submit" name="fragenBearbeiten" value="Fragebogen bearbeiten" />
+</form>
+    <?php
+    //ToDO
+    //Frage löschen
+    //echo $_POST['fragebogenBearbeiten'];
+    if(isset($_Post['fragenBearbeiten'])){
+        $frageObject->showFragenVonFragebogen($_POST['fragebogenBearbeiten']);
+        echo  '<input type="submit" name="frageLoeschen" value="Frage löschen" />';
+    }
+    ?>
+
+    <br><br><br>
+    <input type="submit" name="kopieren" value="Fragebogen kopieren"/>
+    <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
+
+
+</html>
+
+
+
+
+
+<?php
+
+/* $fragebogenObj = new fragebogenController();
     if(isset($_POST['fragebogenAnlegen'])){
         $fragebogen = $_POST['titel'];
         $anzahlFragen = $_POST['AnzahlFragen'];
@@ -77,5 +163,5 @@
             exit();
         }
     } */
-    
+
 ?>

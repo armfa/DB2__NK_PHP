@@ -7,7 +7,7 @@
 
 class Fragebogen extends Dbh {
 
-    protected function getFragebogen(){
+    protected function getFragebogenStmt($titelFragebogen){
         try{
             $sql = "SELECT * FROM fragebogen";
             $stmt = $this->connect()->query($sql);
@@ -63,7 +63,7 @@ class Fragebogen extends Dbh {
             $sql = "SELECT fr.* FROM fragebogen fr, benutzer b WHERE fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$benutzer]);
-            $fragebogen = $stmt->fetch(PDO::FETCH_ASSOC);
+            $fragebogen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragebogen;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
