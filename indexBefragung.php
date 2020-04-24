@@ -84,10 +84,8 @@ if (isset($_POST['fragebogenFertig'])) {
 //Abgegebene Antworten aus DB laden
 if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     //Prüfen, ob Frage schon beantwortet
-    print_r($_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]['InhaltFrage']);
     //Fragenummer holen
     $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]['InhaltFrage'])[0]['Fragenummer'];
-    print_r($Fragenummer);
     //Prüfen, ob schon eine Antwort auf die Frage mit der Fragenummer existiert
     if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], 2345667)) {
         //Falls ja, dann lade diese in die Check Variable. 

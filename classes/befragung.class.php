@@ -2,11 +2,12 @@
 
 class Befragung extends Dbh{
 
-    protected function getFragebogenfromStudentStnmt($student){
+    protected function getFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus){
         try {
-            $sql = "SELECT * FROM fragebogen f WHERE Benutzername = ?"; // Freischalten --> fargebogen, die für user freigeschaltet sind, aber nich nicht abgegeben
+            $sql = "SELECT DISTINCT frageb.Kuerzel, frageb.Titel FROM fragebogen frageb, freischalten freisch, kurs k, student s, fragen f, bearbeitet bearb, beantwortet beantw WHERE frageb.Kuerzel = freisch.Kuerzel AND freisch.Kursname = k.Kursname AND k.Kursname = s.Kursname AND s.Matrikelnummer = bearb.Matrikelnummer AND bearb.Kuerzel = frageb.Kuerzel AND s.Matrikelnummer = ? AND bearb.Abgabestatus = ?";
+            // Freischalten --> fargebogen, die für user freigeschaltet sind, aber nich nicht abgegeben
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$student]);
+            $stmt->execute([$Matrikelnummer, $Abgabestatus]);
             $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $Frageboegen;
         } catch (PDOException $e) {

@@ -15,9 +15,9 @@ class BefragungView extends Befragung{
         return $this->getFragenStmt($Fragebogenkuerzel);
     }
 
-    public function showFragebogenfromBenutzer($benutzer){
+    public function showFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus){
         //Alle Fragebögen des Studenten, die noch nicht abgegeben sind. 
-        $fragebogen = $this->getFragebogenfromBenutzer($benutzer, 0);
+        $fragebogen = $this->getFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus);
         $i = 0;
         while($i < count($fragebogen)){
             echo "<option value='".$fragebogen[$i]['Kuerzel']."'>".$fragebogen[$i]['Titel']."</option>";

@@ -15,8 +15,6 @@ include_once 'classes/dbh.class.php';
     if (isset($_GET['k'])) {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich abgeschickt!</p>";
     }
-    $bContr = new BefragungView();
-    $bContr->showFragebogenfromBenutzer('user1');
 ?>
 
 
@@ -27,7 +25,7 @@ include_once 'classes/dbh.class.php';
             //Dropdownauswahl des Fragebogens, welcher für diesen Student freigeschalten ist. 
             //ToDo: aktueller Benutzer Übergeben     
             $bContr = new BefragungView();
-            $bContr->showFragebogenfromBenutzer('user1'); //ToDo: benutzer einbinden
+            $bContr->showFragebogenfromStudentAbgabestatusStnmt(2345667, 0);//ToDo: benutzer einbinden
             ?>
         </select></br>
         <button type="submit" name="umfrageStarten">Umfrage starten</button>
