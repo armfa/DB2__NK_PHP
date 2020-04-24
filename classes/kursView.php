@@ -1,8 +1,5 @@
 <?php
-  include_once 'classes/kurs.class.php';
-
 //Fabrice Armbruster
-//13.04.2020
 
 //Diese Klasse bildet und verarbeitet das FrontEnd zu den Funktionaliäten der Klasse "Kurs"
 

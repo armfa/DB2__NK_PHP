@@ -3,11 +3,6 @@
 
 
 include_once 'classes/dbh.class.php';
-include_once 'classes/fragebogen.class.php';
-include_once 'classes/fragebogenController.php';
-include_once 'classes/fragebogenView.php';
-include_once 'classes/kursView.php';
-include_once 'classes/kurs.class.php';
 
 $fragebogenView = new FragebogenView();
 $fragebogenCon = new FragebogenController();
@@ -24,6 +19,10 @@ if (isset($_POST['fragebogenAnlegen'])) {
     $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
 }
 
+//Fragebogen Freigeben
+if (isset($_POST['freigeben'])) {
+    $freischaltenObj->fragebogenFreischalten($_POST['fragebogen'], $_POST['kurses']);
+}
 
 
 ?>

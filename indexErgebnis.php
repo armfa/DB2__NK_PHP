@@ -7,6 +7,9 @@ eine Kursauswahl eine kursweise Auswertung durchführen. Er bekommt zu jeder Fra
 Durchschnitts-, Minimal-, Maximal und Standardabweichungswerte der Antworten als auch eine
 Liste aller Kommentare dargestellt. Die Informationen sind über Aufrufe zentrale PHP-Funktionen
 (siehe Punkt 4) zu ermitteln. */
+
+include_once 'classes/dbh.class.php';
+
 ?>
 
 <html>
