@@ -36,7 +36,6 @@ include_once 'error.php';
 include_once 'classes/benutzer.class.php';
 include_once 'classes/benutzerController.php';
 include_once 'classes/benutzerView.php';
-include_once 'classes/home.php';
 
 
 class Dbh

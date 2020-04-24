@@ -57,22 +57,24 @@ if (isset($_POST['benutzerLogin'])) {
     if (empty($benutzername) || empty($passwort)) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=empty");
         exit();
+        //Prüfen ob Benutzernamen und Paswort nicht übereinstimmen
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == true and $userObjekt->getBenutzerStmt($passwort) == false) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginfailed");
-        //neue session
         exit();
         //Prüfen, ob Nutzer schon existiert
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == false) {
+        //Benutzer ist noch nicht registriert -> Benutzer wird registriert
         $userObjekt->setBenutzerStmt($benutzername, $passwort);
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");
-        //neue session
+        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");           //ToDo->auf index seite weiterleiten
+                                                                                                    //neue session -> login in session vermerken.               
         exit();
     } else {
         $userObjekt->getLoginStmt($benutzername, $passwort);
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
         exit();
-        //neue session
+                                                                                                    //ToDo->auf index seite weiterleiten
+                                                                                                    //neue session -> login in session vermerken
     }
 }
 
