@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
 //Fabrice Armbruster
 
 //Diese Klasse beinhaltet alle Funktionen bezüglich des "Kurses".

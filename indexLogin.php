@@ -57,10 +57,10 @@ include_once 'classes/home.php';
 
 <?php
 $userObjekt = new benutzerController();
-session_destroy();
 if (isset($_POST['benutzerLogin'])) {
     $benutzername = $_POST['Benutzername'];
     $passwort = $_POST['Passwort'];
+    $_SESSION[$benutzername]; 
     //Prüfen, ob Feld Benutzername oder Feld Passwort leer sind
     if (empty($benutzername) || empty($passwort)) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=empty");

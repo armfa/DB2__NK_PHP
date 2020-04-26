@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
 
 class Befragung extends Dbh{
 
