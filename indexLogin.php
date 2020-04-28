@@ -33,7 +33,7 @@ include_once 'classes/dbh.class.php';
                 <tr>
                     <th>Passwort:</th>
                     <td>
-                        <input type="password" name="Passwort" required>
+                        <input type="password" name="Passwort">
                     </td>
                 </tr>
                 <tr>
@@ -66,12 +66,13 @@ if (isset($_POST['benutzerLogin'])) {
         //Benutzer ist noch nicht registriert -> Benutzer wird registriert
         $userObjekt->setBenutzerStmt($benutzername, $passwort);
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");           //ToDo->auf index seite weiterleiten
-                                                                                                    //neue session -> login in session vermerken.               
+        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");           //ToDo->auf index seite weiterleiten                                                                                                  //neue session -> login in session vermerken.               
         exit();
     } else {
         $userObjekt->getLoginStmt($benutzername, $passwort);
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
+        session_start();
+        $_SESSION['benutzername'] = 'user1';
         exit();
                                                                                                     //ToDo->auf index seite weiterleiten
                                                                                                     //neue session -> login in session vermerken

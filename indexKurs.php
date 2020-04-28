@@ -1,6 +1,14 @@
 <?php
 //Fabrice Armbruster
 
+//Diese Seite akzeptiert nur Benutzer
+if (isset($_SESSION['benutzername']) == false) {
+    //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
+
 include_once 'classes/dbh.class.php';
 
 $x = new KursView();
@@ -33,7 +41,7 @@ $x = new KursView();
             //Dropdownauswahl des Kurses
             //ToDo: aktueller Benuttzer Übergeben     
             $benutzerObject = new KursView();
-            $benutzerObject->showKursesfromBenutzer('user1');
+            $benutzerObject->showKursesfromBenutzer($_SESSION['benutzername']);
             ?>
         </select></br>
         <input type="text" name="matrikelnummer" placeholder="Matrikelnummer" maxlength="7"></br>

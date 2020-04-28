@@ -1,64 +1,56 @@
 <?php
 
-  include_once 'classes/dbh.class.php';
+//Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
+if (isset($_SESSION['benutzername']) == false or isset($_SESSION['matrikelnummer']) == false) {
+    //Falls nicht eingeloogt, wird der Benutzer/Student auf die Loginseite weitergeleitet.
+    header("Location: ../DB2__NK_PHP/indexLogin.php");
+    exit();
+}
+
+include_once 'classes/dbh.class.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hochschule Umfragen</title>
-    <style>
-    
-    h1 {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 25pt;
-        color: white;
-    }
-    p {
-    	text-align: center; 
-    	color: green;
-    }
-    .navigation{
-        text-align: left;
-        margin-left: 10rem;
-        margin-right: 10rem;
-        margin-top: 1rem; 
-        margin-bottom: 1rem;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 15pt;
-        background-color: lightgrey;
-    }
-    .topHeader{
-        text-align: center;
-        margin-left: 10rem;
-        margin-right: 10rem;
-        margin-top: 3rem; 
-        margin-bottom: 2rem;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 25pt;
-        background-color: #c93838;
-    }
-    </style>
 </head>
-<body>
-    <div class = topHeader>
-    <h1>Herzlich Willkommen im Befragungstool, was möchten Sie tun?</h1> 
-    </div>  
- </p>
- <div>
-    <div class = navigation>
-       <a href="indexKurs.php">Kurs anlegen</a>
-    </div>
-    <div class = navigation>
-          <a href="indexLogin.php">Login</a>
-    </div>
-    <div class = navigation>
-        <a href="indexErgebnis.php">Ergebnis</a>
-    </div>
- </div>
 
-  
+<body>
+    <div class=topHeader>
+        <h1>Herzlich Willkommen im Befragungstool, was möchten Sie tun?</h1>
+    </div>
+    <div>
+
+
+    <?php
+    //Falls der Benutzer eingeloggt ist 
+    if (isset($_SESSION['benutzername'])) {
+        echo         
+    '<div>
+        <a href="indexKurs.php">Kurs anlegen, Studenten anlegen und Kurs zuweisen</a>
+    </div>
+    <div>
+        <a href="indexFragebogen1.php">Fragebogen anlegen, bearbiten kopieren, freigeben</a>
+    </div>
+    <div>
+        <a href="indexErgebnis.php">Ergebnisse aufrufen</a>
+    </div>';
+    }
+
+    //Falls der Student eingeloggt ist 
+    if (isset($_SESSION['matrikelnummer'])) {
+        echo 
+        '<div>
+        <a href="indexBefragungVorauswahl.php">Fragebogen ausfüllen</a>
+        </div>';
+    }
+    ?>
+
 </body>
+
 </html>
