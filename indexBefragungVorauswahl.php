@@ -1,4 +1,12 @@
 <?php
+//Fabrice Armbruster
+
+//________________________BESCHREIBUNG______________________
+//Diese Seite dient als Vorauswahl, auf der der Student die für ihn 
+//freigeschalteten und noch nicht abgegebenen Umfragen aufrufen kann. 
+//Dafür wird er weitergeleitet auf die indexBefragung.php
+
+include_once 'classes/dbh.class.php';
 
 //Diese Seite akzeptiert nur Studenten
 if (isset($_SESSION['matrikelnummer']) == false) {
@@ -7,9 +15,6 @@ if (isset($_SESSION['matrikelnummer']) == false) {
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
-
-include_once 'classes/dbh.class.php';
-
 ?>
 
 <!doctype HTML>

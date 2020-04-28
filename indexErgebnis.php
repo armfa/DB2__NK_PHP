@@ -1,5 +1,4 @@
 +<?php
-//Fabrice Armbruster 
 
 /* 3. Ergebnisdarstellung
 Ein Fragebogenerfasser kann einen von ihm freigeschalteten Fragebogen auswählen und über

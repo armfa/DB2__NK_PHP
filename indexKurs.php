@@ -1,6 +1,8 @@
 <?php
 //Fabrice Armbruster
 
+include_once 'classes/dbh.class.php';
+
 //Diese Seite akzeptiert nur Benutzer
 if (isset($_SESSION['benutzername']) == false) {
     //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
@@ -8,8 +10,6 @@ if (isset($_SESSION['benutzername']) == false) {
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
-
-include_once 'classes/dbh.class.php';
 
 $x = new KursView();
 
