@@ -78,7 +78,7 @@ if (isset($_POST['benutzerLogin'])) {
         if(){
 
         }
-        $_SESSION['benutzername']= $userObjekt['benutzername'];
+        $_SESSION['benutzername']= $userObjekt['Benutzername'];
         $_SESSION['student']= $userObjekt['matrikelnummer'];
 
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
