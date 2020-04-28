@@ -1,8 +1,8 @@
 <?php
+//Fabrice Armbruster
 
 include_once 'classes/dbh.class.php';
 
-//Fabrice Armbruster
 //Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
   if (isset($_SESSION['benutzername']) == false AND isset($_SESSION['matrikelnummer']) == false) {
     //Falls nicht eingeloogt, wird der Benutzer/Student auf die Loginseite weitergeleitet.
@@ -21,7 +21,7 @@ include_once 'classes/dbh.class.php';
     <title>Hochschule Umfragen</title>
 </head>
 
-<body>
+<body> 
     <div class=topHeader>
         <h1>Herzlich Willkommen im Befragungstool, was möchten Sie tun?</h1>
     </div>
