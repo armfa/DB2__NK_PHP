@@ -3,15 +3,10 @@ session_start();
 ?>
 <?php
 
-
 //Dana Geßler	
 //16.04.2020
 
-include_once 'classes/benutzer.class.php';
-include_once 'classes/benutzerController.php';
-include_once 'classes/benutzerView.php';
-include_once 'classes/home.php';
-
+include_once 'classes/dbh.class.php';
 ?>
 
 <!DOCTYPE html>
@@ -61,10 +56,16 @@ if (isset($_POST['benutzerLogin'])) {
     $benutzername = $_POST['Benutzername'];
     $passwort = $_POST['Passwort'];
     $_SESSION[$benutzername]; 
-    //Prüfen, ob Feld Benutzername oder Feld Passwort leer sind
-    if (empty($benutzername) || empty($passwort)) {
+    //Prüfen, ob Feld Benutzername leer ist
+    if (empty($benutzername)) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=empty");
         exit();
+        //Student? 
+    } elseif($userObjekt->getStudentStmt($benutzername)){
+        session_start();
+        $_SESSION['matrikelnummer']= $userObjekt['Matrikelnummer'];
+        exit();
+        //Benutzer?
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == true and $userObjekt->getBenutzerStmt($passwort) == false) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginfailed");
         //neue session
@@ -78,14 +79,10 @@ if (isset($_POST['benutzerLogin'])) {
         exit();
     } else {
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        $_SESSION['benutzername']= $benutzername;
-
+        $_SESSION['benutzername']= $userObjekt['Benutzername'];
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
         session_start();
-        $_SESSION['benutzername'] = 'user1';
         exit();
-
-        //neue session
     }
 }
 
@@ -101,7 +98,7 @@ if (!isset($_GET['login'])) {
     //Then we check if the GET value is equal to a specific string
     if ($loginstatus == "empty") {
         //If it is we create an error or success message!
-        echo "<p class='error'>Bitte füllen Sie beide Felder aus!</p>";
+        echo "<p class='error'>Bitte geben Sie einen Benutzernamen an!</p>";
         exit();
     } elseif ($loginstatus == "loginfailed") {
         echo "<p class='error'>Falsches Passwort!</p>";
