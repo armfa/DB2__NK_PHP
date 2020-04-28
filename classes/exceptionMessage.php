@@ -1,7 +1,6 @@
 <?php
 
 //Fabrice Armnbruster 
-//15.04.2020
 
 class exceptionMessage extends dbh {
 

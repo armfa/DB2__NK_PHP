@@ -29,7 +29,7 @@ include_once 'classes/dbh.class.php';
                 <tr>
                     <th>Benutzername:</th>
                     <td>
-                        <input type="text" name="Benutzername" required>
+                        <input type="text" name="Benutzername">
                     </td>
                 </tr>
                 <tr>
@@ -55,32 +55,35 @@ $userObjekt = new benutzerController();
 if (isset($_POST['benutzerLogin'])) {
     $benutzername = $_POST['Benutzername'];
     $passwort = $_POST['Passwort'];
-    $_SESSION[$benutzername]; 
     //Prüfen, ob Feld Benutzername leer ist
     if (empty($benutzername)) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=empty");
         exit();
-        //Student? 
+//Student?___________________________________________________________________________________________________________  
+         //Prüfen ob sich ein Student mit einer 7-Stelligen Matrikelnummer einloggen möchte? 
     } elseif($userObjekt->getStudentStmt($benutzername)){
         session_start();
         $_SESSION['matrikelnummer']= $userObjekt['Matrikelnummer'];
+        header("Location: ../DB2__NK_PHP/index.php");
         exit();
-        //Benutzer?
+//Benutzer? ________________________________________________________________________________________________________
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == true and $userObjekt->getBenutzerStmt($passwort) == false) {
+        //Passwort und Benutzername stimmen nicht überein
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginfailed");
-        //neue session
         exit();
-        //Prüfen, ob Nutzer schon existiert
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == false) {
+        //Nutzer existiert nicht -> wird neu angelegt
         $userObjekt->setBenutzerStmt($benutzername, $passwort);
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");           //ToDo->auf index seite weiterleiten                                                                                                  //neue session -> login in session vermerken.               
-        //neue session
+        header("Location: ../DB2__NK_PHP/index.php"); 
+        $_SESSION['benutzername']= $userObjekt['Benutzername'];           
+        session_start();
         exit();
     } else {
+        //Erfolgreicher Login eines Benutzers
         $userObjekt->getLoginStmt($benutzername, $passwort);
         $_SESSION['benutzername']= $userObjekt['Benutzername'];
-        header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
+        header("Location: ../DB2__NK_PHP/index.php");
         session_start();
         exit();
     }
@@ -105,14 +108,6 @@ if (!isset($_GET['login'])) {
         exit();
     } elseif ($loginstatus == "neuerBenutzerRegistriert") {
         echo "<p class='error'>Sie wurden als Benutzer registriert! Sie können sich nun mit Ihren Daten einloggen.</p>";
-        exit();
-    } elseif ($loginstatus == "loginsuccess") {
-        echo "<p class='success'>Sie wurden erfolgreich eingeloggt!</p>";
-        $name = $_SESSION['benutzername'];
-        echo $name;
-        header("Location: ../DB2__NK_PHP/indexHome.php");
-        
-        exit();
     }
 }
 

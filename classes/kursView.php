@@ -1,7 +1,4 @@
 <?php
-session_start();
-?>
-<?php
 //Fabrice Armbruster
 
 //Diese Klasse bildet und verarbeitet das FrontEnd zu den Funktionaliäten der Klasse "Kurs"

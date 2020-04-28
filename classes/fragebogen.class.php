@@ -1,7 +1,4 @@
 <?php
-session_start();
-?>
-<?php
 //Isabelle Scheffler
 
     //ToDo: Error Handling is missing 

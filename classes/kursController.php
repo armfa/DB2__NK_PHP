@@ -1,7 +1,4 @@
 <?php
-session_start();
-?>
-<?php
 //Fabrice Armbruster
 
 class kursController extends kurs{
