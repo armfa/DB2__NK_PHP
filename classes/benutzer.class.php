@@ -18,7 +18,6 @@ class Benutzer extends Dbh {
         }
 		}
 		
-
 		public function setBenutzerStmt($Benutzername, $Passwort){
 			try{
 			$sql="INSERT INTO benutzer (Benutzername, Passwort) VALUES (?, ?)";
