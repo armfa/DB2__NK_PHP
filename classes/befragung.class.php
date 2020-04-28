@@ -1,7 +1,5 @@
 <?php
-session_start();
-?>
-<?php
+//Fabrice Armbruster 
 
 class Befragung extends Dbh{
 

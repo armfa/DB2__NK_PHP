@@ -1,4 +1,5 @@
 <?php
+include_once 'classes/dbh.class.php';
 
 //Diese Seite akzeptiert nur Benutzer
 if (isset($_SESSION['benutzername']) == false) {
@@ -7,8 +8,6 @@ if (isset($_SESSION['benutzername']) == false) {
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
-
-include_once 'classes/dbh.class.php';
 
 $frageObject = new FragebogenView();
 $freischaltenObj = new fragebogenController();

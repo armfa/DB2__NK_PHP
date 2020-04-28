@@ -1,6 +1,8 @@
 <?php
 //Fabrice Armbruster
 
+include_once 'classes/dbh.class.php';
+
 //Diese Seite akzeptiert nur Benutzer
 if (isset($_SESSION['benutzername']) == false) {
     //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
@@ -8,8 +10,6 @@ if (isset($_SESSION['benutzername']) == false) {
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
-
-include_once 'classes/dbh.class.php';
 
 $x = new KursView();
 
@@ -106,10 +106,7 @@ if (isset($_POST['studentAnlegen'])) {
     }
 }
 
-//Here we create an error message using GET methods, to see if we have a specific GET superglobal
-//This method we can use with the PHP code in the above form, to prevent the data from being deleted in the inputs, if the user makes a mistake
-//Zunächst wird geprüft, ob wir kein GET in der URL mit dem namen "k" haben.
-
+//Fehlermeldungen im GET 
 //Kurs
 if (!isset($_GET['k'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 

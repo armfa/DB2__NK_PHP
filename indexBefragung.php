@@ -6,6 +6,8 @@
 //Es werden dafür Funktionen in den Klassen "Befragungsview", "BefragungsController" und "Befragung.class" ausgelagert. 
 //Zudem wird die durchgeführte Umfrage auf der Seite indexBefragungVorauswahl.php ausgewählt.
 
+include_once 'classes/dbh.class.php';
+
 //Diese Seite akzeptiert nur Studenten
 if (isset($_SESSION['matrikelnummer']) == false) {
     //Falls Student nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
@@ -13,8 +15,6 @@ if (isset($_SESSION['matrikelnummer']) == false) {
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
-
-include_once 'classes/dbh.class.php';
 
 //Initialisierung der Befragungsklasen -->ToDo: in Sessions speichern/ nach Anmeldung initialiseren, sodass Sie nicht jedes mal neu initialisert werden. 
 $befragungsobjekt = new BefragungView();

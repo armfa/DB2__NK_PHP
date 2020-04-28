@@ -28,14 +28,15 @@ include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
 include_once 'classes/befragungView.php';
 
-//Exception + Error 
+//Exception 
 include_once 'classes/exceptionMessage.php';
-include_once 'error.php';
 
 //Login
 include_once 'classes/benutzer.class.php';
 include_once 'classes/benutzerController.php';
 include_once 'classes/benutzerView.php';
+
+session_start();
 
 
 class Dbh
@@ -54,7 +55,7 @@ class Dbh
       return $pdo;
     } catch (PDOException $e) {
       $exception = new exceptionMessage();
-      $exception->db_connect_failed_message();
+      $exception->db_connect_failed_message($e);
     }
   }
 }
