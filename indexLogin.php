@@ -3,15 +3,10 @@ session_start();
 ?>
 <?php
 
-
 //Dana Geßler	
 //16.04.2020
 
-include_once 'classes/benutzer.class.php';
-include_once 'classes/benutzerController.php';
-include_once 'classes/benutzerView.php';
-include_once 'classes/home.php';
-
+include_once 'classes/dbh.class.php';
 ?>
 
 <!DOCTYPE html>
@@ -78,14 +73,18 @@ if (isset($_POST['benutzerLogin'])) {
         exit();
     } else {
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        $_SESSION['benutzername']= $benutzername;
+        //Nach erfolgreichem Login wird session gesetzt
+        //prüfen ist es ein Student oder ein benutzer?
+        if(){
+
+        }
+        $_SESSION['benutzername']= $userObjekt['Benutzername'];
+        $_SESSION['student']= $userObjekt['matrikelnummer'];
 
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
         session_start();
         $_SESSION['benutzername'] = 'user1';
         exit();
-
-        //neue session
     }
 }
 
