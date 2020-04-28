@@ -2,11 +2,24 @@
 
 //Dana Geßler + Fabrice Armbruster
 
+//______________________KLASSENBESCHREIBUNG______________________
+//Diese Seite benhaltet alle Login-Funktionalitäten. 
+//Studenten und Benutzer können sich einloggen
+//Werden folgende Fälle unterschieden:
+// - es wurde kein benutzername angegeben
+// - es wurde eine passende 7-Stellige Matrikelnummer eingegeben
+// - es wurde ein bekannter Benutzernamen mit richtigem/falschem Passwort eingegeben
+// - es wird ein neuere Benutzernamen eingegeben
+//      - in diesem Fall wird die Länge des Benutzernamens,
+//      - die Zeichen (keine 7 Ziffern, da diese Für Matrikelnummern reserviert),
+//      - sowie die Passwortlänge zwischen 8 und 64 Zeichen geprüft.
+// - in allen Fehlerfällen wird eine Fehlermeldung ausgegeben. 
+
 include_once 'classes/dbh.class.php';
 
 //Automatischer Logout, wenn man auf diese Seite kommt. 
-/* unset($_SESSION['benutzername']);
-unset($_SESSION['matrikelnummer']); */
+unset($_SESSION['benutzername']);
+unset($_SESSION['matrikelnummer']);
 
 ?>
 
@@ -80,7 +93,7 @@ if (isset($_POST['benutzerLogin'])) {
             header("Location: ../DB2__NK_PHP/indexLogin.php?login=no7valueAllowed");
             exit();
         }
-        if (strlen($benutzername) < 6) {
+        if (strlen($benutzername) < 6 AND strlen($benutzername) > 40 ) {
             header("Location: ../DB2__NK_PHP/indexLogin.php?login=6username");
             exit();
         }
@@ -124,7 +137,7 @@ if (!isset($_GET['login'])) {
         echo "<p class='error'>Bitte wählen Sie ein Passwort aus, dass zwischen 8 und 64 Zeichen lang ist!</p>";
         exit();
     } elseif ($loginstatus == "6username") {
-        echo "<p class='error'>Bitte wählen Sie ein Benutzernamen, der mindestens aus 6 Zeichen besteht!</p>";
+        echo "<p class='error'>Bitte wählen Sie ein Benutzernamen, der  aus mindestens 6  und höchstens 40 Zeichen besteht!</p>";
         exit();
     } elseif ($loginstatus == "nologin") {
         echo "<p class='error'>Bitte loggen Sie sich zuerst ein!</p>";

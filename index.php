@@ -1,6 +1,9 @@
 <?php
 //Fabrice Armbruster
 
+//______________________KLASSENBESCHREIBUNG______________________
+//Diese Seite dient als Naviagationsseite, von der der Benutzer die für ihn erlaubten Seiten angezeigt bekommt. 
+
 include_once 'classes/dbh.class.php';
 
 //Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
