@@ -1,5 +1,4 @@
 <?php
-session_start();
 $_SESSION["AnzahlFragenSession"] = 0;
 if (isset($_POST['fragebogenAnlegenStarten'])) {
 $_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];

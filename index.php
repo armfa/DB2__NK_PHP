@@ -1,14 +1,16 @@
 <?php
 
 //Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
-if (isset($_SESSION['benutzername']) == false or isset($_SESSION['matrikelnummer']) == false) {
+/* if (isset($_SESSION['benutzername']) == false && isset($_SESSION['matrikelnummer']) == false) {
     //Falls nicht eingeloogt, wird der Benutzer/Student auf die Loginseite weitergeleitet.
     header("Location: ../DB2__NK_PHP/indexLogin.php");
     exit();
-}
+} */
+
+
 
 include_once 'classes/dbh.class.php';
-
+echo  $_SESSION['matrikelnummer'];
 ?>
 <!DOCTYPE html>
 <html lang="en">

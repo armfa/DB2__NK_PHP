@@ -37,6 +37,8 @@ include_once 'classes/benutzer.class.php';
 include_once 'classes/benutzerController.php';
 include_once 'classes/benutzerView.php';
 
+session_start();
+
 
 class Dbh
 {
