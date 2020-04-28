@@ -23,7 +23,6 @@ class Benutzer extends Dbh {
 		}
 		
 
-
 		public function setBenutzerStmt($Benutzername, $Passwort){
 			try{
 			$sql="INSERT INTO benutzer (Benutzername, Passwort) VALUES (?, ?)";
@@ -46,6 +45,18 @@ class Benutzer extends Dbh {
 		} catch (PDOException $e) {
 			echo $e;
         }
+		}
+
+		public function getStudentStmt($Matrikelnummer){
+			try{
+				$sql="SELECT * FROM student WHERE Matrikelnummer = ?";
+				$stmt = $this->connect()->prepare($sql);
+				$stmt->execute([$Matrikelnummer]);
+				$student = $stmt->fetch(PDO::FETCH_ASSOC);
+				return $student;
+			} catch (PDOException $e) {
+				echo $e;
+			}
 		}
 
 	}
