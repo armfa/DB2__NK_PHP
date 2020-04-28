@@ -1,16 +1,19 @@
 <?php
+//Fabrice Armbruster
 
 //Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
-/* if (isset($_SESSION['benutzername']) == false && isset($_SESSION['matrikelnummer']) == false) {
+  if (isset($_SESSION['benutzername']) == false AND isset($_SESSION['matrikelnummer']) == false) {
     //Falls nicht eingeloogt, wird der Benutzer/Student auf die Loginseite weitergeleitet.
-    header("Location: ../DB2__NK_PHP/indexLogin.php");
+    header("Location: ../DB2__NK_PHP/indexLogin.php?login=nologin");
     exit();
-} */
+} 
 
 
 
 include_once 'classes/dbh.class.php';
+
 echo  $_SESSION['matrikelnummer'];
+echo $_SESSION['benutzername'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
