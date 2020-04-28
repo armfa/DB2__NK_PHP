@@ -5,5 +5,4 @@
 
 class benutzerController extends Benutzer{
 
-
 }
