@@ -1,7 +1,14 @@
 <?php
 
-include_once 'classes/dbh.class.php';
+//Diese Seite akzeptiert nur Studenten
+if (isset($_SESSION['matrikelnummer']) == false) {
+    //Falls Student nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
 
+include_once 'classes/dbh.class.php';
 
 ?>
 
@@ -25,7 +32,7 @@ include_once 'classes/dbh.class.php';
             //Dropdownauswahl des Fragebogens, welcher für diesen Student freigeschalten ist. 
             //ToDo: aktueller Benutzer Übergeben     
             $bContr = new BefragungView();
-            $bContr->showFragebogenfromStudentAbgabestatusStnmt(2345667, 0);//ToDo: benutzer einbinden
+            $bContr->showFragebogenfromStudentAbgabestatusStnmt($_SESSION['matrikelnummer'], 0);//ToDo: benutzer einbinden
             ?>
         </select></br>
         <button type="submit" name="umfrageStarten">Umfrage starten</button>

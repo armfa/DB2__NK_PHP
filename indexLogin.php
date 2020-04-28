@@ -35,7 +35,7 @@ include_once 'classes/dbh.class.php';
                 <tr>
                     <th>Passwort:</th>
                     <td>
-                        <input type="password" name="Passwort" required>
+                        <input type="password" name="Passwort">
                     </td>
                 </tr>
                 <tr>
@@ -68,7 +68,7 @@ if (isset($_POST['benutzerLogin'])) {
     } elseif ($userObjekt->getBenutzerStmt($benutzername) == false) {
         $userObjekt->setBenutzerStmt($benutzername, $passwort);
         $userObjekt->getLoginStmt($benutzername, $passwort);
-        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");
+        header("Location: ../DB2__NK_PHP/indexLogin.php?login=neuerBenutzerRegistriert");           //ToDo->auf index seite weiterleiten                                                                                                  //neue session -> login in session vermerken.               
         //neue session
         exit();
     } else {
@@ -82,6 +82,8 @@ if (isset($_POST['benutzerLogin'])) {
         $_SESSION['student']= $userObjekt['matrikelnummer'];
 
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=loginsuccess");
+        session_start();
+        $_SESSION['benutzername'] = 'user1';
         exit();
     }
 }

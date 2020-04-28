@@ -6,9 +6,15 @@
 //Es werden dafür Funktionen in den Klassen "Befragungsview", "BefragungsController" und "Befragung.class" ausgelagert. 
 //Zudem wird die durchgeführte Umfrage auf der Seite indexBefragungVorauswahl.php ausgewählt.
 
-include_once 'classes/dbh.class.php';
+//Diese Seite akzeptiert nur Studenten
+if (isset($_SESSION['matrikelnummer']) == false) {
+    //Falls Student nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
 
-session_start();
+include_once 'classes/dbh.class.php';
 
 //Initialisierung der Befragungsklasen -->ToDo: in Sessions speichern/ nach Anmeldung initialiseren, sodass Sie nicht jedes mal neu initialisert werden. 
 $befragungsobjekt = new BefragungView();
@@ -37,7 +43,7 @@ if (isset($_POST['naechsteFrage'])) {
     if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"] - 1)) {
         //Falls ja, wird der Kommentar in DB gespeichert oder geupdated
         $kommentar = $_POST['kommentar'];
-        $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], 2345667, $kommentar);
+        $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], $kommentar);
         //Aktuelle Seite um 1 erhöhen.
         $_SESSION["aktuelleSeite"]++;
     }
@@ -46,7 +52,7 @@ if (isset($_POST['naechsteFrage'])) {
         //Falls ja, wird die Antwort in DB gespeichert oder geupdated
         $antwort = $_POST['Antwort'];
         $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["Fragenummer"];
-        $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], 2345667, $antwort);
+        $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'], $antwort);
         //Aktuelle Seite um 1 erhöhen
         $_SESSION["aktuelleSeite"]++;
     }
@@ -63,14 +69,14 @@ if (isset($_POST['vorherigeFrage'])) {
     if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"] - 1)) {
         //Falls ja, wird der Kommentar in DB gespeichert oder geupdated
         $kommentar = $_POST['kommentar'];
-        $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], 2345667, $kommentar);
+        $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], $kommentar);
     }
     //Check, ob Antwort abgegeben wurde
     if (isset($_POST['Antwort'])) {
         //Falls ja, wird die Antwort in DB gespeichert oder geupdated
         $antwort = $_POST['Antwort'];
         $Fragenummer = $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]["Fragenummer"];
-        $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], 2345667, $antwort);
+        $befragungC->createOrUpdateFrageAntwortStmt($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'], $antwort);
     }
     //Aktuelle Seite um 1 verringern
     $_SESSION["aktuelleSeite"]--;
@@ -78,7 +84,7 @@ if (isset($_POST['vorherigeFrage'])) {
 
 //Kommentar in db speichern und Fragebogen als abgeschlossen markieren
 if (isset($_POST['fragebogenFertig'])) {
-    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], 2345667, 1, $_POST['kommentar']);
+    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 1, $_POST['kommentar']);
 }
 
 //Abgegebene Antworten aus DB laden
@@ -87,9 +93,9 @@ if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     //Fragenummer holen
     $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]['InhaltFrage'])[0]['Fragenummer'];
     //Prüfen, ob schon eine Antwort auf die Frage mit der Fragenummer existiert
-    if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], 2345667)) {
+    if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann lade diese in die Check Variable. 
-        $check = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], 2345667)[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
+        $check = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
     } else {
         //Falls nicht, dann ist check leer. 
         $check = "";
@@ -121,9 +127,9 @@ if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
 }
 if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"]) - 1) {
     //Prüfen, ob kommentar schon vorhanden
-    if ($befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], 2345667)) {
+    if ($befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann aus DB holen
-        $kommentarPreloaded = $befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], 2345667)['Kommentar'];
+        $kommentarPreloaded = $befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])['Kommentar'];
     } else {
         $kommentarPreloaded = "";
     };

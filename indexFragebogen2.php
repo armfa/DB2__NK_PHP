@@ -40,7 +40,7 @@
                 <select name="fragebogen">
                 <?php     
                     $frageObject = new FragebogenView();
-                    $frageObject->showFragebogenVonBenutzer('user1');
+                    $frageObject->showFragebogenVonBenutzer($_SESSION['benutzername']);
                 ?>
                 </select></br><br><br>
 		        <table border="3" cellspacing="5" cellpadding="5">

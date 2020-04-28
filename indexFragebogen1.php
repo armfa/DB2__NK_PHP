@@ -1,6 +1,12 @@
 <?php
-//session_start();
 
+//Diese Seite akzeptiert nur Benutzer
+if (isset($_SESSION['benutzername']) == false) {
+    //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
 
 include_once 'classes/dbh.class.php';
 
@@ -9,10 +15,6 @@ $freischaltenObj = new fragebogenController();
 $benutzerObject = new KursView();
 
 
-
-
-
-session_start();
 //Input-Felder Fragebogen Anlegen laden
 $_SESSION["AnzahlFragenSession"] = 0;
 if (isset($_POST['fragebogenAnlegen'])) {
@@ -64,13 +66,13 @@ if ($_SESSION['AnzahlFragenSession'] >= 1) {
 <form action="" method="post" >
     <select name="fragebogen">
         <?php
-        $frageObject->showFragebogenVonBenutzer('user1');
+        $frageObject->showFragebogenVonBenutzer($_SESSION['benutzername']);
         ?>
     </select>
 
     <select name="kurses">
         <?php
-        $benutzerObject->showKursesfromBenutzer('user1');
+        $benutzerObject->showKursesfromBenutzer($_SESSION['benutzername']);
         ?>
     </select>
     <input type="submit" name="freigeben" value="Fragebogen freigeben" />
