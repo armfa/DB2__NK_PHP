@@ -111,7 +111,6 @@ class Kurs extends Dbh
         }
     }
 
-
     public function setStudentStmt($Matrikelnummer, $Studentenname, $Kursname)
     {
         try {
