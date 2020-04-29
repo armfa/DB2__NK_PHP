@@ -3,21 +3,20 @@
 //Fabrice Armnbruster
 
 //______________________KLASSENBESCHREIBUNG______________________
-//Diese Klasse bündelt alle Fehlermeldungen und ist die Exption-Klasse der PDO-DB-Zugriffe.
+//Diese Klasse verwaltet alle Fehlermeldungen und ist die Exception-Klasse der PDO-DB-Zugriffe.
+//Vorteil liegt in der losen Kopplung und zentralen Wartbarkeit. 
 
 class exceptionMessage extends dbh {
 
-    private $msg1 = '<error><p>Your satisfaction is the most important. This is why we work all night and day on fixing this. In the meantime, you could check the weather, if its worth of getting some fresh air:)</p><errorCode>';
-    private $msg2 = '<errorCode></error></br>';
+    private $msg1 = '<error><p>Sie sind am Wichtigsten für uns. Leider gab es trotzdem einen Fehler in der Datenbank.
+    Bitte versuchen Sie es einfach erneut.</p><errorCode>Fehler: ';
+    private $msg2 = '</errorCode></error></br>';
 
     public function displayException($e)
     { 
-        echo $this->msg1.$e.$this->msg2;
-    }
-
-    public function db_connect_failed_message($e)
-    {   
-        echo $this->msg1.'Es gab ein Problem mit der Verbindung zur Datenbank, bitte probieren Sie es später noch einmal!'.$this->msg2;
+        echo $this->msg1.$e->getCode().$this->msg2;
+        //Exit, damit nicht die Error-Info angezeigt bekommt. 
+        exit();
     }
 }
 

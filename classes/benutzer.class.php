@@ -12,8 +12,7 @@ class Benutzer extends Dbh {
 			$stmt = $this->connect()->prepare($sql);
 			$stmt->execute([$Benutzername, $Passwort]);
 		} catch (PDOException $e) {
-			$_SESSION['exception']->displayException($e);
-        }
+			$GLOBALS["exception"]->displayException($e);        }
 		}
 		
 		public function getBenutzerStmt($Benutzername){
@@ -24,8 +23,7 @@ class Benutzer extends Dbh {
 			$benutzer = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $benutzer;
 		} catch (PDOException $e) {
-			$_SESSION['exception']->displayException($e);
-        }
+			$GLOBALS["exception"]->displayException($e);        }
 		}
 
 		public function checkPasswordStmt($Passwort){
@@ -36,8 +34,7 @@ class Benutzer extends Dbh {
 			$count = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $count;
 		} catch (PDOException $e) {
-			$_SESSION['exception']->displayException($e);
-        }
+			$GLOBALS["exception"]->displayException($e);        }
 		}
 
 		public function getStudentStmt($Matrikelnummer){
@@ -48,8 +45,7 @@ class Benutzer extends Dbh {
 				$student = $stmt->fetch(PDO::FETCH_ASSOC);
 				return $student;
 			} catch (PDOException $e) {
-			 $_SESSION['exception']->displayException($e);
-			}
+				$GLOBALS["exception"]->displayException($e);			}
 		}
 
 	}

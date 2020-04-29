@@ -12,8 +12,7 @@ class Befragung extends Dbh{
             $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $Frageboegen;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -38,8 +37,7 @@ class Befragung extends Dbh{
             $anzahlFragen = $stmt->fetch(PDO::FETCH_ASSOC);
             return $anzahlFragen;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -51,8 +49,7 @@ class Befragung extends Dbh{
             $fragenarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragenarray;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -62,8 +59,7 @@ class Befragung extends Dbh{
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -75,8 +71,7 @@ class Befragung extends Dbh{
             $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $antwortarray;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -86,8 +81,7 @@ class Befragung extends Dbh{
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Antwort, $Fragebogenkuerzel, $Matrikelnummer, $Fragenummer]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -99,8 +93,7 @@ class Befragung extends Dbh{
             $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $antwortarray;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -112,8 +105,7 @@ class Befragung extends Dbh{
             $beantwortetarray = $stmt->fetch(PDO::FETCH_ASSOC);
             return $beantwortetarray;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -123,8 +115,7 @@ class Befragung extends Dbh{
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kommentar, $Abgabestatus, $Fragebogenkuerzel, $Matrikelnummer]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -134,8 +125,7 @@ class Befragung extends Dbh{
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -147,8 +137,7 @@ class Befragung extends Dbh{
             $frageNummer = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $frageNummer;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 

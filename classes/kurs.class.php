@@ -25,8 +25,7 @@ class Kurs extends Dbh
             $kurses = $stmt->fetch();
             return $kurses;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -39,8 +38,7 @@ class Kurs extends Dbh
             $kursname = $stmt->fetch(PDO::FETCH_ASSOC);
             return $kursname;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -53,8 +51,7 @@ class Kurs extends Dbh
             $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $kursname;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -65,8 +62,7 @@ class Kurs extends Dbh
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Kursname]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -77,8 +73,7 @@ class Kurs extends Dbh
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Kursname]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -91,8 +86,7 @@ class Kurs extends Dbh
             $student = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $student;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -105,8 +99,7 @@ class Kurs extends Dbh
                 $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $kursname;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                $GLOBALS["exception"]->displayException($e);
             }
         }
     }
@@ -118,8 +111,7 @@ class Kurs extends Dbh
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer, $Studentenname, $Kursname,]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 
@@ -130,8 +122,7 @@ class Kurs extends Dbh
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            $GLOBALS["exception"]->displayException($e);
         }
     }
 }

@@ -34,8 +34,15 @@ include_once 'classes/benutzer.class.php';
 session_start();
 
 //Exception-Objekt zentral angelegt, damit die Wartung vereinfacht wird. 
-//Ansonsten müsste es bei jedem DB-Aufruf mit angegeben werden. 
-$_SESSION['exception'] = new exceptionMessage();
+//Ansonsten müsste es bei jedem DB-Aufruf mit angegeben werden.
+//Objekt in globaler Variable gespeichert, damit muss es nicht für jeden User neu instanziiert werden. 
+$GLOBALS["exception"] = new exceptionMessage();
+
+//Session vs GLOBAL
+//Global variables are the variables which remain common for the whole application… 
+//Their value can be used across the whole application whereas Session variables are 
+//variables which remain common for the whole application but for one particular user.
+//They also can be used across the whole application… But they die when a particular user session ends.
 
 class Dbh
 {
@@ -52,7 +59,7 @@ class Dbh
       $pdo->setAttribute(PDO::ERRMODE_SILENT, PDO::ERRMODE_EXCEPTION);
       return $pdo;
     } catch (PDOException $e) {
-      $_SESSION['exception']->db_connect_failed_message($e);
+			$GLOBALS["exception"]->displayException($e);
     }
   }
 }
