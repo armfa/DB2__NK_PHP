@@ -15,8 +15,6 @@
 
 //Kurs
 include_once 'classes/kurs.class.php';
-include_once 'classes/kursController.php';
-include_once 'classes/kursView.php';
 
 //Fragebogen
 include_once 'classes/fragebogen.class.php';
@@ -33,11 +31,12 @@ include_once 'classes/exceptionMessage.php';
 
 //Login
 include_once 'classes/benutzer.class.php';
-include_once 'classes/benutzerController.php';
-include_once 'classes/benutzerView.php';
 
 session_start();
 
+//Exception-Objekt zentral angelegt, damit die Wartung vereinfacht wird. 
+//Ansonsten müsste es bei jedem DB-Aufruf mit angegeben werden. 
+$_SESSION['exception'] = new exceptionMessage();
 
 class Dbh
 {
@@ -51,11 +50,10 @@ class Dbh
     try {
       $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;
       $pdo = new PDO($dsn, $this->user, $this->pwd);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $pdo->setAttribute(PDO::ERRMODE_SILENT, PDO::ERRMODE_EXCEPTION);
       return $pdo;
     } catch (PDOException $e) {
-      $exception = new exceptionMessage();
-      $exception->db_connect_failed_message($e);
+      $_SESSION['exception']->db_connect_failed_message($e);
     }
   }
 }
