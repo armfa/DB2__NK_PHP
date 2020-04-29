@@ -24,7 +24,6 @@ include_once 'classes/fragebogenView.php';
 //Befragung
 include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
-include_once 'classes/befragungView.php';
 
 //Exception 
 include_once 'classes/exceptionMessage.php';
