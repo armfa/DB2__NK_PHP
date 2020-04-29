@@ -14,8 +14,8 @@ class FragebogenController extends Fragebogen{
         return $this->checkObFragebogenExistiert($titelFragebogen);
     }
 
-    public function checkFrage($titelFrage){
-        return $this->checkObFrageExistiert($titelFrage);
+    public function checkFrage($titelFrage, $kuerzel){
+        return $this->checkObFrageExistiert($titelFrage, $kuerzel);
     }
 
     public function deleteFragebogen($kuerzel){
@@ -26,9 +26,16 @@ class FragebogenController extends Fragebogen{
         $this->deleteFragebogenStmt($fragenummer);
     }
 
-    public function fragebogenFreischalten($kuerzel, $kursname){
-        $this->setFreischaltungStmt($kuerzel, $kursname);
+    public function kuerzelVonFragebogen($titelFragebogen){
+        $this->getKuerzelVonFragebogen($titelFragebogen);
     }
 
+    public function checkFreigabe($kuerzel, $kursname){
+        $this->checkObFreischaltungExistiert($kuerzel, $kursname);
+    }
+
+    public function fragebogenFreischalten($kuerzel, $kursname){
+        $this->setFreischaltungStmt($kuerzel, $kursname);       
+    }
 
 }

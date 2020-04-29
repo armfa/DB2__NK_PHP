@@ -1,7 +1,4 @@
 <?php
-//Isabelle Scheffler
-
-    //ToDo: Error Handling is missing 
 
 
 class Fragebogen extends Dbh {
@@ -39,6 +36,18 @@ class Fragebogen extends Dbh {
             $stmt = $this->connect()->query($sql);
             $frage = $stmt->fetch();
             return $frage;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+
+    protected function getKuerzelVonFragebogen($titelFragebogen){
+        try{
+            $sql = "SELECT Kuerzel FROM fragebogen where Titel = ?";
+            $stmt = $this->connect()->query($sql);
+            $kuerzel = $stmt->fetch();
+            return $kuerzel;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
             $exceptionMessage->displayException($e);
@@ -105,18 +114,16 @@ class Fragebogen extends Dbh {
         }
     }
 
-    protected function checkObFrageExistiert($inhaltFrage){
-        {
-            try {
-                $sql = "SELECT * from fragen Where InhaltFrage = ?";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$inhaltFrage]);
-                $frage = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $frage;
-            } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
-            }
+    protected function checkObFrageExistiert($inhaltFrage, $kuerzel){
+        try {
+            $sql = "SELECT * from fragen Where InhaltFrage = $inhaltFrage and Kuerzel = $kuerzel";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$inhaltFrage]);
+            $frage = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $frage;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -142,6 +149,19 @@ class Fragebogen extends Dbh {
         }
     }
 
+    protected function checkObFreischaltungExistiert($kuerzel, $kursname){
+        try {
+            $sql = "SELECT * from freischalten Where Kuerzel = $kuerzel and Kursname = $kursname";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kuerzel, $kursname]);
+            $freigabe = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $freigabe;
+        } catch (PDOException $e) {
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
+        }
+    }
+    
     protected function setFreischaltungStmt($kuerzel, $kursname){
         try{
             $sql = "INSERT INTO freischalten (Kuerzel, Kursname) VALUES (?, ?)";
