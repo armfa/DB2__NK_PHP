@@ -56,7 +56,7 @@ class Dbh
     try {
       $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;
       $pdo = new PDO($dsn, $this->user, $this->pwd);
-      $pdo->setAttribute(PDO::ERRMODE_SILENT, PDO::FETCH_ASSOC);
+      $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
       return $pdo;
     } catch (PDOException $e) {
 			$GLOBALS["exception"]->displayException($e);
