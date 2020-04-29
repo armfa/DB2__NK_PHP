@@ -3,7 +3,7 @@
 
 class Befragung extends Dbh{
 
-    protected function getFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus){
+    public function getFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus){
         try {
             $sql = "SELECT DISTINCT frageb.Kuerzel, frageb.Titel FROM fragebogen frageb, freischalten freisch, kurs k, student s, fragen f, bearbeitet bearb, beantwortet beantw WHERE frageb.Kuerzel = freisch.Kuerzel AND freisch.Kursname = k.Kursname AND k.Kursname = s.Kursname AND s.Matrikelnummer = bearb.Matrikelnummer AND bearb.Kuerzel = frageb.Kuerzel AND s.Matrikelnummer = ? AND bearb.Abgabestatus = ?";
             // Freischalten --> fargebogen, die für user freigeschaltet sind, aber nich nicht abgegeben
@@ -17,7 +17,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
+    public function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
             try {
                 $sql = "SELECT COUNT(Kuerzel) FROM fragen WHERE Kuerzel = ?";
                 $stmt = $this->connect()->prepare($sql);
@@ -30,7 +30,7 @@ class Befragung extends Dbh{
             }
     }
 
-    protected function getFragebogenTitelStmt($Fragebogenkuerzel){
+    public function getFragebogenTitelStmt($Fragebogenkuerzel){
         try {
             $sql = "SELECT * FROM fragebogen WHERE Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -43,7 +43,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getFragenStmt($Fragebogenkuerzel){
+    public function getFragenStmt($Fragebogenkuerzel){
         try {
             $sql = "SELECT * FROM fragen WHERE Kuerzel = ? ORDER BY Fragenummer";
             $stmt = $this->connect()->prepare($sql);
@@ -56,7 +56,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function setFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
+    public function setFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
         try {
             $sql = "INSERT INTO beantwortet (Fragenummer, Kuerzel, Matrikelnummer, Antwort) VALUES (?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
@@ -67,7 +67,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer){
+    public function getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer){
         try {
             $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? ORDER BY Fragenummer";
             $stmt = $this->connect()->prepare($sql);
@@ -80,7 +80,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function setFrageAntwortUpdateStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
+    public function setFrageAntwortUpdateStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
         try {
             $sql = "UPDATE beantwortet SET Antwort = ? where Kuerzel = ? AND Matrikelnummer = ? AND Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -91,7 +91,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer){
+    public function getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer){
         try {
             $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? and Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -104,7 +104,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus){
+    public function getSingleKommentar($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus){
         try {
             $sql = "SELECT * FROM bearbeitet WHERE Matrikelnummer = ? AND KUERZEL = ? and Abgabestatus = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -117,7 +117,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
+    public function setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
         try {
             $sql = "UPDATE bearbeitet SET Kommentar = ?, Abgabestatus = ? where Kuerzel = ? AND Matrikelnummer = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -128,7 +128,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
+    public function setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
         try {
             $sql = "INSERT INTO bearbeitet (Kuerzel, Matrikelnummer, Abgabestatus, Kommentar) VALUES (?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
@@ -139,7 +139,7 @@ class Befragung extends Dbh{
         }
     }
 
-    protected function getFragenummerStmt($Fragebogenkuerzel, $InhaltFrage){
+    public function getFragenummerStmt($Fragebogenkuerzel, $InhaltFrage){
         try {
             $sql = "SELECT * FROM fragen WHERE Kuerzel = ? AND InhaltFrage = ?";
             $stmt = $this->connect()->prepare($sql);
