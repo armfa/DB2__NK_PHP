@@ -5,13 +5,13 @@
 //Diese Klasse stellt eine PDO_Verbindung zur Datenbank her. 
 //Zur Einbindung muss auf diese Klasse referenziert werden --> extends Dbh
 //Es nutzt dabei das setAttribute mit fetch_assoc als Standardeinstellung, 
-//weshalb alle Daten als Assoziatives Array zurückgegeben werden. 
+//weshalb alle Daten standartmäßig als Assoziatives Array zurückgegeben werden. 
 //Dies kann bei Bedarf in der entsprechenden Funktion übersteuert werden, 
 //ebenso wie die die Einstellung FetchAll/Fetch.
 
 
 //Alle includes werden hier angegeben, da durch die Vererbung diese auch in den Sub-Klassen verfügbar sind. 
-//Nur die index*.php-Seiten müssen, da keine Vererbung zu dieser Klasse existiert, in diesen Klassen angegeben werden. 
+//Nur in den index*.php-Seiten müssen, da keine Vererbung zu dieser Klasse existieren, diese Klasse includiert werden. 
 
 //Kurs
 include_once 'classes/kurs.class.php';
