@@ -65,7 +65,7 @@ unset($_SESSION['matrikelnummer']);
 </body>
 
 <?php
-$userObjekt = new benutzerController();
+$userObjekt = new Benutzer();
 if (isset($_POST['benutzerLogin'])) {
 
     $benutzername = $_POST['Benutzername'];
