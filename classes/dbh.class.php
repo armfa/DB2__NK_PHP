@@ -18,8 +18,6 @@ include_once 'classes/kurs.class.php';
 
 //Fragebogen
 include_once 'classes/fragebogen.class.php';
-include_once 'classes/fragebogenController.php';
-include_once 'classes/fragebogenView.php';
 
 //Befragung
 include_once 'classes/befragung.class.php';

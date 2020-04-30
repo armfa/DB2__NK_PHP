@@ -4,19 +4,26 @@
 
 include_once 'classes/dbh.class.php';
 
-$fragebogenView = new FragebogenView();
-$fragebogenCon = new FragebogenController();
-$kursView = new KursView();
 
-session_start();
-//Input-Felder Fragebogen Anlegen laden
+//Diese Seite akzeptiert nur Benutzer
+if (isset($_SESSION['benutzername']) == false) {
+    //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
+
+
+$fragebogenObj = new Fragebogen();
+$kurs = new Kurs();
+
 
 ?>
 
 <html>
 <h4>Fragebogen anlegen</h4>
 
-<form action="" method="post">
+<form action="" method="POST">
     <label for="TitelFragebogen">Titel Fragebogen:</label>
     <input type="text" name="titel"> <br><br>
     <label for="AnzahlFragen">Anzahl Fragen:</label>
@@ -25,26 +32,38 @@ session_start();
 </form>
 
 <h4>Fragebogen freigeben</h4>
-<form action="" method="post" >
-    <select name="fragebogen">
-        <?php
-        $fragebogenView->showFragebogenVonBenutzer('user1');
-        ?>
+<form action="" method="POST">
+    <select name='fragebogen'>
+    <?php
+    $titelArray = $fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']);
+
+    $i = 0;
+    while($i < count($titelArray)){
+        echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
+        $i++;
+    }
+    ?>
     </select>
 
     <select name="kurse">
         <?php
-        $kursView->showKursesfromBenutzer('user1');
+        $kurs->getKuresfromBenutzerStmt($_SESSION['benutzername']);
         ?>
     </select>
     <input type="submit" name="freigeben" value="Fragebogen freigeben" />
 </form>
 
 <h4>Fragebogen bearbeiten</h4>
-<form action="" method="post">
+<form action="" method="POST">
     <select name="fragebogenBearbeiten">
         <?php
-        $fragebogenView->showFragebogenVonBenutzer('user1');
+        $titelArray = $fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']);
+
+        $i = 0;
+        while($i < count($titelArray)){
+            echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
+            $i++;
+        }
         ?>
     </select>
     <input type="submit" name="fragenBearbeiten" value="Frage/n löschen/hinzufügen" />
@@ -57,11 +76,11 @@ session_start();
 
 // Fragebogen anlegen
 if (isset($_POST['fragebogenAnlegen'])) {
-    $fragebogen = $_POST['titel'];
-    $benutzername = 'user1';
+    $titelFragebogen = $_POST['titel'];
+    $benutzername = $_SESSION['benutzername'];
     $anzahlFragen = $_POST['anzahlFragen'];
     //Prüfen, ob Feld "Fragebogen" leer ist
-    if ((empty($fragebogen)) or (empty($anzahlFragen))) {
+    if ((empty($titelFragebogen)) or (empty($anzahlFragen))) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=empty");
         exit();
     } else {
@@ -71,13 +90,13 @@ if (isset($_POST['fragebogenAnlegen'])) {
             exit();
         }
         //Prüfen, ob Fragebogen schon existiert
-        if ($fragebogenCon->checkFragebogen($fragebogen) != false) {
+        if ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
             header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
             exit();
         } else {
-            $fragebogenCon->createFragebogen($fragebogen, $benutzername);
-            header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=success");
-            header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php");
+            $fragebogenObj->setFragebogen($titelFragebogen, $benutzername);
+            $kuerzel = $fragebogenObj->getKuerzelVonFragebogen($titelFragebogen);
+            header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
             exit();
         }
     }
@@ -85,12 +104,9 @@ if (isset($_POST['fragebogenAnlegen'])) {
        
 if (!isset($_GET['k'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else {
-    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+} else { 
     $fragebogenAnlegen = $_GET['k'];
-    //Then we check if the GET value is equal to a specific string
     if ($fragebogenAnlegen == "empty") {
-        //If it is we create an error or success message!
         echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
         exit();
     } elseif ($fragebogenAnlegen == "char") {
@@ -110,11 +126,11 @@ if (isset($_POST['freigeben'])) {
     $kuerzel = $_POST['fragebogen'];
     $kursname = $_POST['kurse'];
     //Prüfen, ob Fragebogen bereits dem Kurs freigegeben wurde
-    if ($fragebogenCon->checkFreigabe($kuerzel, $kursname) != false) {
+    if ($fragebogenObj->checkObFreischaltungExistiert($kuerzel, $kursname) != false) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=nosuccess");
         exit();
     } else {
-        $fragebogenCon->fragebogenFreischalten($kuerzel, $kursname);
+        $fragebogenObj->setFreischaltung($kuerzel, $kursname);
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=success");
         exit();
     }
@@ -122,10 +138,8 @@ if (isset($_POST['freigeben'])) {
        
 if (!isset($_GET['t'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else {
-    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+} else { 
     $fragebogenAnlegen = $_GET['t'];
-    //Then we check if the GET value is equal to a specific string
     if ($fragebogenAnlegen == "nosuccess") {
         echo "<p class='error'>Diese Freigabe existiert bereits!</p>";
         exit();
@@ -138,7 +152,7 @@ if (!isset($_GET['t'])) {
 //Fragebogen Löschen
 if (isset($_POST['loeschen'])) {
     $kuerzel = $_POST['fragebogenBearbeiten'];
-    $fragebogenCon->deleteFragebogen($kuerzel);
+    $fragebogenObj->deleteFragebogen($kuerzel);
     header("Location: ../DB2__NK_PHP/indexFragebogen.php?u=success");
     exit();
 }
@@ -146,9 +160,7 @@ if (isset($_POST['loeschen'])) {
 if (!isset($_GET['u'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
-    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
     $fragebogenAnlegen = $_GET['u'];
-    //Then we check if the GET value is equal to a specific string
     if ($fragebogenAnlegen == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich gelöscht!</p>";
         exit();
@@ -158,14 +170,45 @@ if (!isset($_GET['u'])) {
 if (isset($_POST['kopieren'])){
     $kuerzel = $_POST['fragebogenBearbeiten'];
     echo '<form action="" method="post">
-    <input type="text" name="titelFragebogen"> <br>
+    <input type="text" name="titelFragebogen"> 
     <input type="submit" name="umbenennen" value="Fragebogen umbenennem" />
     </form>';
-    $fragebogenCon->checkFragebogen($titelFragebogen);
-    
-    $fragebogenCon->createFragebogen($fragebogen, $benutzername);
-    $fragebogenCon->createFrage($inhaltFrage, $kuerzel);
-
+    $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
+ 
 }
+
+    if(isset($_POST['umbenennen'])){
+        if(empty($titelFragebogen)){
+            header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=empty");
+            exit();
+        } elseif($fragenArray != 0){
+            $titelFragebogen = $_POST['titelFragebogen']; 
+            $fragebogenObj->setFragebogen($titelFragebogen, $benutzername);
+            foreach($frage AS $fragenArray){
+                $fragebogenObj->setFrage($frage, $kuerzel);
+            }
+            header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
+            exit();
+        }   
+    }
+
+if (!isset($_GET['s'])) {
+    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+} else {
+    $fragebogenAnlegen = $_GET['s'];
+    if ($fragebogenAnlegen == "empty") {
+        echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
+        exit();        
+    }elseif ($fragebogenAnlegen == "success") {
+        echo "<p class='success'>Sie haben den Fragebogen erfolgreich kopiert!</p>";
+        exit();
+    }
+}
+
+if (isset($_POST['fragenBearbeiten'])){
+    $kuerzel = $_POST['fragebogenBearbeiten'];
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?kuerzel=$kuerzel");
+}
+
 
 ?>

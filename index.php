@@ -39,7 +39,7 @@ include_once 'classes/dbh.class.php';
         <a href="indexKurs.php">Kurs anlegen, Studenten anlegen und Kurs zuweisen</a>
     </div>
     <div>
-        <a href="indexFragebogen1.php">Fragebogen anlegen, bearbiten kopieren, freigeben</a>
+        <a href="indexFragebogen.php">Fragebogen anlegen, bearbiten kopieren, freigeben</a>
     </div>
     <div>
         <a href="indexErgebnis.php">Ergebnisse aufrufen</a>
