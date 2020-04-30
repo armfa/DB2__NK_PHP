@@ -1,79 +1,95 @@
 <?php
+//session_start();
+
 
 include_once 'classes/dbh.class.php';
 
+$fragebogenObj = new Fragebogen();
 
-session_start();
-$_SESSION["AnzahlFragenSession"] = 0;
-if (isset($_POST['fragebogenAnlegenStarten'])) {
-$_SESSION["AnzahlFragenSession"] = $_POST['anzahlFragen'];
+if (!isset($_GET['kuerzel'])){
+    echo "Error";
+    exit;
 }
 
-$fragebogenCon = new FragebogenController();
+$kuerzel = $_GET['kuerzel'];
 
 ?>
 
-<html>
+<h4>Fragebogen bearbeiten</h4>
+<h4>Frage löschen</h4>
 
-<form  action="" method="post">
-<?php
+<form action="" method="POST">
+    <select name='fragen'>
 
-// Input-Felder erstellen nach Anzahl der gewünschten Fragen. 
-$i = 1;
-while($i <= $_SESSION["AnzahlFragenSession"]){
-    echo '<label for="inhaltFrage"> Frage '.$i.'</label>';
-    echo '<input type="text" name="inhaltFrage'.$i.'"></br>';
-    $i++;
-}
-?>
-</form>	      
-<?php
+    <?php
+    $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
+        
+    $i = 0;
+    while($i < count($fragenArray)){
+        echo "<option value='".$fragenArray[$i]['Fragenummer']."'>".$fragenArray[$i]['InhaltFrage']."</option>";
+        $i++;
+    } 
+    ?>
 
-//Wenn mindestens eine Frage erstellt werden kann, kann der Fragebogen erstellt und abgeschlossen werden.
-if ($_SESSION['AnzahlFragenSession']>= 1) {
-    echo '<form action="" method="post">
-<input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
-</form>';
-}
-?>
+    <input type="submit" name="frageLoeschen" value="Frage löschen" />
+    </select>
+</form>
+
+<h4>Frage hinzufügen</h4>
+<form action="" method="POST">
+    <input type="text" name="inhaltFrage">
+    <input type="submit" name="frageHinzufuegen" value="Frage hinzufügen" /><br>
+</form>
 
 </html>
 
 <?php
 
-// Fragebogen hinzufügen
-if (isset($_POST['fragenhinzufuegen'])) {
-    $kuerzel = $fragebogenCon->kuerzelVonFragebogen($titelFragebogen);
-    $i = 1;
-    while ($i <= $_SESSION["AnzahlFragenSession"]) {
-        $titelFrage = $_POST["inhaltFrage' . $i . '"];
-        //Prüfen, ob Feld "Fragebogen" leer ist
-        if (empty($frage)) {
-            header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=empty");
+// Frage löschen
+if (isset($_POST['frageLoeschen'])) {
+    $fragenummer = $_POST["fragen"];
+    $fragebogenObj->deleteFrage($fragenummer);
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?u=success");
+    exit();
+}
+    
+if (!isset($_GET['u'])) {
+    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+} else { 
+    $frageLoeschen = $_GET['u'];
+    if ($frageLoeschen  == "success") {
+        echo "<p class='success'>Sie haben die Frage erfolgreich gelöscht!</p>";
+        exit();
+    }
+} 
+
+
+
+// Frage hinzufügen
+if (isset($_POST['frageHinzufuegen'])) {
+    $inhaltFrage = $_POST["inhaltFrage"];
+    //Prüfen, ob Feld "inhaltFrage" leer ist
+    if (empty($inhaltFrage)) {
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=empty");
+        exit();
+    } else {
+        //Prüfen, ob Frage schon existiert
+        if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel) != false) {
+            header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=nosuccess");
             exit();
         } else {
-            //Prüfen, ob Frage schon existiert
-            if ($fragebogenCon->checkFrage($titelFrage, $kuerzel) != false) {
-                header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=nosuccess");
-                exit();
-            } else {
-                $fragebogenCon->createFrage($titelFrage, $kuerzel);
-                header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=success");
-                exit();
-            }
+            $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
+            header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=success");
+            exit();
         }
-        $i++;
     }
 }
     
 if (!isset($_GET['s'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else {
-    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+} else { 
     $frageAnlegen = $_GET['s'];
-    //Then we check if the GET value is equal to a specific string
     if ($frageAnlegen == "empty") {
-        //If it is we create an error or success message!
         echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
         exit();
     } elseif ($frageAnlegen == "nosuccess") {
@@ -83,7 +99,5 @@ if (!isset($_GET['s'])) {
         echo "<p class='success'>Sie haben die Frage/n erfolgreich angelegt!</p>";
         exit();
     }
-}      
-
+} 
 ?>
-
