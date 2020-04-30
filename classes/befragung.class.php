@@ -24,8 +24,7 @@ class Befragung extends Dbh{
                 $anzahlFragen = $stmt->fetch(PDO::FETCH_NUM);
                 return $anzahlFragen;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                $GLOBALS["exception"]->displayException($e);
             }
     }
 
