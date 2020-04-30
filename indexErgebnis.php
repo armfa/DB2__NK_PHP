@@ -58,3 +58,14 @@ include_once 'classes/dbh.class.php';
 </body>
 
 </html>
+
+
+<?php
+
+$Auswertung = new ErgebnisView;
+if(isset($_POST["fragebogenAuswerten"])){
+   $Auswertung->showKommentare($alleKommentare);
+   $Auswertung->showBerechnungenJeFragejeKurs($auswertung);
+}
+
+?>

@@ -1,18 +1,39 @@
 <?php
-//Fabrice Armbruster + Dana Gessler
+//Dana Gessler 30.04.2020
 // Klasse zur Ergebnisauswertung
+//Diese Klasse wertet Fragebögen aus. Die Auswertung erfolgt nach Auswahl von auszuwertendem Fragebogen und ausgewähltem Kurs.
+//Kommentare und Auswertungen beziehen sich auf den ausgewählten Kurs.
+
 
 class Ergebnis extends dbh{
 
-    protected function getKommentareStmt(){
+//   NOT TESTED YET
+    // Kommentare je Fragebogen & Kurs abfragen, Ausgabe erfolgt kurseweise mit Zeilenumbruch zwischen jedem Kommentar
+    protected function getKommentareStmt($kommentar){
         {
             try {
-                //SQL missing 
-                /* $sql = "SELECT * from bearbeitet b Where matrikelnummer = ?";
+                $sql = "SELECT Kommentar 
+                FROM        bearbeitet bear,    
+                            beantwortet bean, 
+                            student s                
+                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+                AND bear.Matrikelnummer = bean.Matrikelnummer  
+                AND s.Matrikelnummer = bean.Matrikelnummer  
+                AND bear.Abgabestatus = 1
+                AND bean.Fragenummer = bear.Kuerzel
+                AND bear.Kuerzel = ?
+                AND s.kurs = ?
+                GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$matrikelnummer]);
-                $kommentare = $stmt->fetch(PDO::FETCH_ASSOC); 
-                return $kommentare;*/
+                $stmt->execute([$kommentar]);
+                $kommentarArray = $stmt->fetch(PDO::FETCH_ASSOC); 
+
+                foreach($kommentarArray as $zeile) {
+                //Zeilenumbruch zu nach jedem Kommentar
+                echo '<br>';
+                echo '<br>' . $zeile['Kommentar'];
+                return $kommentarArray;
+                }
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
                 $exceptionMessage->displayException($e);
@@ -20,24 +41,29 @@ class Ergebnis extends dbh{
         }
     }
 
+//   NOT TESTED YET
+    //Antworten je Fragebogen & Kurs abfragen, Berechnung der durchnittlichen Antwort. 
 
-    protected function getAvgAnswer($avgAnswer){
+    protected function getAvgAnswerStmt($avgAnswer){
         {
             try {
                 $sql = "SELECT avg(Antwort) 
-                FROM 		bearbeitet bear, 	
+                FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s 
-                WHERE 	bear.Matrikelnummer = s.Matrikelnummer  
+                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Matrikelnummer = bean.Matrikelnummer  
                 AND s.Matrikelnummer = bean.Matrikelnummer  
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?";
+                AND bear.Kuerzel = ?
+                AND s.kurs = ?
+                GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$avgAnswer]);
-                $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 
-                return $ergebnis;
+                $avgAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
+ //               return $ergebnis;
+                return $avgAnswer;
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
                 $exceptionMessage->displayException($e);
@@ -45,23 +71,28 @@ class Ergebnis extends dbh{
         }
     }
 
-    protected function getMinAnswer($minAnswer){
+    //   NOT TESTED YET
+    //Antworten je Fragebogen & Kurs abfragen, Berechnung der minimalen Antwort. 
+    protected function getMinAnswerStmt($minAnswer){
         {
             try {
-                $sql = "SELECT min(Antwort) 
-                FROM 		bearbeitet bear, 	
+                $sql = "SELECT min(bean.Antwort) 
+                FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s 
-                WHERE 	bear.Matrikelnummer = s.Matrikelnummer  
+                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Matrikelnummer = bean.Matrikelnummer  
                 AND s.Matrikelnummer = bean.Matrikelnummer  
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?";
+                AND bear.Kuerzel = ?
+                AND s.kurs = ?
+                GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$minAnswer]);
-                $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 
-                return $ergebnis;
+                $minAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
+               // return $ergebnis;
+               return $minAnswer;
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
                 $exceptionMessage->displayException($e);
@@ -69,23 +100,28 @@ class Ergebnis extends dbh{
         }
     }
 
-    protected function getMaxAnswer($maxAnswer){
+    //   NOT TESTED YET
+    //Antworten je Fragebogen & Kurs abfragen, Berechnung der maximalen Antwort. 
+
+    protected function getMaxAnswerStmt($maxAnswer){
         {
             try {
                 $sql = "SELECT max(bean.Antwort) 
-                FROM 		bearbeitet bear, 	
+                FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s 
-                WHERE 	bear.Matrikelnummer = s.Matrikelnummer  
+                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Matrikelnummer = bean.Matrikelnummer  
                 AND s.Matrikelnummer = bean.Matrikelnummer  
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?";
+                AND bear.Kuerzel = ?
+                AND s.kurs = ?
+                GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$maxAnswer]);
-                $ergebnis = $stmt->fetch(PDO::FETCH_ASSOC); 
-                return $ergebnis;
+                $maxAnswer = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $maxAnswer;
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
                 $exceptionMessage->displayException($e);
@@ -93,19 +129,41 @@ class Ergebnis extends dbh{
         }
     }
 
-    protected function getStandDeviation(){
+//   NOT TESTED YET
+    //Antworten je Fragebogen & Kurs abfragen, Berechnung der Standardabweichung der Antworten. 
+
+    protected function getStandDevStmt($standDev){
         {
             try {
-                //SQL missing 
-                /* $sql = "SELECT * from bearbeitet b Where matrikelnummer = ?";
+                $sql = "SELECT bean.Antwort
+                FROM        bearbeitet bear,    
+                            beantwortet bean, 
+                            student s 
+                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+                AND bear.Matrikelnummer = bean.Matrikelnummer  
+                AND s.Matrikelnummer = bean.Matrikelnummer  
+                AND bear.Abgabestatus = 1
+                AND bean.Fragenummer = bear.Kuerzel
+                AND bear.Kuerzel = ?
+                AND s.kurs = ?
+                GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$matrikelnummer]);
-                $kommentare = $stmt->fetch(PDO::FETCH_ASSOC); 
-                return $kommentare;*/
+                $stmt->execute([$standDev]);
+                $standDev = $stmt->fetch(PDO::FETCH_ASSOC); 
+// Berechnung der Standardabweichung hier: 
+                $num = count($standDev);
+                $avg = array_sum($standDev) / $num;
+                $abweichung = 0;
+                foreach ($standDev as $elem) {
+                    $abweichung += ($elem - $avg) * ($elem - $avg);
+                }
+                $standDev = sqrt( (1/($num-1)) * $abweichung);
+                return $standDev;
             } catch (PDOException $e) {
                 $exceptionMessage = new exceptionMessage();
                 $exceptionMessage->displayException($e);
             }
         }
     }
+
 }
