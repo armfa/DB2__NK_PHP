@@ -1,6 +1,6 @@
 <?php
 
-class FragebogenController extends Fragebogen{
+class fragebogenController extends Fragebogen{
 
     public function createFragebogen($fragebogen, $benutzername){
         $this->setFragebogenStmt($fragebogen, $benutzername);     
@@ -14,8 +14,8 @@ class FragebogenController extends Fragebogen{
         return $this->checkObFragebogenExistiert($titelFragebogen);
     }
 
-    public function checkFrage($titelFrage, $kuerzel){
-        return $this->checkObFrageExistiert($titelFrage, $kuerzel);
+    public function checkFrage($titelFrage){
+        return $this->checkObFrageExistiert($titelFrage);
     }
 
     public function deleteFragebogen($kuerzel){
@@ -26,16 +26,9 @@ class FragebogenController extends Fragebogen{
         $this->deleteFragebogenStmt($fragenummer);
     }
 
-    public function kuerzelVonFragebogen($titelFragebogen){
-        $this->getKuerzelVonFragebogen($titelFragebogen);
-    }
-
-    public function checkFreigabe($kuerzel, $kursname){
-        $this->checkObFreischaltungExistiert($kuerzel, $kursname);
-    }
-
     public function fragebogenFreischalten($kuerzel, $kursname){
-        $this->setFreischaltungStmt($kuerzel, $kursname);       
+        $this->setFreischaltungStmt($kuerzel, $kursname);
     }
+
 
 }
