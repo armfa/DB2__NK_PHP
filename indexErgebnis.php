@@ -1,5 +1,5 @@
 +<?php
-
+// Fabrice Armbruster, Dana Geßler
 /* 3. Ergebnisdarstellung
 Ein Fragebogenerfasser kann einen von ihm freigeschalteten Fragebogen auswählen und über
 eine Kursauswahl eine kursweise Auswertung durchführen. Er bekommt zu jeder Frage die
@@ -45,7 +45,14 @@ include_once 'classes/dbh.class.php';
             //Dropdownauswahl des fragebogens
             //ToDo: aktueller Benutzer Übergeben     
             $ergebnisVObject = new ErgebnisView();
-            $ergebnisVObject->showFragebogenBenutzerKurs($_SESSION['benutzername']);
+
+            $Kurs = $_POST['auswertungKurs'];
+            $Fragebogen = $_POST['fragebogen'];
+
+            if(isset($_POST["fragebogenAuswerten"])){
+                    $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                    $ergebnisVObject->showBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+            }
             ?>
         </select></br>
     <button type="submit" name="fragebogenAuswerten">Fragebogen auswerten</button>
@@ -58,14 +65,3 @@ include_once 'classes/dbh.class.php';
 </body>
 
 </html>
-
-
-<?php
-
-$Auswertung = new ErgebnisView;
-if(isset($_POST["fragebogenAuswerten"])){
-   $Auswertung->showKommentare($alleKommentare);
-   $Auswertung->showBerechnungenJeFragejeKurs($auswertung);
-}
-
-?>
