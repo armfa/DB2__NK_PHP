@@ -21,12 +21,13 @@ include_once 'classes/dbh.class.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hochschule Umfragen</title>
+    <title> Umfragen Hochschule</title>
 </head>
 
 <body> 
     <div class=topHeader>
-        <h1>Herzlich Willkommen im Befragungstool, was möchten Sie tun?</h1>
+        <h1>Herzlich Willkommen im Befragungstool!</h1>
+        <h2>Was möchten Sie tun?</h2>
     </div>
     <div>
 
@@ -37,10 +38,10 @@ include_once 'classes/dbh.class.php';
         echo         
     '<div>
         <a href="indexKurs.php">Kurs anlegen, Studenten anlegen und Kurs zuweisen</a>
-    </div>
+    </div><br>
     <div>
-        <a href="indexFragebogen1.php">Fragebogen anlegen, bearbiten kopieren, freigeben</a>
-    </div>
+        <a href="indexFragebogen.php">Fragebogen anlegen, bearbeiten, freigeben</a>
+    </div><br>
     <div>
         <a href="indexErgebnis.php">Ergebnisse aufrufen</a>
     </div>';

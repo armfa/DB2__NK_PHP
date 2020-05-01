@@ -35,9 +35,13 @@ if (isset($_SESSION['matrikelnummer']) == false) {
         <select name="fragebogen">
             <?php
             //Dropdownauswahl des Fragebogens, welcher für diesen Student freigeschalten ist. 
-            //ToDo: aktueller Benutzer Übergeben     
-            $bContr = new BefragungView();
-            $bContr->showFragebogenfromStudentAbgabestatusStnmt($_SESSION['matrikelnummer'], 0);//ToDo: benutzer einbinden
+            $befragung = new Befragung();
+            $fragebogen = $befragung->getFragebogenfromStudentAbgabestatusStnmt($_SESSION['matrikelnummer'], 0);
+            $i = 0;
+            while($i < count($fragebogen)){
+                echo "<option value='".$fragebogen[$i]['Kuerzel']."'>".$fragebogen[$i]['Titel']."</option>";
+                $i++;
+                } 
             ?>
         </select></br>
         <button type="submit" name="umfrageStarten">Umfrage starten</button>
