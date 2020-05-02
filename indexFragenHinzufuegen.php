@@ -70,7 +70,7 @@ if (isset($_POST['fragenHinzufuegen'])) {
         for($z = 0; $z < $anzahlFragen; $z++){
             $inhaltFrage = $inhaltFragenArray[$z];
             // Prüfen, ob die Frage im Fragebogen schon existiert.
-            if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel) != false) {
+            if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
                 header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=nosuccess&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
                 exit();
             } else {

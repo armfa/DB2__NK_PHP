@@ -102,7 +102,7 @@ if (isset($_POST['frageHinzufuegen'])) {
     // Wenn der Button geklickt wurde, wird das Textfeld "inhaltFrage" einer Variable zugeordnet.
     $inhaltFrage = $_POST["inhaltFrage"];
     // Prüfen, ob die Frage im Fragebogen schon existiert.
-    if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel) != false) {
+    if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
         header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=nosuccess&kuerzel=$kuerzel");
         exit();
     } else {
@@ -118,7 +118,7 @@ if (!isset($_GET['s'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else { 
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $frageAnlegen = $_GET['s'];
+    $frageHinzufuegen = $_GET['s'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($frageHinzufuegen == "nosuccess") {
         echo "<p class='error'>Diese Frage existiert bereits!</p>";

@@ -99,7 +99,7 @@ class Fragebogen extends Dbh {
         try {
             $sql = "SELECT * from fragen Where InhaltFrage = ? and Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$inhaltFrage,$kuerzel]);
+            $stmt->execute([$inhaltFrage, $kuerzel]);
             $frage = $stmt->fetch(PDO::FETCH_ASSOC);
             return $frage;
         } catch (PDOException $e) {

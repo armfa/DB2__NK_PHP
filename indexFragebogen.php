@@ -88,6 +88,7 @@ $kurs = new Kurs();
     </form>
 
     <h4>Fragebogen kopieren</h4>
+    <h5>Die Fragen aus dem linken Fragebogen werden in den rechten Fragebogen kopiert.</h5>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenKopieren1">
@@ -230,13 +231,13 @@ if (isset($_POST['kopieren'])){
         // Die Fragen des ausgewählten Fragebogens, werden in ein Array gespeichert.
         $fragenArray = $fragebogenObj->getFragenVonFragebogen($fragebogen1);
         for($i=0; $i < count($fragenArray); $i++){
-            $inhaltFrage = $inhaltFragenArray[$i];
-            // Wenn nicht, dann zuerst einen Fragebogen erstellen und anschließend die Fragen hinzufügen.
-            if($fragenbogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)){
+            $inhaltFrage = $fragenArray[$i];
+            // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
+           if($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2)){
                 header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=nosuccess");
                 exit();
             } else{
-                $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
+                $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
             }
         }   
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
@@ -255,7 +256,7 @@ if (!isset($_GET['s'])) {
         echo "<p class='error'>Bitte wählen Sie verschiedene Fragebögen aus!</p>";
         exit();        
     } elseif ($fragebogenKopieren == "nosuccess") {
-        echo "<p class='error'>Dieser Fragebogen existiert bereits!</p>";
+        echo "<p class='error'>Diese Frage existiert bereits!</p>";
         exit();
     }elseif ($fragebogenKopieren == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich kopiert!</p>";
