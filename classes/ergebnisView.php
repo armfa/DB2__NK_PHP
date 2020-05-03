@@ -4,32 +4,32 @@
 class ErgebnisView extends Ergebnis
 {
 
-    public function showFragebogenBenutzerKurs($fragebogen)
+    public function showFragebogenBenutzerKurs($Fragebogen, $Kurs)
     { 
     }
 
     //Aufruf getKommentareStmt
-    public function showKommentare($alleKommentare){
-        $kommentar = $this->kommentar;
-        $this->getKommentareStmt($kommentar);
-        $alleKommentare = $kommentar; 
+    public function showKommentare($Fragebogen, $Kurs){
+        $kommentarArray = $this->kommentarArray;
+        $this->getKommentareStmt($Fragebogen, $Kurs);
+        $alleKommentare = $kommentarArray; 
         return $alleKommentare;
     }
 
-    public function showBerechnungenJeFragejeKurs($auswertung)
+    public function showBerechnungenJeFragejeKurs($Fragebogen, $Kurs)
     {   
     // Aufrufe für Antworten (avg, min, max, standDev)
         $avgAnswer = $this->avgAnswer;
-        $this->getAvgAnswerStmt($avgAnswer);
+        $this->getAvgAnswerStmt($Fragebogen, $Kurs);
 
         $minAnswer = $this->minAnswer;
-        $this->getMinAnswerStmt($minAnswer);
+        $this->getMinAnswerStmt($Fragebogen, $Kurs);
 
         $maxAnswer = $this->maxAnswer;
-        $this->getMaxAnswerStmt($maxAnswer);
+        $this->getMaxAnswerStmt($Fragebogen, $Kurs);
 
         $standDev = $this->standDev;
-        $this->getStandDevStmt($standDev);
+        $this->getStandDevStmt($Fragebogen, $Kurs);
 
         $auswertung = array($avgAnswer, $minAnswer, $maxAnswer, $standDev);
 

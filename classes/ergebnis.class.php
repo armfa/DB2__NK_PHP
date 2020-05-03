@@ -9,7 +9,7 @@ class Ergebnis extends dbh{
 
 //   NOT TESTED YET
     // Kommentare je Fragebogen & Kurs abfragen, Ausgabe erfolgt kurseweise mit Zeilenumbruch zwischen jedem Kommentar
-    protected function getKommentareStmt($kommentar){
+    protected function getKommentareStmt($Fragebogen , $Kurs){
         {
             try {
                 $sql = "SELECT Kommentar 
@@ -25,7 +25,7 @@ class Ergebnis extends dbh{
                 AND s.kurs = ?
                 GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$kommentar]);
+                $stmt->execute([$Fragebogen, $Kurs]);
                 $kommentarArray = $stmt->fetch(PDO::FETCH_ASSOC); 
 
                 foreach($kommentarArray as $zeile) {
@@ -44,7 +44,7 @@ class Ergebnis extends dbh{
 //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der durchnittlichen Antwort. 
 
-    protected function getAvgAnswerStmt($avgAnswer){
+    protected function getAvgAnswerStmt($Fragebogen, $Kurs){
         {
             try {
                 $sql = "SELECT avg(Antwort) 
@@ -60,7 +60,7 @@ class Ergebnis extends dbh{
                 AND s.kurs = ?
                 GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$avgAnswer]);
+                $stmt->execute([$Fragebogen, $Kurs]);
                 $avgAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
  //               return $ergebnis;
                 return $avgAnswer;
@@ -73,7 +73,7 @@ class Ergebnis extends dbh{
 
     //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der minimalen Antwort. 
-    protected function getMinAnswerStmt($minAnswer){
+    protected function getMinAnswerStmt($Fragebogen, $Kurs){
         {
             try {
                 $sql = "SELECT min(bean.Antwort) 
@@ -89,7 +89,7 @@ class Ergebnis extends dbh{
                 AND s.kurs = ?
                 GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$minAnswer]);
+                $stmt->execute([$Fragebogen, $Kurs]);
                 $minAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
                // return $ergebnis;
                return $minAnswer;
@@ -103,7 +103,7 @@ class Ergebnis extends dbh{
     //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der maximalen Antwort. 
 
-    protected function getMaxAnswerStmt($maxAnswer){
+    protected function getMaxAnswerStmt($Fragebogen, $Kurs){
         {
             try {
                 $sql = "SELECT max(bean.Antwort) 
@@ -119,7 +119,7 @@ class Ergebnis extends dbh{
                 AND s.kurs = ?
                 GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$maxAnswer]);
+                $stmt->execute([$Fragebogen, $Kurs]);
                 $maxAnswer = $stmt->fetch(PDO::FETCH_ASSOC);
                 return $maxAnswer;
             } catch (PDOException $e) {
@@ -132,7 +132,7 @@ class Ergebnis extends dbh{
 //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der Standardabweichung der Antworten. 
 
-    protected function getStandDevStmt($standDev){
+    protected function getStandDevStmt($Fragebogen, $Kurs){
         {
             try {
                 $sql = "SELECT bean.Antwort
@@ -148,7 +148,7 @@ class Ergebnis extends dbh{
                 AND s.kurs = ?
                 GROUP BY s.kurs";
                 $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$standDev]);
+                $stmt->execute([$Fragebogen, $Kurs]);
                 $standDev = $stmt->fetch(PDO::FETCH_ASSOC); 
 // Berechnung der Standardabweichung hier: 
                 $num = count($standDev);
