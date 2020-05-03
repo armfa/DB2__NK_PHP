@@ -50,8 +50,26 @@ include_once 'classes/dbh.class.php';
             $Fragebogen = $_POST['fragebogen'];
 
             if(isset($_POST["fragebogenAuswerten"])){
-                    $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-                    $ergebnisVObject->showBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                   $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                   $ErgebnisArray =  $ergebnisVObject->showBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
+            }
+
+            if (!isset($_GET['ergebnis'])) {
+                //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+                exit();
+            } else {
+                //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+                $loginstatus = $_GET['ergebnis'];
+                if ($loginstatus == "empty") {
+                    echo "<p class='success'>Hier sind die Ergebnisse von Kurs </p>".$Kurs;
+                    echo "<h3>Kommentare: ?</h3>".$Kommentare;
+                    echo "<h3>Durchschnittliche Antwort: ?</h3>".$ErgebnisArray[0];
+                    echo "<h3>Minimale Antwort: ?</h3>".$ErgebnisArray[1];
+                    echo "<h3>Maximale Antwort: ?</h3>".$ErgebnisArray[2];
+                    echo "<h3>Standardabweichung: ?</h3>".$ErgebnisArray[3];
+                    exit();
+                }
             }
             ?>
         </select></br>
