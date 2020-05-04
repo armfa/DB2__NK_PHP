@@ -23,7 +23,6 @@ include_once 'classes/fragebogen.class.php';
 //Befragung
 include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
-include_once 'classes/befragungView.php';
 
 //Login
 include_once 'classes/benutzer.class.php';

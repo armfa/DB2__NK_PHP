@@ -22,6 +22,14 @@ if (isset($_SESSION['benutzername']) == false) {
     <title>Kurs</title>
 </head>
 
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
+
 <body>
     <h1>This is the Kurs Page.</h1>
 
@@ -36,7 +44,7 @@ if (isset($_SESSION['benutzername']) == false) {
         <select name="kurses">
             <?php
             //Dropdownauswahl: alle Kurse werdeb dem Benutzer zur Auswahl angezeigt
-            $kurs = new Kurs();    
+            $kurs = new Kurs();
             $kursname = $kurs->getKurses($_SESSION['benutzername']);
             $i = 0;
             while ($i < count($kursname)) {
@@ -98,7 +106,7 @@ if (isset($_POST['studentAnlegen'])) {
                 header("Location: ../DB2__NK_PHP/indexKurs.php?s=nosuccess");
                 exit();
             } else {
-                $kurs->checkIfStudentExists($matrikelnummer, $studentenname, $kursname);
+                $kurs->setStudentStmt($matrikelnummer, $studentenname, $kursname);
                 header("Location: ../DB2__NK_PHP/indexKurs.php?s=success");
                 exit();
             }
@@ -133,7 +141,7 @@ if (!isset($_GET['k'])) {
 //Student
 if (!isset($_GET['s'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else{
+} else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
     $studentstellen = $_GET['s'];
     //Then we check if the GET value is equal to a specific string

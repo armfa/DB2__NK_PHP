@@ -7,11 +7,11 @@
 include_once 'classes/dbh.class.php';
 
 //Prüfen, ob Login schon erfolgt ist, bzw ob und welche Funktionen der Benutzer/ Student hier angezeigt bekommt. 
-  if (isset($_SESSION['benutzername']) == false AND isset($_SESSION['matrikelnummer']) == false) {
+if (isset($_SESSION['benutzername']) == false and isset($_SESSION['matrikelnummer']) == false) {
     //Falls nicht eingeloogt, wird der Benutzer/Student auf die Loginseite weitergeleitet.
     header("Location: ../DB2__NK_PHP/indexLogin.php?login=nologin");
     //exit();
-} 
+}
 
 ?>
 <!DOCTYPE html>
@@ -24,7 +24,14 @@ include_once 'classes/dbh.class.php';
     <title> Umfragen Hochschule</title>
 </head>
 
-<body> 
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
+
+<body>
     <div class=topHeader>
         <h1>Herzlich Willkommen im Befragungstool!</h1>
         <h2>Was möchten Sie tun?</h2>
@@ -32,11 +39,11 @@ include_once 'classes/dbh.class.php';
     <div>
 
 
-    <?php
-    //Falls der Benutzer eingeloggt ist 
-    if (isset($_SESSION['benutzername'])) {
-        echo         
-    '<div>
+        <?php
+        //Falls der Benutzer eingeloggt ist 
+        if (isset($_SESSION['benutzername'])) {
+            echo
+                '<div>
         <a href="indexKurs.php">Kurs anlegen, Studenten anlegen und Kurs zuweisen</a>
     </div><br>
     <div>
@@ -45,16 +52,16 @@ include_once 'classes/dbh.class.php';
     <div>
         <a href="indexErgebnis.php">Ergebnisse aufrufen</a>
     </div>';
-    }
+        }
 
-    //Falls der Student eingeloggt ist 
-    if (isset($_SESSION['matrikelnummer'])) {
-        echo 
-        '<div>
+        //Falls der Student eingeloggt ist 
+        if (isset($_SESSION['matrikelnummer'])) {
+            echo
+                '<div>
         <a href="indexBefragungVorauswahl.php">Fragebogen ausfüllen</a>
         </div>';
-    }
-    ?>
+        }
+        ?>
 
 </body>
 

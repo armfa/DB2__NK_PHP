@@ -20,17 +20,25 @@ if (isset($_SESSION['matrikelnummer']) == false) {
 <!doctype HTML>
 <html>
 
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
+
 <body>
     <h1>Welche Umfrage möchten Sie starten?</h1>
 
-<?php
+    <?php
     if (isset($_GET['k'])) {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich abgeschickt!</p>";
     }
-?>
+    ?>
 
 
-<form action="indexBefragung.php" method="post">
+    <form action="indexBefragung.php" method="post">
         <label>Fragebogen</label>
         <select name="fragebogen">
             <?php
@@ -39,13 +47,14 @@ if (isset($_SESSION['matrikelnummer']) == false) {
             //Alle Fragebögen des Studenten, die noch nicht abgegeben sind. 
             $fragebogen = $befragung->getFragebogenfromStudentAbgabestatusStnmt($_SESSION['matrikelnummer'], 0);
             $i = 0;
-            while($i < count($fragebogen)){
-                echo "<option value='".$fragebogen[$i]['Kuerzel']."'>".$fragebogen[$i]['Titel']."</option>";
+            while ($i < count($fragebogen)) {
+                echo "<option value='" . $fragebogen[$i]['Kuerzel'] . "'>" . $fragebogen[$i]['Titel'] . "</option>";
                 $i++;
-                } 
+            }
             ?>
         </select></br>
         <button type="submit" name="umfrageStarten">Umfrage starten</button>
     </form>
 </body>
+
 </html>

@@ -91,7 +91,7 @@ if (isset($_POST['fragebogenFertig'])) {
 if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     //Prüfen, ob Frage schon beantwortet
     //Fragenummer holen
-    $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]['InhaltFrage'])[0]['Fragenummer'];
+    $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]['InhaltFrage'])[0]['Fragenummer'];
     //Prüfen, ob schon eine Antwort auf die Frage mit der Fragenummer existiert
     if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann lade diese in die Check Variable. 
@@ -99,7 +99,7 @@ if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     } else {
         //Falls nicht, dann ist check leer. 
         $check = "";
-    } 
+    }
     switch ($check) {
         case 1:
             $check1 = "checked";
@@ -135,8 +135,16 @@ if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"]) - 1) {
     };
 }
 ?>
-
+<!doctype HTML>
 <html>
+
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
 
 <body>
     <h1>Fragebogen: <?php echo $befragungsobjekt->getFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
