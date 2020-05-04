@@ -1,96 +1,102 @@
 <?php
-//session_start();
 
+// Isabelle Scheffler
+
+//______________________KLASSENBESCHREIBUNG______________________
+// Diese PHP-Seite ist für das Hinzufügen der Fragen zum Fragebogen zuständig.
+// Es werden dafür Funktionen in den Klasse "Fragebogen.class" ausgelagert. 
 
 include_once 'classes/dbh.class.php';
 
-$fragebogenObj = new Fragebogen();
+//Diese Seite akzeptiert nur Benutzer
+if (!isset($_SESSION['benutzername'])) {
+    //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    header("Location: ../DB2__NK_PHP/index.php");
+    exit();
+}
 
-if (!isset($_GET['kuerzel'])){
-    echo "Error";
+// Wenn keine "anzahlFragen" und "kuerzel" weitergeben wird, leitet es den Nutzer zurück auf die "indexFragebogen.php" Seite.
+if (!isset($_GET['anzahlFragen']) AND !isset($_GET['kuerzel'])){
+    header("Location: ../DB2__NK_PHP/indexFragebogen.php");
     exit;
 }
 
-$kuerzel = $_GET['kuerzel'];
+$fragebogenObj = new Fragebogen();
 
+// Die übergebenen Werte "anzahlFragen" und "kuerzel" werden hier in der jeweiligen Variable gespeichert.
+$anzahlFragen = $_GET['anzahlFragen'];
+$kuerzel = $_GET['kuerzel'];
 ?>
 
-<h4>Fragebogen bearbeiten</h4>
-<h4>Frage löschen</h4>
+<html>
+    
+<head>
+    <title>Fragen hinzufügen</title>
+</head>
 
-<form action="" method="POST">
-    <select name='fragen'>
+<body>
+    <header style="background-color:Gray;">
+        <!--Link um zurück auf die Fragebogen Seite zu kommen-->
+        <br><a href="indexFragebogen.php">Zurück zur Fragebogen-Seite</a><br><br>
+    </header>
+
+    <br><br>
 
     <?php
-    $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
-        
-    $i = 0;
-    while($i < count($fragenArray)){
-        echo "<option value='".$fragenArray[$i]['Fragenummer']."'>".$fragenArray[$i]['InhaltFrage']."</option>";
+    // Je nach Anzahl an Fragen die erstellt werden sollen, werden Textfelder erstellt. 
+    $i = 1;
+    while($i <= $anzahlFragen){
+        echo '<form action="" method="POST">
+        <label for="inhaltFrage"> Frage '.$i.'</label>
+        <input type="text" name="inhaltFragen[]'.$i.'" maxlength="100" required></br><br>';
         $i++;
-    } 
+    }
     ?>
 
-    <input type="submit" name="frageLoeschen" value="Frage löschen" />
-    </select>
-</form>
 
-<h4>Frage hinzufügen</h4>
-<form action="" method="POST">
-    <input type="text" name="inhaltFrage">
-    <input type="submit" name="frageHinzufuegen" value="Frage hinzufügen" /><br>
-</form>
-
+    <input type="submit" name="fragenHinzufuegen" value="Frage/n hinzufügen" /><br>
+    </form>
+</body>
 </html>
 
 <?php
+// Fragen hinzufügen
+if (isset($_POST['fragenHinzufuegen'])) {
+    // Wenn der Button geklickt wurde, wird der Inhalt der Textfelder "inhaltFragen[]" einer Variable zugeordnet.
+    $inhaltFragenArray = $_POST["inhaltFragen"];
 
-// Frage löschen
-if (isset($_POST['frageLoeschen'])) {
-    $fragenummer = $_POST["fragen"];
-    $fragebogenObj->deleteFrage($fragenummer);
-    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?u=success");
-    exit();
-}
-    
-if (!isset($_GET['u'])) {
-    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else { 
-    $frageLoeschen = $_GET['u'];
-    if ($frageLoeschen  == "success") {
-        echo "<p class='success'>Sie haben die Frage erfolgreich gelöscht!</p>";
-        exit();
-    }
-} 
-
-
-
-// Frage hinzufügen
-if (isset($_POST['frageHinzufuegen'])) {
-    $inhaltFrage = $_POST["inhaltFrage"];
-    //Prüfen, ob Feld "inhaltFrage" leer ist
-    if (empty($inhaltFrage)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=empty");
-        exit();
-    } else {
-        //Prüfen, ob Frage schon existiert
-        if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel) != false) {
-            header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=nosuccess");
-            exit();
-        } else {
-            $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
-            header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=success");
-            exit();
+    if(count($inhaltFragenArray) == $anzahlFragen){
+        for($z = 0; $z < $anzahlFragen; $z++){
+            $inhaltFrage = $inhaltFragenArray[$z];
+            // Prüfen, ob die Frage im Fragebogen schon existiert.
+            if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
+                header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=nosuccess&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+                exit();
+            } else {
+                // Wennn nicht, wird die Frage hinzugefügt.
+                $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
+            }
         }
+
+        header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=success&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+        exit();
+
+    } else{
+        header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=wrong&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+        exit();
     }
 }
-    
+   
+// Fehlermeldung zu Fragen hinzufügen
 if (!isset($_GET['s'])) {
-    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else { 
+    // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+} else {
+    // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $frageAnlegen = $_GET['s'];
-    if ($frageAnlegen == "empty") {
-        echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
+    // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
+    if ($frageAnlegen == "wrong") {
+        echo "<p class='error'>Es ist ein Fehler aufgetreten! Bitte versuchen Sie es erneut!</p>";
         exit();
     } elseif ($frageAnlegen == "nosuccess") {
         echo "<p class='error'>Diese Frage existiert bereits!</p>";
@@ -99,5 +105,7 @@ if (!isset($_GET['s'])) {
         echo "<p class='success'>Sie haben die Frage/n erfolgreich angelegt!</p>";
         exit();
     }
-} 
+}      
+
 ?>
+

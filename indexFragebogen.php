@@ -1,14 +1,21 @@
 <?php
-//session_start();
+
+// Isabelle Scheffler
+
+//______________________KLASSENBESCHREIBUNG______________________
+// Diese PHP-Seite ist für die Darstellung und Bearbeitung des Fragebogens zuständig.
+// Es werden dafür Funktionen in den Klasse "Fragebogen.class" ausgelagert. 
+// Zudem wird zu einer neuen Seite weitergeleitet, wenn man die Fragen zu einem Fragebogen hinzufügen will oder man den Fragebogen bearbeiten will.
+
 
 
 include_once 'classes/dbh.class.php';
 
 
-//Diese Seite akzeptiert nur Benutzer
-if (isset($_SESSION['benutzername']) == false) {
-    //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
-    //Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+// Diese Seite akzeptiert nur Benutzer
+if (!isset($_SESSION['benutzername'])) {
+    // Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
+    // Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
@@ -21,95 +28,125 @@ $kurs = new Kurs();
 ?>
 
 <html>
-<h4>Fragebogen anlegen</h4>
 
-<form action="" method="POST">
-    <label for="TitelFragebogen">Titel Fragebogen:</label>
-    <input type="text" name="titel"> <br><br>
-    <label for="AnzahlFragen">Anzahl Fragen:</label>
-    <input type="text" name="anzahlFragen">
-    <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
-</form>
+<head>
+    <title>Fragebogen</title>
+</head>
 
-<h4>Fragebogen freigeben</h4>
-<form action="" method="POST">
-    <select name='fragebogen'>
-    <?php
-    $titelArray = $fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']);
+<body>
+    <header style="background-color:Gray;">
+        <!--Link um zurück auf die Startseite zu kommen-->
+        <br><a href="index.php">Zurück zur Startseite</a><br><br>
+    </header>
+      
 
-    $i = 0;
-    while($i < count($titelArray)){
-        echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
-        $i++;
-    }
-    ?>
-    </select>
+    <h4>Fragebogen anlegen</h4>
 
-    <select name="kurse">
+    <form action="" method="POST">
+        <label for="TitelFragebogen">Titel Fragebogen:</label>
+        <input type="text" name="titel" maxlength="100" required> <br><br>
+        <label for="AnzahlFragen">Anzahl Fragen:</label>
+        <input type="text" name="anzahlFragen" maxlength="2" required>
+        <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
+    </form>
+    <br>
+    
+    <h4>Fragebogen freigeben</h4>
+    <form action="" method="POST">
+        <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+        <select name='fragebogen'>
         <?php
-        $kurs->getKuresfromBenutzerStmt($_SESSION['benutzername']);
+            $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
         ?>
-    </select>
-    <input type="submit" name="freigeben" value="Fragebogen freigeben" />
-</form>
+        </select>
 
-<h4>Fragebogen bearbeiten</h4>
-<form action="" method="POST">
-    <select name="fragebogenBearbeiten">
+        <!--Drop-Down Menü das alle Kurs anzeigt die ein Benutzer angelegt hat.-->
+        <select name="kurse">
         <?php
-        $titelArray = $fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']);
-
+        $kursArray = $kurs->getKurses();
         $i = 0;
-        while($i < count($titelArray)){
-            echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
+        while($i < count($kursArray)){
+            echo "<option value='".$kursArray[$i]['Kursname']."'>".$kursArray[$i]['Kursname']."</option>";
             $i++;
         }
         ?>
-    </select>
-    <input type="submit" name="fragenBearbeiten" value="Frage/n löschen/hinzufügen" />
-    <input type="submit" name="kopieren" value="Fragebogen kopieren"/>
-    <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
-</form>
+        </select>
+
+        <input type="submit" name="freigeben" value="Fragebogen freigeben" />
+    </form>
+    <br>
+
+    <h4>Fragebogen bearbeiten</h4>
+    <form action="" method="POST">
+        <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+        <select name="fragebogenBearbeiten">
+        <?php
+            $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
+        ?>
+        </select>
+        
+        <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" />
+        <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
+    </form>
+
+    <br>
+    <h4>Fragebogen kopieren</h4>
+    <h5>Die Fragen aus dem linken Fragebogen werden in den rechten Fragebogen kopiert.</h5>
+    <form action="" method="POST">
+        <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+        <select name="fragebogenKopieren1">
+        <?php
+            $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
+        ?>
+        </select>
+
+        <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+        <select name="fragebogenKopieren2">
+        <?php
+            $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
+        ?>
+        </select>
+        
+        <input type="submit" name="kopieren" value="Fragebogen kopieren"/>
+    </form>
+
+</body>
 </html>
 
 <?php
 
 // Fragebogen anlegen
 if (isset($_POST['fragebogenAnlegen'])) {
+    // Wenn der Button geklickt wurde, werden die Textfelder "titel" und "anzahlFragen" jeweils einer Variable zugeordnet.
     $titelFragebogen = $_POST['titel'];
-    $benutzername = $_SESSION['benutzername'];
     $anzahlFragen = $_POST['anzahlFragen'];
-    //Prüfen, ob Feld "Fragebogen" leer ist
-    if ((empty($titelFragebogen)) or (empty($anzahlFragen))) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=empty");
+    // Prüfen, ob das Textfeld "anzahlFragen" richtig ausgefüllt wurde.
+    if ((!preg_match("/[0-9]/", $anzahlFragen)) and ($anzahlFragen <= 20)) {
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=char");
+        exit();
+    }
+    // Prüfen, ob der Fragebogen schon existiert.
+    if ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
         exit();
     } else {
-        // Prüfen, ob AnzahlFragen richtig ausgefüllt wurde
-        if ((!preg_match("/[0-9]/", $anzahlFragen)) and ($anzahlFragen <= 20)) {
-            header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=char");
-            exit();
-        }
-        //Prüfen, ob Fragebogen schon existiert
-        if ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
-            header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
-            exit();
-        } else {
-            $fragebogenObj->setFragebogen($titelFragebogen, $benutzername);
-            $kuerzel = $fragebogenObj->getKuerzelVonFragebogen($titelFragebogen);
-            header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
-            exit();
-        }
+        // Existiert der Fragebogen noch nicht, wird dieser erstellt und die Seite "indexFragenHinzufuegen.php" aufgerufen
+        // und die Variabelen "kuerzel" und "anzahlFragen" übergeben.
+        $fragebogenObj->setFragebogen($titelFragebogen, $_SESSION['benutzername']);
+        $kuerzel = $fragebogenObj->getKuerzelVonFragebogen($titelFragebogen);
+        header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+        exit();
     }
 }
-       
+ 
+// Fehlermeldung zu Fragebogen anlegen
 if (!isset($_GET['k'])) {
-    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+    // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else { 
+    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $fragebogenAnlegen = $_GET['k'];
-    if ($fragebogenAnlegen == "empty") {
-        echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
-        exit();
-    } elseif ($fragebogenAnlegen == "char") {
+    // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
+    if ($fragebogenAnlegen == "char") {
         echo "<p class='error'>Bitte füllen Sie das Feld mit Zahlenwerten aus!</p>";
         exit();
     } elseif ($fragebogenAnlegen == "nosuccess") {
@@ -121,94 +158,116 @@ if (!isset($_GET['k'])) {
     }
 }
 
-//Fragebogen Freigeben
+// Fragebogen freigeben
 if (isset($_POST['freigeben'])) {
+    // Wenn der Button geklickt wurde, wird die Auswahl der Drop-Down Menüs "fragebogen" und "kurse" jeweils einer Variable zugeordnet.
     $kuerzel = $_POST['fragebogen'];
     $kursname = $_POST['kurse'];
-    //Prüfen, ob Fragebogen bereits dem Kurs freigegeben wurde
+    // Prüfen, ob der Fragebogen bereits für den Kurs freigegeben wurde.
     if ($fragebogenObj->checkObFreischaltungExistiert($kuerzel, $kursname) != false) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=nosuccess");
         exit();
     } else {
+        // Wenn nicht, dann wird der Fragebogen für den Kurs freigegeben.
         $fragebogenObj->setFreischaltung($kuerzel, $kursname);
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=success");
         exit();
     }
 }
-       
+
+// Fehlermeldung zu Fragebogen freigeben
 if (!isset($_GET['t'])) {
-    //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+    // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else { 
-    $fragebogenAnlegen = $_GET['t'];
-    if ($fragebogenAnlegen == "nosuccess") {
+    // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
+    $fragebogenFreigeben = $_GET['t'];
+    // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
+    if ($fragebogenFreigeben == "nosuccess") {
         echo "<p class='error'>Diese Freigabe existiert bereits!</p>";
         exit();
-    } elseif ($fragebogenAnlegen == "success") {
+    } elseif ($fragebogenFreigeben == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich freigegeben!</p>";
         exit();
     }
 }
 
+// Fragen hinzufügen oder löschen
+if (isset($_POST['fragenLoeschenHinzufuegen'])){
+    // Die Auswahl im Drop-Down Menü wird in einer Variable gespeichert.
+    $kuerzel = $_POST['fragebogenBearbeiten'];
+    // Die Seite "indexFragebogenBearbeiten" wird aufgerufen und die Variable mitgegeben.
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?kuerzel=$kuerzel");
+}
+
 //Fragebogen Löschen
 if (isset($_POST['loeschen'])) {
+    // Der im Drop-Down Menü ausgewählte Fragebogen wird gelöscht.
     $kuerzel = $_POST['fragebogenBearbeiten'];
     $fragebogenObj->deleteFragebogen($kuerzel);
+    // Hier ist kein Fehlerfall möglich, deshalb ist der Löschvorgang immer erfolgreich.
     header("Location: ../DB2__NK_PHP/indexFragebogen.php?u=success");
     exit();
 }
 
+// Fehlermeldung zu Fragebogen löschen
 if (!isset($_GET['u'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
-    $fragebogenAnlegen = $_GET['u'];
-    if ($fragebogenAnlegen == "success") {
+    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
+    $fragebogenLoeschen = $_GET['u'];
+    // Es wird die Meldung an der Oberfläche ausgegeben.
+    if ($fragebogenLoeschen == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich gelöscht!</p>";
         exit();
     }
 }
 
+// Fragebogen kopieren
 if (isset($_POST['kopieren'])){
-    $kuerzel = $_POST['fragebogenBearbeiten'];
-    echo '<form action="" method="post">
-    <input type="text" name="titelFragebogen"> 
-    <input type="submit" name="umbenennen" value="Fragebogen umbenennem" />
-    </form>';
-    $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
- 
+    // Die Auswahl im Drop-Down Menü wird in einer Variable gespeichert.
+    $fragebogen1 = $_POST['fragebogenKopieren1'];
+    $fragebogen2 = $_POST['fragebogenKopieren2'];
+    if($fragebogen1 == $fragebogen2){
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=wrong");
+        exit(); 
+    } else{
+        // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
+        $fragenArray = $fragebogenObj->getFragenVonFragebogen($fragebogen1);
+        print_r($fragenArray);
+        // In der ersten Ebene des Arrays steht folgendes -> [0]=>Array
+        foreach($fragenArray AS $Index => $Array){
+            // In der zweiten Ebene des Arrays steht folgendes -> [InhaltFrage] => Frage
+            foreach($Array AS $InhaltFrageSpalte => $inhaltFrage){
+                // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
+                if($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0){
+                    $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
+                }
+            }
+        }   
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
+        exit();
+    }   
 }
 
-    if(isset($_POST['umbenennen'])){
-        if(empty($titelFragebogen)){
-            header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=empty");
-            exit();
-        } elseif($fragenArray != 0){
-            $titelFragebogen = $_POST['titelFragebogen']; 
-            $fragebogenObj->setFragebogen($titelFragebogen, $benutzername);
-            foreach($frage AS $fragenArray){
-                $fragebogenObj->setFrage($frage, $kuerzel);
-            }
-            header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
-            exit();
-        }   
-    }
-
+// Fehlermeldung zu Fragebogen kopieren
 if (!isset($_GET['s'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
-    $fragebogenAnlegen = $_GET['s'];
-    if ($fragebogenAnlegen == "empty") {
-        echo "<p class='error'>Bitte füllen Sie das Feld aus!</p>";
+    //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
+    $fragebogenKopieren = $_GET['s'];
+    // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
+    if ($fragebogenKopieren == "wrong") {
+        echo "<p class='error'>Bitte wählen Sie verschiedene Fragebögen aus!</p>";
         exit();        
-    }elseif ($fragebogenAnlegen == "success") {
+    } elseif ($fragebogenKopieren == "nosuccess") {
+        echo "<p class='error'>Diese Frage existiert bereits!</p>";
+        exit();
+    }elseif ($fragebogenKopieren == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich kopiert!</p>";
         exit();
     }
 }
 
-if (isset($_POST['fragenBearbeiten'])){
-    $kuerzel = $_POST['fragebogenBearbeiten'];
-    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?kuerzel=$kuerzel");
-}
 
 
 ?>
