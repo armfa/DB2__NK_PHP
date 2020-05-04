@@ -1,5 +1,5 @@
 +<?php
-
+// Fabrice Armbruster, Dana Geßler
 /* 3. Ergebnisdarstellung
 Ein Fragebogenerfasser kann einen von ihm freigeschalteten Fragebogen auswählen und über
 eine Kursauswahl eine kursweise Auswertung durchführen. Er bekommt zu jeder Frage die
@@ -45,7 +45,32 @@ include_once 'classes/dbh.class.php';
             //Dropdownauswahl des fragebogens
             //ToDo: aktueller Benutzer Übergeben     
             $ergebnisVObject = new ErgebnisView();
-            $ergebnisVObject->showFragebogenBenutzerKurs($_SESSION['benutzername']);
+
+            $Kurs = $_POST['auswertungKurs'];
+            $Fragebogen = $_POST['fragebogen'];
+
+            if(isset($_POST["fragebogenAuswerten"])){
+                   $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                   $ErgebnisArray =  $ergebnisVObject->showBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
+            }
+
+            if (!isset($_GET['ergebnis'])) {
+                //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
+                exit();
+            } else {
+                //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+                $loginstatus = $_GET['ergebnis'];
+                if ($loginstatus == "empty") {
+                    echo "<p class='success'>Hier sind die Ergebnisse von Kurs </p>".$Kurs;
+                    echo "<h3>Kommentare: ?</h3>".$Kommentare;
+                    echo "<h3>Durchschnittliche Antwort: ?</h3>".$ErgebnisArray[0];
+                    echo "<h3>Minimale Antwort: ?</h3>".$ErgebnisArray[1];
+                    echo "<h3>Maximale Antwort: ?</h3>".$ErgebnisArray[2];
+                    echo "<h3>Standardabweichung: ?</h3>".$ErgebnisArray[3];
+                    exit();
+                }
+            }
             ?>
         </select></br>
     <button type="submit" name="fragebogenAuswerten">Fragebogen auswerten</button>

@@ -1,5 +1,7 @@
 <?php
+//Isabelle Scheffler
 
+    //ToDo: Error Handling is missing 
 
 class Fragebogen extends Dbh {
 
@@ -46,7 +48,8 @@ class Fragebogen extends Dbh {
             $fragebogenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragebogenArray;
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -56,7 +59,8 @@ class Fragebogen extends Dbh {
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fragebogen, $benutzername]);
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -78,7 +82,8 @@ class Fragebogen extends Dbh {
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragenArray;
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -100,7 +105,8 @@ class Fragebogen extends Dbh {
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$inhaltFrage, $kuerzel]);
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -110,7 +116,8 @@ class Fragebogen extends Dbh {
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fragenummer]);
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 
@@ -132,7 +139,8 @@ class Fragebogen extends Dbh {
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel, $kursname]);
         } catch (PDOException $e) {
-            $GLOBALS["exception"]->displayException($e);
+            $exceptionMessage = new exceptionMessage();
+            $exceptionMessage->displayException($e);
         }
     }
 }
