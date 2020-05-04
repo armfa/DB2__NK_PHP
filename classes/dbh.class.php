@@ -21,6 +21,7 @@ include_once 'classes/kursView.php';
 //Fragebogen
 include_once 'classes/fragebogen.class.php';
 
+
 //Befragung
 include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
@@ -42,7 +43,7 @@ class Dbh
   private $host = "localhost";
   private $user = "root";
   private $pwd = "";
-  private $dbName = "dhbw";
+  private $dbName = "db";
 
   protected function connect()
   {

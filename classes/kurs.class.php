@@ -22,7 +22,7 @@ class Kurs extends Dbh
         try {
             $sql = "SELECT * FROM Kurs";
             $stmt = $this->connect()->query($sql);
-            $kurses = $stmt->fetch();
+            $kurses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $kurses;
         } catch (PDOException $e) {
             $exceptionMessage = new exceptionMessage();
