@@ -1,4 +1,5 @@
-+<?php
+<?php
+
 // Fabrice Armbruster, Dana Geßler
 /* 3. Ergebnisdarstellung
 Ein Fragebogenerfasser kann einen von ihm freigeschalteten Fragebogen auswählen und über
@@ -7,6 +8,7 @@ Durchschnitts-, Minimal-, Maximal und Standardabweichungswerte der Antworten als
 Liste aller Kommentare dargestellt. Die Informationen sind über Aufrufe zentrale PHP-Funktionen
 (siehe Punkt 4) zu ermitteln. */
 
+include_once 'classes/dbh.class.php';
 //Diese Seite akzeptiert nur Benutzer
 if (isset($_SESSION['benutzername']) == false) {
     //Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
@@ -15,7 +17,7 @@ if (isset($_SESSION['benutzername']) == false) {
     exit();
 }
 
-include_once 'classes/dbh.class.php';
+
 
 ?>
 
@@ -63,6 +65,7 @@ include_once 'classes/dbh.class.php';
                 $loginstatus = $_GET['ergebnis'];
                 if ($loginstatus == "empty") {
                     echo "<p class='success'>Hier sind die Ergebnisse von Kurs </p>".$Kurs;
+                    echo "<h2>Ergebnisse: ?</h2>";
                     echo "<h3>Kommentare: ?</h3>".$Kommentare;
                     echo "<h3>Durchschnittliche Antwort: ?</h3>".$ErgebnisArray[0];
                     echo "<h3>Minimale Antwort: ?</h3>".$ErgebnisArray[1];
