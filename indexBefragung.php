@@ -17,7 +17,7 @@ if (isset($_SESSION['matrikelnummer']) == false) {
 }
 
 //Initialisierung der Befragungsklasen -->ToDo: in Sessions speichern/ nach Anmeldung initialiseren, sodass Sie nicht jedes mal neu initialisert werden. 
-$befragungsobjekt = new BefragungView();
+$befragung = new Befragung();
 $befragungC = new BefragungController();
 
 $infoMessage = "";
@@ -31,10 +31,10 @@ if (isset($_POST['fragebogen'])) {
 //Erste Seite - erster Seitenaufruf
 if ((isset($_POST['naechsteFrage']) == false) && (isset($_POST['vorherigeFrage']) == false)) {
     //Alle Fragen werden geholt und in Session gespeichert. 
-    $_SESSION["Fragen"] = $befragungsobjekt->showFrageStmt($_SESSION["kuerzel"]);
+    $_SESSION["Fragen"] = $befragungsobjekt->getFragenStmt($_SESSION["kuerzel"]);
     $_SESSION["aktuelleSeite"] = 1;
     //Anzahl der Seiten ist die Anzahl der Fragen + Seite Kommentar + Seite fragebogen abschließen. 
-    $_SESSION["anzahlSeiten"] = 2 + $befragungsobjekt->showAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
+    $_SESSION["anzahlSeiten"] = 2 + $befragungsobjekt->getAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
 }
 
 //Nächste Frage-Button 
@@ -91,15 +91,15 @@ if (isset($_POST['fragebogenFertig'])) {
 if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     //Prüfen, ob Frage schon beantwortet
     //Fragenummer holen
-    $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"]-1]['InhaltFrage'])[0]['Fragenummer'];
+    $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]['InhaltFrage'])[0]['Fragenummer'];
     //Prüfen, ob schon eine Antwort auf die Frage mit der Fragenummer existiert
     if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann lade diese in die Check Variable. 
-        $check = $befragungsobjekt->showFrageAntwortStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
+        $check = $befragungsobjekt->getFrageAntwortStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
     } else {
         //Falls nicht, dann ist check leer. 
         $check = "";
-    } 
+    }
     switch ($check) {
         case 1:
             $check1 = "checked";
@@ -127,19 +127,27 @@ if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
 }
 if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"]) - 1) {
     //Prüfen, ob kommentar schon vorhanden
-    if ($befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
+    if ($befragungsobjekt->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann aus DB holen
-        $kommentarPreloaded = $befragungsobjekt->showKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])['Kommentar'];
+        $kommentarPreloaded = $befragungsobjekt->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])['Kommentar'];
     } else {
         $kommentarPreloaded = "";
     };
 }
 ?>
-
+<!doctype HTML>
 <html>
 
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
+
 <body>
-    <h1>Fragebogen: <?php echo $befragungsobjekt->showFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
+    <h1>Fragebogen: <?php echo $befragungsobjekt->getFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
     <form action="" method="post">
         <?php
         //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;

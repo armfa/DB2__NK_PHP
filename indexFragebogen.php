@@ -8,9 +8,7 @@
 // Zudem wird zu einer neuen Seite weitergeleitet, wenn man die Fragen zu einem Fragebogen hinzufügen will oder man den Fragebogen bearbeiten will.
 
 
-
 include_once 'classes/dbh.class.php';
-
 
 // Diese Seite akzeptiert nur Benutzer
 if (!isset($_SESSION['benutzername'])) {
@@ -20,28 +18,33 @@ if (!isset($_SESSION['benutzername'])) {
     exit();
 }
 
-
 $fragebogenObj = new Fragebogen();
 $kurs = new Kurs();
-
-
 ?>
 
+<!doctype HTML>
 <html>
 
 <head>
     <title>Fragebogen</title>
 </head>
 
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
+
 <body>
     <header style="background-color:Gray;">
         <!--Link um zurück auf die Startseite zu kommen-->
-        <br><a href="index.php">Zurück zur Startseite</a><br><br>
+        <br><a href="index.php">Zurück zur Startseite</a><br>
+        <br><a href="indexLogin.php">Log out</a><br>
     </header>
-      
 
     <h4>Fragebogen anlegen</h4>
-
     <form action="" method="POST">
         <label for="TitelFragebogen">Titel Fragebogen:</label>
         <input type="text" name="titel" maxlength="100" required> <br><br>
@@ -50,26 +53,26 @@ $kurs = new Kurs();
         <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
     </form>
     <br>
-    
+
     <h4>Fragebogen freigeben</h4>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name='fragebogen'>
-        <?php
+            <?php
             $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
-        ?>
+            ?>
         </select>
 
         <!--Drop-Down Menü das alle Kurs anzeigt die ein Benutzer angelegt hat.-->
         <select name="kurse">
-        <?php
-        $kursArray = $kurs->getKurses();
-        $i = 0;
-        while($i < count($kursArray)){
-            echo "<option value='".$kursArray[$i]['Kursname']."'>".$kursArray[$i]['Kursname']."</option>";
-            $i++;
-        }
-        ?>
+            <?php
+            $kursArray = $kurs->getKurses();
+            $i = 0;
+            while ($i < count($kursArray)) {
+                echo "<option value='" . $kursArray[$i]['Kursname'] . "'>" . $kursArray[$i]['Kursname'] . "</option>";
+                $i++;
+            }
+            ?>
         </select>
 
         <input type="submit" name="freigeben" value="Fragebogen freigeben" />
@@ -80,13 +83,13 @@ $kurs = new Kurs();
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenBearbeiten">
-        <?php
+            <?php
             $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
-        ?>
+            ?>
         </select>
-        
+
         <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" />
-        <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
+        <input type="submit" name="loeschen" value="Fragebogen loeschen" /><br>
     </form>
 
     <br>
@@ -95,22 +98,23 @@ $kurs = new Kurs();
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenKopieren1">
-        <?php
+            <?php
             $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
-        ?>
+            ?>
         </select>
 
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenKopieren2">
-        <?php
+            <?php
             $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
-        ?>
+            ?>
         </select>
-        
-        <input type="submit" name="kopieren" value="Fragebogen kopieren"/>
+
+        <input type="submit" name="kopieren" value="Fragebogen kopieren" />
     </form>
 
 </body>
+
 </html>
 
 <?php
@@ -138,11 +142,11 @@ if (isset($_POST['fragebogenAnlegen'])) {
         exit();
     }
 }
- 
+
 // Fehlermeldung zu Fragebogen anlegen
 if (!isset($_GET['k'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else { 
+} else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $fragebogenAnlegen = $_GET['k'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
@@ -178,7 +182,7 @@ if (isset($_POST['freigeben'])) {
 // Fehlermeldung zu Fragebogen freigeben
 if (!isset($_GET['t'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else { 
+} else {
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $fragebogenFreigeben = $_GET['t'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
@@ -192,7 +196,7 @@ if (!isset($_GET['t'])) {
 }
 
 // Fragen hinzufügen oder löschen
-if (isset($_POST['fragenLoeschenHinzufuegen'])){
+if (isset($_POST['fragenLoeschenHinzufuegen'])) {
     // Die Auswahl im Drop-Down Menü wird in einer Variable gespeichert.
     $kuerzel = $_POST['fragebogenBearbeiten'];
     // Die Seite "indexFragebogenBearbeiten" wird aufgerufen und die Variable mitgegeben.
@@ -223,30 +227,30 @@ if (!isset($_GET['u'])) {
 }
 
 // Fragebogen kopieren
-if (isset($_POST['kopieren'])){
+if (isset($_POST['kopieren'])) {
     // Die Auswahl im Drop-Down Menü wird in einer Variable gespeichert.
     $fragebogen1 = $_POST['fragebogenKopieren1'];
     $fragebogen2 = $_POST['fragebogenKopieren2'];
-    if($fragebogen1 == $fragebogen2){
+    if ($fragebogen1 == $fragebogen2) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=wrong");
-        exit(); 
-    } else{
+        exit();
+    } else {
         // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
         $fragenArray = $fragebogenObj->getFragenVonFragebogen($fragebogen1);
         print_r($fragenArray);
         // In der ersten Ebene des Arrays steht folgendes -> [0]=>Array
-        foreach($fragenArray AS $Index => $Array){
+        foreach ($fragenArray as $Index => $Array) {
             // In der zweiten Ebene des Arrays steht folgendes -> [InhaltFrage] => Frage
-            foreach($Array AS $InhaltFrageSpalte => $inhaltFrage){
+            foreach ($Array as $InhaltFrageSpalte => $inhaltFrage) {
                 // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
-                if($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0){
+                if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0) {
                     $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
                 }
             }
-        }   
+        }
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
         exit();
-    }   
+    }
 }
 
 // Fehlermeldung zu Fragebogen kopieren
@@ -258,11 +262,11 @@ if (!isset($_GET['s'])) {
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($fragebogenKopieren == "wrong") {
         echo "<p class='error'>Bitte wählen Sie verschiedene Fragebögen aus!</p>";
-        exit();        
+        exit();
     } elseif ($fragebogenKopieren == "nosuccess") {
         echo "<p class='error'>Diese Frage existiert bereits!</p>";
         exit();
-    }elseif ($fragebogenKopieren == "success") {
+    } elseif ($fragebogenKopieren == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich kopiert!</p>";
         exit();
     }

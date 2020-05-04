@@ -35,8 +35,7 @@ class Ergebnis extends dbh{
                 return $kommentarArray;
                 }
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }
@@ -65,8 +64,7 @@ class Ergebnis extends dbh{
  //               return $ergebnis;
                 return $avgAnswer;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }
@@ -94,8 +92,7 @@ class Ergebnis extends dbh{
                // return $ergebnis;
                return $minAnswer;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }
@@ -123,8 +120,7 @@ class Ergebnis extends dbh{
                 $maxAnswer = $stmt->fetch(PDO::FETCH_ASSOC);
                 return $maxAnswer;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }
@@ -160,8 +156,7 @@ class Ergebnis extends dbh{
                 $standDev = sqrt( (1/($num-1)) * $abweichung);
                 return $standDev;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }

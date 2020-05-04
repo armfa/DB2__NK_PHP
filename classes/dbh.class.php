@@ -15,8 +15,6 @@
 
 //Kurs
 include_once 'classes/kurs.class.php';
-include_once 'classes/kursController.php';
-include_once 'classes/kursView.php';
 
 //Fragebogen
 include_once 'classes/fragebogen.class.php';
@@ -25,15 +23,9 @@ include_once 'classes/fragebogen.class.php';
 //Befragung
 include_once 'classes/befragung.class.php';
 include_once 'classes/befragungController.php';
-include_once 'classes/befragungView.php';
-
-//Exception 
-include_once 'classes/exceptionMessage.php';
 
 //Login
 include_once 'classes/benutzer.class.php';
-include_once 'classes/benutzerController.php';
-include_once 'classes/benutzerView.php';
 
 session_start();
 
@@ -43,7 +35,7 @@ class Dbh
   private $host = "localhost";
   private $user = "root";
   private $pwd = "";
-  private $dbName = "db";
+  private $dbName = "dhbw";
 
   protected function connect()
   {
@@ -53,8 +45,7 @@ class Dbh
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $pdo;
     } catch (PDOException $e) {
-      $exception = new exceptionMessage();
-      $exception->db_connect_failed_message($e);
+      header("Location: ../DB2__NK_PHP/indexFehler.php");
     }
   }
 }

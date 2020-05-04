@@ -17,7 +17,7 @@ if (!isset($_SESSION['benutzername'])) {
 }
 
 // Wenn keine "anzahlFragen" und "kuerzel" weitergeben wird, leitet es den Nutzer zurück auf die "indexFragebogen.php" Seite.
-if (!isset($_GET['anzahlFragen']) AND !isset($_GET['kuerzel'])){
+if (!isset($_GET['anzahlFragen']) and !isset($_GET['kuerzel'])) {
     header("Location: ../DB2__NK_PHP/indexFragebogen.php");
     exit;
 }
@@ -28,12 +28,20 @@ $fragebogenObj = new Fragebogen();
 $anzahlFragen = $_GET['anzahlFragen'];
 $kuerzel = $_GET['kuerzel'];
 ?>
-
+<!doctype HTML>
 <html>
-    
+
 <head>
     <title>Fragen hinzufügen</title>
 </head>
+
+<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+<header style="background-color:lightGray;">
+    <ul>
+        <li><a href="index.php">Zurück zur Startseite</a></li>
+        <li><a href="indexLogin.php">Logout</a></li>
+    </ul>
+</header>
 
 <body>
     <header style="background-color:Gray;">
@@ -46,10 +54,10 @@ $kuerzel = $_GET['kuerzel'];
     <?php
     // Je nach Anzahl an Fragen die erstellt werden sollen, werden Textfelder erstellt. 
     $i = 1;
-    while($i <= $anzahlFragen){
+    while ($i <= $anzahlFragen) {
         echo '<form action="" method="POST">
-        <label for="inhaltFrage"> Frage '.$i.'</label>
-        <input type="text" name="inhaltFragen[]'.$i.'" maxlength="100" required></br><br>';
+        <label for="inhaltFrage"> Frage ' . $i . '</label>
+        <input type="text" name="inhaltFragen[]' . $i . '" maxlength="100" required></br><br>';
         $i++;
     }
     ?>
@@ -58,6 +66,7 @@ $kuerzel = $_GET['kuerzel'];
     <input type="submit" name="fragenHinzufuegen" value="Frage/n hinzufügen" /><br>
     </form>
 </body>
+
 </html>
 
 <?php
@@ -66,8 +75,8 @@ if (isset($_POST['fragenHinzufuegen'])) {
     // Wenn der Button geklickt wurde, wird der Inhalt der Textfelder "inhaltFragen[]" einer Variable zugeordnet.
     $inhaltFragenArray = $_POST["inhaltFragen"];
 
-    if(count($inhaltFragenArray) == $anzahlFragen){
-        for($z = 0; $z < $anzahlFragen; $z++){
+    if (count($inhaltFragenArray) == $anzahlFragen) {
+        for ($z = 0; $z < $anzahlFragen; $z++) {
             $inhaltFrage = $inhaltFragenArray[$z];
             // Prüfen, ob die Frage im Fragebogen schon existiert.
             if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
@@ -81,13 +90,12 @@ if (isset($_POST['fragenHinzufuegen'])) {
 
         header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=success&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
         exit();
-
-    } else{
+    } else {
         header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=wrong&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
         exit();
     }
 }
-   
+
 // Fehlermeldung zu Fragen hinzufügen
 if (!isset($_GET['s'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
@@ -105,7 +113,6 @@ if (!isset($_GET['s'])) {
         echo "<p class='success'>Sie haben die Frage/n erfolgreich angelegt!</p>";
         exit();
     }
-}      
+}
 
 ?>
-
