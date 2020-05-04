@@ -1,6 +1,7 @@
 <?php
 //Dana Geßler	
-//Diese Klasse selektiert Benutzername und Passwort zur Abprüfung auf die Datenbank, und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen. 
+//Diese Klasse selektiert Benutzername und Passwort zur Abprüfung auf die Datenbank, 
+//und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen. 
 
 include_once 'classes/dbh.class.php';
 
@@ -12,7 +13,8 @@ class Benutzer extends Dbh {
 			$stmt = $this->connect()->prepare($sql);
 			$stmt->execute([$Benutzername, $Passwort]);
 		} catch (PDOException $e) {
-			$GLOBALS["exception"]->displayException($e);        }
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+		}
 		}
 		
 		public function getBenutzerStmt($Benutzername){
@@ -23,7 +25,8 @@ class Benutzer extends Dbh {
 			$benutzer = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $benutzer;
 		} catch (PDOException $e) {
-			$GLOBALS["exception"]->displayException($e);        }
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+		}
 		}
 
 		public function checkPasswordStmt($Passwort){
@@ -34,7 +37,8 @@ class Benutzer extends Dbh {
 			$count = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $count;
 		} catch (PDOException $e) {
-			$GLOBALS["exception"]->displayException($e);        }
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+		}
 		}
 
 		public function getStudentStmt($Matrikelnummer){
@@ -45,7 +49,8 @@ class Benutzer extends Dbh {
 				$student = $stmt->fetch(PDO::FETCH_ASSOC);
 				return $student;
 			} catch (PDOException $e) {
-				$GLOBALS["exception"]->displayException($e);			}
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+			}
 		}
 
 	}

@@ -1,5 +1,5 @@
 +<?php
-// Fabrice Armbruster, Dana Geßler
+// Dana Geßler
 /* 3. Ergebnisdarstellung
 Ein Fragebogenerfasser kann einen von ihm freigeschalteten Fragebogen auswählen und über
 eine Kursauswahl eine kursweise Auswertung durchführen. Er bekommt zu jeder Frage die

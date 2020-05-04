@@ -17,7 +17,7 @@
 class Kurs extends Dbh
 {
 
-    protected function getKurses()
+    public function getKurses()
     {
         try {
             $sql = "SELECT * FROM Kurs";
@@ -25,12 +25,11 @@ class Kurs extends Dbh
             $kurses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $kurses;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function checkIfKursExists($kurs)
+    public function checkIfKursExists($kurs)
     {
         try {
             $sql = "SELECT * from kurs Where Kursname = ?";
@@ -39,12 +38,11 @@ class Kurs extends Dbh
             $kursname = $stmt->fetch(PDO::FETCH_ASSOC);
             return $kursname;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function getKuresfromBenutzerStmt($benutzer)
+    public function getKuresfromBenutzerStmt($benutzer)
     {
         try {
             $sql = "SELECT k.* FROM kurs k,freischalten f, fragebogen fr, benutzer b WHERE k.Kursname = f.Kursname AND f.Kuerzel = fr.Kuerzel AND fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
@@ -53,36 +51,33 @@ class Kurs extends Dbh
             $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $kursname;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function setKursStmt($Kursname)
+    public function setKursStmt($Kursname)
     {
         try {
             $sql = "INSERT INTO kurs (Kursname) VALUES (?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Kursname]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function deleteKursStmt($Kursname)
+    public function deleteKursStmt($Kursname)
     {
         try {
             $sql = "DELETE FROM kurs WHERE Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Kursname]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function getStudentenVonKursStmt($Kursname)
+    public function getStudentenVonKursStmt($Kursname)
     {
         try {
             $sql = "SELECT * FROM student WHERE Kursname = ?";
@@ -91,12 +86,11 @@ class Kurs extends Dbh
             $student = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $student;
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function checkIfStudentExists($matrikelnummer){
+    public function checkIfStudentExists($matrikelnummer){
         {
             try {
                 $sql = "SELECT * from student Where matrikelnummer = ?";
@@ -105,34 +99,31 @@ class Kurs extends Dbh
                 $kursname = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $kursname;
             } catch (PDOException $e) {
-                $exceptionMessage = new exceptionMessage();
-                $exceptionMessage->displayException($e);
+                header("Location: ../DB2__NK_PHP/indexFehler.php");
             }
         }
     }
 
 
-    protected function setStudentStmt($Matrikelnummer, $Studentenname, $Kursname)
+    public function setStudentStmt($Matrikelnummer, $Studentenname, $Kursname)
     {
         try {
             $sql = "INSERT INTO student (Matrikelnummer, Studentenname, Kursname) VALUES (?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer, $Studentenname, $Kursname,]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    protected function deleteStudentStmt($Matrikelnummer)
+    public function deleteStudentStmt($Matrikelnummer)
     {
         try {
             $sql = "DELETE FROM student WHERE Matrikelnummer = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer]);
         } catch (PDOException $e) {
-            $exceptionMessage = new exceptionMessage();
-            $exceptionMessage->displayException($e);
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 }

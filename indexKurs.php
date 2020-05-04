@@ -11,8 +11,6 @@ if (isset($_SESSION['benutzername']) == false) {
     exit();
 }
 
-$x = new KursView();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +26,6 @@ $x = new KursView();
     <h1>This is the Kurs Page.</h1>
 
     <h3>Neuen Kurs anlegen</h3>
-
     <form class='neuerKurs-form' action="" method="post">
         <input type="text" name="Kurs" placeholder="Kurs">
         <button type="submit" name="kursAnlegen">Kurs anlegen</button>
@@ -38,10 +35,14 @@ $x = new KursView();
         <label>Kurs</label>
         <select name="kurses">
             <?php
-            //Dropdownauswahl des Kurses
-            //ToDo: aktueller Benuttzer Übergeben     
-            $benutzerObject = new KursView();
-            $benutzerObject->showKursesfromBenutzer($_SESSION['benutzername']);
+            //Dropdownauswahl: alle Kurse werdeb dem Benutzer zur Auswahl angezeigt
+            $kurs = new Kurs();    
+            $kursname = $kurs->getKurses($_SESSION['benutzername']);
+            $i = 0;
+            while ($i < count($kursname)) {
+                echo "<option value='" . $kursname[$i]['Kursname'] . "'>" . $kursname[$i]['Kursname'] . "</option>";
+                $i++;
+            }
             ?>
         </select></br>
         <input type="text" name="matrikelnummer" placeholder="Matrikelnummer" maxlength="7"></br>
@@ -53,7 +54,6 @@ $x = new KursView();
 </html>
 
 <?php
-$kursObj = new kursController();
 if (isset($_POST['kursAnlegen'])) {
     $kursname = $_POST['Kurs'];
     //Prüfen, ob Feld "Kursname" ist leer
@@ -67,11 +67,11 @@ if (isset($_POST['kursAnlegen'])) {
             exit();
         } else {
             //Prüfen, ob Kurs schon existiert
-            if ($kursObj->checkKurs($kursname) != false) {
+            if ($kurs->checkIfKursExists($kursname) != false) {
                 header("Location: ../DB2__NK_PHP/indexKurs.php?k=nosuccess");
                 exit();
             } else {
-                $kursObj->createKurs($kursname);
+                $kurs->setKursStmt($kursname);
                 header("Location: ../DB2__NK_PHP/indexKurs.php?k=success");
                 exit();
             }
@@ -94,11 +94,11 @@ if (isset($_POST['studentAnlegen'])) {
             exit();
         } else {
             //Prüfen, ob Student schon existiert 
-            if ($kursObj->checkStudent($matrikelnummer) != false) {
+            if ($kurs->checkIfStudentExists($matrikelnummer) != false) {
                 header("Location: ../DB2__NK_PHP/indexKurs.php?s=nosuccess");
                 exit();
             } else {
-                $kursObj->createStudent($matrikelnummer, $studentenname, $kursname);
+                $kurs->checkIfStudentExists($matrikelnummer, $studentenname, $kursname);
                 header("Location: ../DB2__NK_PHP/indexKurs.php?s=success");
                 exit();
             }
