@@ -49,7 +49,7 @@ $kuerzel = $_GET['kuerzel'];
     while($i <= $anzahlFragen){
         echo '<form action="" method="POST">
         <label for="inhaltFrage"> Frage '.$i.'</label>
-        <input type="text" name="inhaltFragen[]'.$i.'" required></br><br>';
+        <input type="text" name="inhaltFragen[]'.$i.'" maxlength="100" required></br><br>';
         $i++;
     }
     ?>

@@ -44,12 +44,13 @@ $kurs = new Kurs();
 
     <form action="" method="POST">
         <label for="TitelFragebogen">Titel Fragebogen:</label>
-        <input type="text" name="titel" required> <br><br>
+        <input type="text" name="titel" maxlength="100" required> <br><br>
         <label for="AnzahlFragen">Anzahl Fragen:</label>
-        <input type="text" name="anzahlFragen" required>
+        <input type="text" name="anzahlFragen" maxlength="2" required>
         <input type="submit" name="fragebogenAnlegen" value="Fragebogen anlegen" /><br>
     </form>
-
+    <br>
+    
     <h4>Fragebogen freigeben</h4>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
@@ -73,6 +74,7 @@ $kurs = new Kurs();
 
         <input type="submit" name="freigeben" value="Fragebogen freigeben" />
     </form>
+    <br>
 
     <h4>Fragebogen bearbeiten</h4>
     <form action="" method="POST">
@@ -87,6 +89,7 @@ $kurs = new Kurs();
         <input type="submit" name="loeschen" value="Fragebogen loeschen"/><br>
     </form>
 
+    <br>
     <h4>Fragebogen kopieren</h4>
     <h5>Die Fragen aus dem linken Fragebogen werden in den rechten Fragebogen kopiert.</h5>
     <form action="" method="POST">
@@ -228,16 +231,17 @@ if (isset($_POST['kopieren'])){
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=wrong");
         exit(); 
     } else{
-        // Die Fragen des ausgewählten Fragebogens, werden in ein Array gespeichert.
+        // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
         $fragenArray = $fragebogenObj->getFragenVonFragebogen($fragebogen1);
-        for($i=0; $i < count($fragenArray); $i++){
-            $inhaltFrage = $fragenArray[$i];
-            // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
-           if($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2)){
-                header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=nosuccess");
-                exit();
-            } else{
-                $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
+        print_r($fragenArray);
+        // In der ersten Ebene des Arrays steht folgendes -> [0]=>Array
+        foreach($fragenArray AS $Index => $Array){
+            // In der zweiten Ebene des Arrays steht folgendes -> [InhaltFrage] => Frage
+            foreach($Array AS $InhaltFrageSpalte => $inhaltFrage){
+                // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
+                if($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0){
+                    $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
+                }
             }
         }   
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");

@@ -42,8 +42,9 @@ $kuerzel = $_GET['kuerzel'];
     </header>
 
     <h4>Fragebogen bearbeiten</h4>
+    <br>
+    
     <h4>Frage löschen</h4>
-
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragen anzeigt, die zu dem zuvor - auf der "indesFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
         <select name='fragen'>
@@ -61,11 +62,11 @@ $kuerzel = $_GET['kuerzel'];
 
         <input type="submit" name="frageLoeschen" value="Frage löschen" />
     </form>
+    <br>
 
     <h4>Frage hinzufügen</h4>
-
     <form action="" method="POST">
-        <input type="text" name="inhaltFrage" required>
+        <input type="text" name="inhaltFrage" maxlength="100" required>
         <input type="submit" name="frageHinzufuegen" value="Frage hinzufügen" /><br>
     </form>
 

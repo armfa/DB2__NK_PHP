@@ -97,7 +97,7 @@ class Fragebogen extends Dbh {
 
     public function checkObFrageExistiert($inhaltFrage, $kuerzel){
         try {
-            $sql = "SELECT * from fragen Where InhaltFrage = ? and Kuerzel = ?";
+            $sql = "SELECT Fragenummer from fragen Where InhaltFrage = ? and Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$inhaltFrage, $kuerzel]);
             $frage = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,7 +121,7 @@ class Fragebogen extends Dbh {
     
     public function getFragenVonFragebogen($kuerzel){
         try{
-            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
+            $sql = "SELECT fra.InhaltFrage FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
