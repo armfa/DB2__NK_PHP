@@ -35,18 +35,13 @@ $kuerzel = $_GET['kuerzel'];
     <title>Fragen hinzufügen</title>
 </head>
 
-<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="indexFragebogen.php">Zurück zum Fragebogen</a></li>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
-    <header style="background-color:Gray;">
-        <!--Link um zurück auf die Fragebogen Seite zu kommen-->
-        <br><a href="indexFragebogen.php">Zurück zur Fragebogen-Seite</a><br><br>
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="indexFragebogen.php">Zurück zum Fragebogen</a></li>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
     </header>
 
     <br><br>

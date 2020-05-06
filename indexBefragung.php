@@ -138,15 +138,15 @@ if ($_SESSION["aktuelleSeite"] == $_SESSION["anzahlSeiten"] - 1) {
 <!doctype HTML>
 <html>
 
-<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="index.php">Zurück zur Startseite</a></li>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="index.php">Zurück zur Startseite</a></li>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
+    </header>
+    
     <h1>Fragebogen: <?php echo $befragung->getFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
     <form action="" method="post">
         <?php

@@ -55,7 +55,7 @@ unset($_SESSION['matrikelnummer']);
                 <tr>
                     <td></td>
                     <td>
-                        <input class="btn" type="submit" name="benutzerLogin" value="Login">
+                        <input class="btn" type="submit" name="benutzerLogin" value="Login/Registrieren">
                     </td>
                 </tr>
                 <tr>

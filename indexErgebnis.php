@@ -21,15 +21,15 @@ Liste aller Kommentare dargestellt. Die Informationen sind über Aufrufe zentral
 <!doctype HTML>
 <html>
 
-<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="index.php">Zurück zur Startseite</a></li>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="index.php">Zurück zur Startseite</a></li>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
+    </header>
+    
     <h1>Ergbnisdarstellung</h1>
 
     <label>Welchen Kurs möchten Sie auswerten?</label></br>

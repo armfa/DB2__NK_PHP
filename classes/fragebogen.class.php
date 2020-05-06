@@ -1,15 +1,8 @@
 <?php
-<<<<<<< HEAD
 // Isabelle Scheffler
 
 // Diese Klasse beinhaltet alle Funktionen bezüglich des "Fragebogens" und der "Fragen".
 // Hierzu zählen die Funktionen
-=======
-//Isabelle Scheffler
-
-//Diese Klasse beinhaltet alle Funktionen bezüglich des "Fragebogens" und der "Fragen".
-//Hierzu zählen die Funktionen
->>>>>>> f413a07dc4420306b4a74c72557aa6867f7e1e88
 // - showFragebogenVonBenutzer() --> Gibt die Fragebögen des Benutzers in einem Drop-Down Menü aus.
 // - checkObFragebogenExistiert() --> Gibt zurück, ob der Titel bereits vergeben ist.
 // - setFragebogen() --> Fügt einen Fragebogen in die DB ein.
