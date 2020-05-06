@@ -1,8 +1,6 @@
 <?php
 //Isabelle Scheffler
 
-// Isabelle Scheffler
-
 //Diese Klasse beinhaltet alle Funktionen bezüglich des "Fragebogens" und der "Fragen".
 //Hierzu zählen die Funktionen
 // - showFragebogenVonBenutzer() --> Gibt die Fragebögen des Benutzers in einem Drop-Down Menü aus.

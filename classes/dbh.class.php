@@ -2,16 +2,15 @@
 //Fabrice Armbruster
 
 //______________________KLASSENBESCHREIBUNG______________________
-//Diese Klasse stellt eine PDO_Verbindung zur Datenbank her. 
+//Diese Klasse stellt eine PDO-Verbindung zur Datenbank her. 
 //Zur Einbindung muss auf diese Klasse referenziert werden --> extends Dbh
 //Es nutzt dabei das setAttribute mit fetch_assoc als Standardeinstellung, 
-//weshalb alle Daten als Assoziatives Array zurückgegeben werden. 
+//weshalb alle Daten standartmäßig als Assoziatives Array zurückgegeben werden. 
 //Dies kann bei Bedarf in der entsprechenden Funktion übersteuert werden, 
 //ebenso wie die die Einstellung FetchAll/Fetch.
 
-
 //Alle includes werden hier angegeben, da durch die Vererbung diese auch in den Sub-Klassen verfügbar sind. 
-//Nur die index*.php-Seiten müssen, da keine Vererbung zu dieser Klasse existiert, in diesen Klassen angegeben werden. 
+//Nur die index*.php-Seiten müssen, da keine Vererbung zu dieser Klasse existiert, in lokal angegeben werden. 
 
 //Kurs
 include_once 'classes/kurs.class.php';
@@ -42,7 +41,7 @@ class Dbh
     try {
       $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbName;
       $pdo = new PDO($dsn, $this->user, $this->pwd);
-      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
       return $pdo;
     } catch (PDOException $e) {
       header("Location: ../DB2__NK_PHP/indexFehler.php");

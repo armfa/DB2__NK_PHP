@@ -2,7 +2,7 @@
 //Fabrice Armbruster
 
 //Diese Klasse beinhaltet alle Funktionen bezüglich des "Kurses".
-//Hierzu zählen die Funktionen
+//Hierzu zählen die Funktionen:
 // - getKurses() --> returns Array mit Kursen
 // - getStudentenVonKurs() -> returns Array mit Studenten eines Kurses
 // - setKurs() --> Fügt Kurs in DB hinzu
@@ -10,9 +10,6 @@
 // - setStudent() --> Fügt Student DB hinzu
 // - deleteStudent() --> Löscht Student in der DB 
 // - getKuresfromBenutzerStmt() --> returns Array mit Kursen dieses Benutzers
-
-//ToDo: Error Handling is missing -> DB-Server side is done
-
 
 class Kurs extends Dbh
 {
