@@ -25,15 +25,15 @@ if (isset($_SESSION['benutzername']) == false) {
     <title>Kurs</title>
 </head>
 
-<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="index.php">Zurück zur Startseite</a></li>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="index.php">Zurück zur Startseite</a></li>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
+    </header>
+
     <h1>This is the Kurs Page.</h1>
     <!--Kurs anlegen-->
     <h3>Neuen Kurs anlegen</h3>
