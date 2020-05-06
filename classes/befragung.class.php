@@ -1,20 +1,8 @@
 <?php
 //Fabrice Armbruster
 
+//______________________KLASSENBESCHREIBUNG______________________
 //Diese Klasse beinhaltet alle Datenbankabfragen, im Zusammenhang mit der Befragung stehen: 
-// - getFragebogenfromStudentAbgabestatusStnmt()
-// - setFrageAntwortStmt()
-// - setFrageAntwortUpdateStmt()
-// - getSingleAntwort()
-// - getSingleKommentar()
-// - setKommentarUpdateStmt()
-// - setKommentarStmt()
-// - getFragenummerStmt()
-// - public function getAnzahlFragenFragebogenStmt()
-// - getFragenStmt()
-// - getFrageAntwortStmt()
-// - getFragebogenTitelStmt()
-
 
 class Befragung extends Dbh{
 
@@ -131,6 +119,7 @@ class Befragung extends Dbh{
             header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
+
 
     public function getFragenStmt($Fragebogenkuerzel){
         try {

@@ -1,5 +1,7 @@
 <?php
-//Dana Geßler	
+//Dana Geßler
+
+//______________________KLASSENBESCHREIBUNG______________________
 //Diese Klasse selektiert Benutzername und Passwort zur Abprüfung auf die Datenbank, 
 //und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen.
 

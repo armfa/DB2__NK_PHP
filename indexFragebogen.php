@@ -29,19 +29,13 @@ $kurs = new Kurs();
     <title>Fragebogen</title>
 </head>
 
-<!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="index.php">Zurück zur Startseite</a></li>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
-    <header style="background-color:Gray;">
-        <!--Link um zurück auf die Startseite zu kommen-->
-        <br><a href="index.php">Zurück zur Startseite</a><br>
-        <br><a href="indexLogin.php">Log out</a><br>
+    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="index.php">Zurück zur Startseite</a></li>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
     </header>
 
     <h4>Fragebogen anlegen</h4>

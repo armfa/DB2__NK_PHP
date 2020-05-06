@@ -24,14 +24,14 @@ if (isset($_SESSION['benutzername']) == false and isset($_SESSION['matrikelnumme
     <title> Umfragen Hochschule</title>
 </head>
 
-    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
-<header style="background-color:lightGray;">
-    <ul>
-        <li><a href="indexLogin.php">Logout</a></li>
-    </ul>
-</header>
-
 <body>
+     <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <header style="background-color:lightGray;">
+        <ul>
+            <li><a href="indexLogin.php">Logout</a></li>
+        </ul>
+    </header>
+
     <div class=topHeader>
         <h1>Herzlich Willkommen im Befragungstool!</h1>
         <h2>Was möchten Sie tun?</h2>
@@ -47,7 +47,7 @@ if (isset($_SESSION['benutzername']) == false and isset($_SESSION['matrikelnumme
         <a href="indexKurs.php">Kurs anlegen, Studenten anlegen und Kurs zuweisen</a>
     </div><br>
     <div>
-        <a href="indexFragebogen.php">Fragebogen anlegen, bearbeiten, freigeben</a>
+        <a href="indexFragebogen.php">Fragebogen anlegen, bearbeiten oder freigeben</a>
     </div><br>
     <div>
         <a href="indexErgebnis.php">Ergebnisse aufrufen</a>
