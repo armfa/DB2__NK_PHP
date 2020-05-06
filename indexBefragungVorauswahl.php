@@ -40,28 +40,24 @@ $befragungControll = new BefragungController();
     //Darf ein Student ein Fragebogen aufrufen -> Array mit Liste der Fragebögen, 
     //die für diesen Studenten freigegeben sind, und die dieser noch nicht abgegeben hat
     $resultx = $befragungControll->darfStudentFragebogenausfuellen($_SESSION['matrikelnummer']);
-?>
+    ?>
 
-<?php
-if($resultx != null){
-
-    echo '<form action="indexBefragung.php" method="post">';
-        echo '<select name="fragebogen">';          
-            $i = 0;
-            while ($i < count($resultx)) {
-                echo "<option value='" . $resultx[$i]['Kuerzel'] . "'>" . $resultx[$i]['Titel'] . "</option>";
-                $i++;
-            }           
+    <?php
+    if ($resultx != null) {
+        //Dropdownauswahl des Fragebogens, welcher für diesen Student freigeschalten ist.     
+        echo '<form action="indexBefragung.php" method="post">';
+        echo '<select name="fragebogen">';
+        $i = 0;
+        while ($i < count($resultx)) {
+            echo "<option value='" . $resultx[$i]['Kuerzel'] . "'>" . $resultx[$i]['Titel'] . "</option>";
+            $i++;
+        }
         echo '</select></br></br>
-        <button type="submit" name="umfrageStarten">Umfrage starten</button></form>';    
-}
-else
-{
-    echo "Super, du hast schon alle Umfragen beantwortet!";
-}
-?>
+        <button type="submit" name="umfrageStarten">Umfrage starten</button></form>';
+    } else {
+        echo "Super, du hast schon alle Umfragen beantwortet!";
+    }
+    ?>
 </body>
-<?php
-?>
 
 </html>

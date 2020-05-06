@@ -2,7 +2,7 @@
 
 //Dana Geßler + Fabrice Armbruster
 
-//__________________________BESCHREIBUNG______________________
+//_______________________BESCHREIBUNG______________________
 //Diese Seite benhaltet alle Login-Funktionalitäten. 
 //Studenten und Benutzer können sich einloggen
 //Werden folgende Fälle unterschieden:
@@ -55,7 +55,7 @@ unset($_SESSION['matrikelnummer']);
                 <tr>
                     <td></td>
                     <td>
-                        <input class="btn" type="submit" name="benutzerLogin" value="Login">
+                        <input class="btn" type="submit" name="benutzerLogin" value="Login / Registrieren">
                     </td>
                 </tr>
                 <tr>
