@@ -1,6 +1,9 @@
 <?php
 //Fabrice Armbruster
 
+//Auf dieser Seite Kann der Benutzer einen Kurs erstellen und einen Student erstellen und dabei diesem einem Kurs zuweisen.
+//Hierzu werden die Datenbankfunktionen in "kurs.class.php" genutzt. 
+
 include_once 'classes/dbh.class.php';
 
 //Diese Seite akzeptiert nur Benutzer
@@ -32,18 +35,19 @@ if (isset($_SESSION['benutzername']) == false) {
 
 <body>
     <h1>This is the Kurs Page.</h1>
-
+<!--Kurs anlegen-->
     <h3>Neuen Kurs anlegen</h3>
     <form class='neuerKurs-form' action="" method="post">
         <input type="text" name="Kurs" placeholder="Kurs">
         <button type="submit" name="kursAnlegen">Kurs anlegen</button>
     </form>
+<!--Student anlegen und Kurs zuweisen-->    
     <h3>Neuen Student anlegen</h3>
     <form class='neuerStudent-form' action="" method="post">
         <label>Kurs</label>
         <select name="kurses">
             <?php
-            //Dropdownauswahl: alle Kurse werdeb dem Benutzer zur Auswahl angezeigt
+            //Dropdownauswahl: alle Kurse werden dem Benutzer zur Auswahl angezeigt
             $kurs = new Kurs();
             $kursname = $kurs->getKurses($_SESSION['benutzername']);
             $i = 0;
@@ -62,6 +66,7 @@ if (isset($_SESSION['benutzername']) == false) {
 </html>
 
 <?php
+//Kurs anlegen
 if (isset($_POST['kursAnlegen'])) {
     $kursname = $_POST['Kurs'];
     //Prüfen, ob Feld "Kursname" ist leer
@@ -87,6 +92,7 @@ if (isset($_POST['kursAnlegen'])) {
     }
 }
 
+//Student anlegen
 if (isset($_POST['studentAnlegen'])) {
     $kursname = $_POST['kurses'];
     $matrikelnummer = $_POST['matrikelnummer'];

@@ -1,9 +1,18 @@
 <?php
-//Fabrice Armbruster 
+//Fabrice Armbruster
 
+//Diese Klasse führt alle grundlegenden Funktionen in "indexBefragung.php" aus.
+//Hierzu zählen folgende Teile der Aufgabenstellung:
+
+// - Prozedur zur Belegung des Kommentarfelds für einen Studenten in einem Fragebogen.
+// - Prozedur, die für eine Matrikelnummer und einen Fragebogen die Einträge als abgeschlossen markiert.
+// -  Prozedur, um eine für eine Matrikelnummer die gemachte Punktevergabe einträgt (student, fragebogen, frage, punkte).
+
+// Hierfür werden die Datenbank Funktionen der Klasse Befragung genutzt. 
 
 class BefragungController extends Befragung{
 
+    //Antwort speichern/updaten
     public function createOrUpdateFrageAntwortStmt($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort){
         //Check, ob Antwort auf Frage schon abgegeben wurde in DB
         //Falls ja, dann update, wenn Unterschied
@@ -16,6 +25,7 @@ class BefragungController extends Befragung{
         }
     }
 
+    //Fragebogen abschließen
     public function createKommentarFragebogenFertig($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){  
         //Kommentar auf 1 = Abgegeben setzten
         $this->setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
@@ -23,6 +33,7 @@ class BefragungController extends Befragung{
         header("Location: ../DB2__NK_PHP/indexBefragungVorauswahl.php?f=success");
     }
 
+    //Kommentar Updaten/Abschließen
     public function createOrUpdateKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $kommentar){
         //Prüfen, Datensatz (Kommentar) bereits in der Datenbank existiert, aber noch nicht agegeben wurde.
         //Falls ja, dann update Datensatz
@@ -33,14 +44,6 @@ class BefragungController extends Befragung{
         else{
             $this->setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, 0, $kommentar);
         }
-    }
-
-    public function showSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer){
-        return $this->getSingleAntwort($Fragenummer, $Fragebogenkuerzel, $Matrikelnummer);
-    }
-
-    public function showFragenummerStmt($Fragebogenkuerzel, $InhaltFrage){
-        return $this->getFragenummerStmt($Fragebogenkuerzel, $InhaltFrage);
     }
 
 }

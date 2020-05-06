@@ -1,7 +1,8 @@
 <?php
 //Dana Geßler	
 //Diese Klasse selektiert Benutzername und Passwort zur Abprüfung auf die Datenbank, 
-//und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen. 
+//und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen.
+
 
 include_once 'classes/dbh.class.php';
 

@@ -1,10 +1,9 @@
 <?php
 //Fabrice Armbruster
 
-//______________________KLASSENBESCHREIBUNG______________________
 //Diese PHP-Seite ist für die Darstellung der Befragung bzw. Durchführung einer Umfrage zuständig.
-//Es werden dafür Funktionen in den Klassen "Befragungsview", "BefragungsController" und "Befragung.class" ausgelagert. 
-//Zudem wird die durchgeführte Umfrage auf der Seite indexBefragungVorauswahl.php ausgewählt.
+//Es werden dafür Funktionen in den Klassen "BefragungsController" und "Befragung.class" ausgelagert. 
+//Zudem wird die durchgeführte Umfrage auf der Seite "indexBefragungVorauswahl.php" ausgewählt.
 
 include_once 'classes/dbh.class.php';
 
@@ -31,10 +30,10 @@ if (isset($_POST['fragebogen'])) {
 //Erste Seite - erster Seitenaufruf
 if ((isset($_POST['naechsteFrage']) == false) && (isset($_POST['vorherigeFrage']) == false)) {
     //Alle Fragen werden geholt und in Session gespeichert. 
-    $_SESSION["Fragen"] = $befragungsobjekt->getFragenStmt($_SESSION["kuerzel"]);
+    $_SESSION["Fragen"] = $befragung->getFragenStmt($_SESSION["kuerzel"]);
     $_SESSION["aktuelleSeite"] = 1;
     //Anzahl der Seiten ist die Anzahl der Fragen + Seite Kommentar + Seite fragebogen abschließen. 
-    $_SESSION["anzahlSeiten"] = 2 + $befragungsobjekt->getAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
+    $_SESSION["anzahlSeiten"] = 2 + $befragung->getAnzahlFragenFragebogenStmt($_SESSION["kuerzel"])[0];
 }
 
 //Nächste Frage-Button 
@@ -91,11 +90,11 @@ if (isset($_POST['fragebogenFertig'])) {
 if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
     //Prüfen, ob Frage schon beantwortet
     //Fragenummer holen
-    $Fragenummer = $befragungC->showFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]['InhaltFrage'])[0]['Fragenummer'];
+    $Fragenummer = $befragung->getFragenummerStmt($_SESSION["kuerzel"], $_SESSION["Fragen"][$_SESSION["aktuelleSeite"] - 1]['InhaltFrage'])[0]['Fragenummer'];
     //Prüfen, ob schon eine Antwort auf die Frage mit der Fragenummer existiert
-    if ($befragungC->showSingleAntwort($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
+    if ($befragung->getSingleAntwort($Fragenummer, $_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
         //Falls ja, dann lade diese in die Check Variable. 
-        $check = $befragungsobjekt->getFrageAntwortStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
+        $check = $befragung->getFrageAntwortStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])[$_SESSION["aktuelleSeite"] - 1]['Antwort'];
     } else {
         //Falls nicht, dann ist check leer. 
         $check = "";
@@ -125,14 +124,15 @@ if ($_SESSION["aktuelleSeite"] < ($_SESSION["anzahlSeiten"] - 1)) {
             $check1 = $check2 =  $check3 = $check4 = $check5 = "";
     }
 }
-if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"]) - 1) {
+if ($_SESSION["aktuelleSeite"] == $_SESSION["anzahlSeiten"] - 1) {
     //Prüfen, ob kommentar schon vorhanden
-    if ($befragungsobjekt->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])) {
+    if ($befragung->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 0)) {
         //Falls ja, dann aus DB holen
-        $kommentarPreloaded = $befragungsobjekt->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'])['Kommentar'];
-    } else {
+        $kommentarPreloaded = $befragung->getSingleKommentar($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 0)['Kommentar'];
+    } 
+    else {
         $kommentarPreloaded = "";
-    };
+    }
 }
 ?>
 <!doctype HTML>
@@ -147,7 +147,7 @@ if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"]) - 1) {
 </header>
 
 <body>
-    <h1>Fragebogen: <?php echo $befragungsobjekt->getFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
+    <h1>Fragebogen: <?php echo $befragung->getFragebogenTitelStmt($_SESSION["kuerzel"])['Titel']; ?></h1>
     <form action="" method="post">
         <?php
         //ToDo: Erzeugen des Seiteninhalts über Datenbankzugriffe;

@@ -1,12 +1,35 @@
 <?php
-//Fabrice Armbruster 
+//Fabrice Armbruster
+
+//Diese Klasse beinhaltet alle Datenbankabfragen, im Zusammenhang mit der Befragung stehen: 
+// - getFragebogenfromStudentAbgabestatusStnmt()
+// - setFrageAntwortStmt()
+// - setFrageAntwortUpdateStmt()
+// - getSingleAntwort()
+// - getSingleKommentar()
+// - setKommentarUpdateStmt()
+// - setKommentarStmt()
+// - getFragenummerStmt()
+// - public function getAnzahlFragenFragebogenStmt()
+// - getFragenStmt()
+// - getFrageAntwortStmt()
+// - getFragebogenTitelStmt()
+
 
 class Befragung extends Dbh{
 
     public function getFragebogenfromStudentAbgabestatusStnmt($Matrikelnummer, $Abgabestatus){
         try {
-            $sql = "SELECT DISTINCT frageb.Kuerzel, frageb.Titel FROM fragebogen frageb, freischalten freisch, kurs k, student s, fragen f, bearbeitet bearb, beantwortet beantw WHERE frageb.Kuerzel = freisch.Kuerzel AND freisch.Kursname = k.Kursname AND k.Kursname = s.Kursname AND s.Matrikelnummer = bearb.Matrikelnummer AND bearb.Kuerzel = frageb.Kuerzel AND s.Matrikelnummer = ? AND bearb.Abgabestatus = ?";
-            // Freischalten --> fargebogen, die für user freigeschaltet sind, aber nich nicht abgegeben
+            $sql = "SELECT DISTINCT frageb.Kuerzel, frageb.Titel 
+            FROM fragebogen frageb, freischalten freisch, kurs k, student s, fragen f, bearbeitet bearb, beantwortet beantw 
+            WHERE frageb.Kuerzel = freisch.Kuerzel 
+            AND freisch.Kursname = k.Kursname 
+            AND k.Kursname = s.Kursname 
+            AND s.Matrikelnummer = bearb.Matrikelnummer 
+            AND bearb.Kuerzel = frageb.Kuerzel 
+            AND s.Matrikelnummer = ? 
+            AND bearb.Abgabestatus = ?";
+            // Freischalten --> Fragebogen, die für user freigeschaltet sind, aber nicht nicht abgegeben
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Matrikelnummer, $Abgabestatus]);
             $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -16,37 +39,18 @@ class Befragung extends Dbh{
         }
     }
 
-    public function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
-            try {
-                $sql = "SELECT COUNT(Kuerzel) FROM fragen WHERE Kuerzel = ?";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogenkuerzel]);
-                $anzahlFragen = $stmt->fetch(PDO::FETCH_NUM);
-                return $anzahlFragen;
-            } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-            }
-    }
-
-    public function getFragebogenTitelStmt($Fragebogenkuerzel){
+    public function getFragebogenfromStudent($Matrikelnummer){
         try {
-            $sql = "SELECT * FROM fragebogen WHERE Kuerzel = ?";
+            $sql = "SELECT frageb.Kuerzel, frageb.Titel 
+            FROM fragebogen frageb, freischalten freisch, kurs k, student s
+            WHERE frageb.Kuerzel = freisch.Kuerzel 
+            AND freisch.Kursname = k.Kursname 
+            AND k.Kursname = s.Kursname 
+            AND s.Matrikelnummer = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$Fragebogenkuerzel]);
-            $anzahlFragen = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $anzahlFragen;
-        } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-        }
-    }
-
-    public function getFragenStmt($Fragebogenkuerzel){
-        try {
-            $sql = "SELECT * FROM fragen WHERE Kuerzel = ? ORDER BY Fragenummer";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$Fragebogenkuerzel]);
-            $fragenarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $fragenarray;
+            $stmt->execute([$Matrikelnummer]);
+            $Frageboegen = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $Frageboegen;
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
@@ -57,18 +61,6 @@ class Befragung extends Dbh{
             $sql = "INSERT INTO beantwortet (Fragenummer, Kuerzel, Matrikelnummer, Antwort) VALUES (?, ?, ?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Fragenummer, $Fragebogenkuerzel, $Matrikelnummer, $Antwort]);
-        } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-        }
-    }
-
-    public function getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer){
-        try {
-            $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? ORDER BY Fragenummer";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel]);
-            $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $antwortarray;
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
@@ -139,5 +131,53 @@ class Befragung extends Dbh{
             header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
+
+    public function getFragenStmt($Fragebogenkuerzel){
+        try {
+            $sql = "SELECT * FROM fragen WHERE Kuerzel = ? ORDER BY Fragenummer";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogenkuerzel]);
+            $fragenarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $fragenarray;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+        }
+    }
+
+    public function getAnzahlFragenFragebogenStmt($Fragebogenkuerzel){
+        try {
+            $sql = "SELECT COUNT(Kuerzel) FROM fragen WHERE Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogenkuerzel]);
+            $anzahlFragen = $stmt->fetch(PDO::FETCH_NUM);
+            return $anzahlFragen;
+        } catch (PDOException $e) {
+        header("Location: ../DB2__NK_PHP/indexFehler.php");
+        }
+}
+
+public function getFrageAntwortStmt($Fragebogenkuerzel, $Matrikelnummer){
+    try {
+        $sql = "SELECT * FROM beantwortet WHERE Matrikelnummer = ? AND KUERZEL = ? ORDER BY Fragenummer";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$Matrikelnummer, $Fragebogenkuerzel]);
+        $antwortarray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $antwortarray;
+    } catch (PDOException $e) {
+        header("Location: ../DB2__NK_PHP/indexFehler.php");
+    }
+}
+
+public function getFragebogenTitelStmt($Fragebogenkuerzel){
+    try {
+        $sql = "SELECT * FROM fragebogen WHERE Kuerzel = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$Fragebogenkuerzel]);
+        $anzahlFragen = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $anzahlFragen;
+    } catch (PDOException $e) {
+        header("Location: ../DB2__NK_PHP/indexFehler.php");
+    }
+}
 
 }
