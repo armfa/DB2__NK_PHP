@@ -35,13 +35,13 @@ if (isset($_SESSION['benutzername']) == false) {
     </header>
 
     <h1>This is the Kurs Page.</h1>
-<!--Kurs anlegen-->
+    <!--Kurs anlegen-->
     <h3>Neuen Kurs anlegen</h3>
     <form class='neuerKurs-form' action="" method="post">
         <input type="text" name="Kurs" placeholder="Kurs">
         <button type="submit" name="kursAnlegen">Kurs anlegen</button>
     </form>
-<!--Student anlegen und Kurs zuweisen-->    
+    <!--Student anlegen und Kurs zuweisen-->
     <h3>Neuen Student anlegen</h3>
     <form class='neuerStudent-form' action="" method="post">
         <label>Kurs</label>
@@ -103,7 +103,7 @@ if (isset($_POST['studentAnlegen'])) {
         exit();
     } else {
         //Prüfen, ob Matrikelnummer aus 7 Ziffern besteht. 
-        if (!preg_match("/\d\d\d\d\d\d\d/", $matrikelnummer)) {
+        if (!preg_match("/^\d{7}(?:\d{2})?$/", $matrikelnummer)) {
             header("Location: ../DB2__NK_PHP/indexKurs.php?s=char");
             exit();
         } else {

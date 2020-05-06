@@ -2,7 +2,7 @@
 
 //Dana Geßler + Fabrice Armbruster
 
-//__________________________BESCHREIBUNG______________________
+//_______________________BESCHREIBUNG______________________
 //Diese Seite benhaltet alle Login-Funktionalitäten. 
 //Studenten und Benutzer können sich einloggen
 //Werden folgende Fälle unterschieden:
