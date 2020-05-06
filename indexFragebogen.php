@@ -56,7 +56,7 @@ $kurs = new Kurs();
 
     <h4>Fragebogen freigeben</h4>
     <form action="" method="POST">
-        <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+        <!--Drop-Down Menü, das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name='fragebogen'>
             <?php
             $fragebogenObj->showFragebogenVonBenutzer($_SESSION['benutzername']);

@@ -22,20 +22,23 @@ class Ergebnis extends dbh{
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?
+                GROUP BY s.kursname";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
-                $kommentarArray = $stmt->fetch(PDO::FETCH_ASSOC); 
+                $kommentarArray = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                foreach($kommentarArray as $zeile) {
-                //Zeilenumbruch zu nach jedem Kommentar
-                echo '<br>';
-                echo '<br>' . $zeile['Kommentar'];
-                return $kommentarArray;
+                if ($kommentarArray == null ){
+                    header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noComments");
                 }
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+                else{
+                $ausgabe = implode("<br>\n",$kommentarArray);
+                echo $ausgabe;
+                return $kommentarArray;
+                }}
+             catch (PDOException $e) {
+            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e; 
             }
         }
     }
@@ -56,15 +59,22 @@ class Ergebnis extends dbh{
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?
+                GROUP BY s.kursname";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
                 $avgAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
  //               return $ergebnis;
-                return $avgAnswer;
+
+ 
+                if ($avgAnswer == null ){
+                header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
+                }
+                    else{
+                return $avgAnswer;}
             } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e; 
             }
         }
     }
@@ -84,19 +94,24 @@ class Ergebnis extends dbh{
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?
+                GROUP BY s.kursname";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
                 $minAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
                // return $ergebnis;
-               return $minAnswer;
+ 
+               if ($minAnswer == null ){
+                header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
+                }
+                    else{
+                return $minAnswer;}
             } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e; 
             }
         }
     }
-
     //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der maximalen Antwort. 
 
@@ -113,17 +128,22 @@ class Ergebnis extends dbh{
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?
+                GROUP BY s.kursname";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
                 $maxAnswer = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $maxAnswer;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+                if ($maxAnswer == null ){
+                    header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
+                    }
+                        else{
+                    return $maxAnswer;}
+                } catch (PDOException $e) {
+                //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+                echo $e; 
+                }
             }
         }
-    }
 
 //   NOT TESTED YET
     //Antworten je Fragebogen & Kurs abfragen, Berechnung der Standardabweichung der Antworten. 
@@ -141,24 +161,31 @@ class Ergebnis extends dbh{
                 AND bear.Abgabestatus = 1
                 AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?
+                GROUP BY s.kursname";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
                 $standDev = $stmt->fetch(PDO::FETCH_ASSOC); 
 // Berechnung der Standardabweichung hier: 
-                $num = count($standDev);
-                $avg = array_sum($standDev) / $num;
-                $abweichung = 0;
-                foreach ($standDev as $elem) {
-                    $abweichung += ($elem - $avg) * ($elem - $avg);
+
+        if ($standDev == null ){
+                 header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
+                     }
+             else{
+            $num_elem = count($standDev);
+            $abweichung = 0.0;
+
+            $avg = array_sum($standDev)/$num_elem;
+            foreach($standDev as $i){
+            $abweichung += pow(($i - $avg), 2);
                 }
-                $standDev = sqrt( (1/($num-1)) * $abweichung);
-                return $standDev;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+
+                $standDev = (float)sqrt($abweichung/$num_elem);
+             return $standDev;}
+        } catch (PDOException $e) {
+        //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+                echo $e; 
             }
         }
     }
-
 }
