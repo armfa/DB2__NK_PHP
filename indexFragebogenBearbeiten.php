@@ -44,8 +44,7 @@ $kuerzel = $_GET['kuerzel'];
         </ul>
     </header>
     
-    <h4>Fragebogen bearbeiten</h4>
-    <br>
+    <h1>Fragebogen bearbeiten</h1>
     
     <h4>Frage löschen</h4>
     <form action="" method="POST">

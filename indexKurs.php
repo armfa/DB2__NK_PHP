@@ -34,7 +34,7 @@ if (isset($_SESSION['benutzername']) == false) {
         </ul>
     </header>
 
-    <h1>This is the Kurs Page.</h1>
+    <h1>Kurs-Seite</h1>
     <!--Kurs anlegen-->
     <h3>Neuen Kurs anlegen</h3>
     <form class='neuerKurs-form' action="" method="post">

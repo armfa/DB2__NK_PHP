@@ -44,8 +44,7 @@ $kuerzel = $_GET['kuerzel'];
         </ul>
     </header>
 
-    <br><br>
-
+    <h1>Fragen hinzufügen</h1>
     <?php
     // Je nach Anzahl an Fragen die erstellt werden sollen, werden Textfelder erstellt. 
     $i = 1;

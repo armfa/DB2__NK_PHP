@@ -38,6 +38,7 @@ $kurs = new Kurs();
         </ul>
     </header>
 
+    <h1>Fragebogen-Seite</h1>
     <h4>Fragebogen anlegen</h4>
     <form action="" method="POST">
         <label for="TitelFragebogen">Titel Fragebogen:</label>
