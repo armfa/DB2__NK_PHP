@@ -12,7 +12,7 @@ class Ergebnis extends dbh{
     protected function getKommentareStmt($Fragebogen , $Kurs){
         {
             try {
-                $sql = "SELECT Kommentar 
+                $sql = "SELECT bear.Kommentar 
                 FROM        bearbeitet bear,    
                             student s                
                 WHERE   bear.Matrikelnummer = s.Matrikelnummer  
@@ -23,14 +23,8 @@ class Ergebnis extends dbh{
                 $stmt->execute([$Fragebogen, $Kurs]);
                 $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                if ($kommentarArray == null ){
-                    header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noComments");
-                }
-                elseif ($kommentarArray !== null){
-                $ausgabe = implode("<br>\n",$kommentarArray);
-                echo $ausgabe;
                 return $kommentarArray;
-                }}
+                }
              catch (PDOException $e) {
             //    header("Location: ../DB2__NK_PHP/indexFehler.php");
             echo $e; 
@@ -44,7 +38,7 @@ class Ergebnis extends dbh{
     protected function getAvgAnswerStmt($Fragebogen, $Kurs){
         {
             try {
-                $sql = "SELECT Fragenummer, avg(Antwort) 
+                $sql = "SELECT bean.Fragenummer, avg(bean.Antwort) 
                 FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s 
@@ -72,7 +66,7 @@ class Ergebnis extends dbh{
     protected function getMinAnswerStmt($Fragebogen, $Kurs){
         {
             try {
-                $sql = "SELECT Fragenummer, min(bean.Antwort) 
+                $sql = "SELECT bean.Fragenummer, min(bean.Antwort) 
                 FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s 

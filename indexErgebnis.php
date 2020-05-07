@@ -89,13 +89,12 @@ if (!isset($_GET['fehler'])) {
     <?php 
             $ergebnisVObject = new ErgebnisView();
 
-
+        
 
             if (isset($_POST["fragebogenAuswerten"])) {
                 header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
                 $Kurs = $_POST['auswertungKurs'];
                 $Fragebogen = $_POST['fragebogen'];
-                
                 exit();
             }
 
@@ -122,7 +121,8 @@ if (!isset($_GET['fehler'])) {
                     
                 }
             }
-        
+
+                    
             ?>
         </select></br>
     </form>
