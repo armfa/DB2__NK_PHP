@@ -28,10 +28,15 @@ $fragebogenObj = new Fragebogen();
 $kuerzel = $_GET['kuerzel'];
 
 ?>
+
 <!doctype HTML>
 <html>
+
 <head>
-    <title>Fragebogen Bearbeiten</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fragebogen bearbeiten</title>
 </head>
 
 <body>
