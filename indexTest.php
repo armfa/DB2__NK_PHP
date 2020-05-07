@@ -55,15 +55,8 @@ return $standDevArray;
 
     //Standardabweichung pro Fragenummer berechnen (+Ausgabe)
     for ($i = 0; $i<count($antworten); $i++){
-        $antworten[$i];
-    
-        $num_elem = count($antworten[$i]);
-        $abweichung = 0.0;
-        $avg = array_sum($antworten[$i])/$num_elem;
-        foreach($antworten[$i] as $j){
-            $abweichung += pow(($j - $avg), 2);
-        }
-        $standDev = (float)sqrt($abweichung/$num_elem);
+        
+        $standDev = calculateStandDev($antworten[$i]);
         echo $fragenummern[$i];
         echo ": ";
         echo $standDev;
@@ -102,5 +95,6 @@ return $standDevArray;
         echo $row['Antwort']."<br>"; */
         //$newArray = array($newArray) + $row['Antwort'];
     //}
-     
+   
+
 ?>

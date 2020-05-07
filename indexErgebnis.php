@@ -115,7 +115,13 @@ if (!isset($_GET['fehler'])) {
                     echo "<h3>Durchschnittliche Antwort: ?</h3>".$ErgebnisArray[0];
                     echo "<h3>Minimale Antwort: ?</h3>".$ErgebnisArray[1];
                     echo "<h3>Maximale Antwort: ?</h3>".$ErgebnisArray[2];
+
+
+
                     echo "<h3>Standardabweichung: ?</h3>".$ErgebnisArray[3];
+
+
+                    
                     exit();
                 } elseif ($ergebnisAngefragt == "keineAntworten"){
                     
