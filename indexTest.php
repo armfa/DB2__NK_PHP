@@ -2,10 +2,60 @@
 
 include_once 'classes/dbh.class.php';
 
-class Test extends dbh{
-    public function getStandDevArrayStmt($Fragebogen, $Kurs){
 
+$Fragebogen = "36";
+$Kurs = "wwi118";
+
+class Test extends dbh{
+
+
+
+        function getKommentareStmt($Fragebogen , $Kurs){
+            $sql = "SELECT bear.Kommentar 
+            FROM        bearbeitet bear,    
+                        student s                
+            WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+            AND bear.Abgabestatus = 1
+            AND bear.Kuerzel = ?
+            AND s.Kursname = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $kommentarArray;
+        }
+
+
+
+        
+        function showKommentare($Fragebogen, $Kurs){
+            //  $kommentarArray = $this->kommentarArray;
+            $alleKommentare =  $this->getKommentareStmt($Fragebogen, $Kurs);
+            //    $alleKommentare = $kommentarArray; 
+        
+            if ($alleKommentare == null ){
+                // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noComments");
+            }  elseif ($alleKommentare !== null){
+                $kommentarString = '';
+                foreach($alleKommentare as $kommentar){
+                    $kommentarString = $kommentarString.$kommentar['Kommentar'];
+                    If ($kommentarString != '') $kommentarString = $kommentarString."<br>";
+                }
+                echo $kommentarString;
+            }
+        }
+    
+}
+
+$TestObj = new Test; 
+
+$TestObj->showKommentare($Fragebogen, $Kurs);
+
+
+        /* 
         // DB Abfrage
+
+          public function getStandDevArrayStmt($Fragebogen, $Kurs){
 $sql = "SELECT bean.Fragenummer, bean.Antwort
 FROM        bearbeitet bear,    
             beantwortet bean, 
@@ -21,12 +71,12 @@ ORDER BY bean.Kuerzel";
 $stmt = $this->connect()->prepare($sql);
 $stmt->execute([$Fragebogen, $Kurs]);
 $standDevArray = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+
+
 return $standDevArray;
     }}
 
-    $TestObj = new Test; 
-    $Fragebogen = "36";
-    $Kurs = "wwi118";
+   
     //Befüllen des Arrays
     $standDevArray = $TestObj->getStandDevArrayStmt($Fragebogen, $Kurs);
     
@@ -61,7 +111,7 @@ return $standDevArray;
         echo ": ";
         echo $standDev;
         echo "<br> ";
-    }
+    } */
 
     //echo count($antworten);
     //arrayx = [[1,2,3],[1,2,3]]

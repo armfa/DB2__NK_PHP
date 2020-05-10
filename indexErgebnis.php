@@ -87,50 +87,61 @@ if (!isset($_GET['fehler'])) {
 }
 ?>
     <?php 
-            $ergebnisVObject = new ErgebnisView();
+        $ergebnisVObject = new ErgebnisView();
 
-        
 
-            if (isset($_POST["fragebogenAuswerten"])) {
-                header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
+        if (isset($_POST["fragebogenAuswerten"])) {
+            $Kurs = $_POST['auswertungKurs'];
+            $Fragebogen = $_POST['fragebogen'];
+            
+            $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+            $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);              
+            echo "<p class='success'>Hier sind die Ergebnisse von Kurs ".$Kurs.": </p>";
+            echo "<h2>Ergebnisse: </h2>";
+            echo "<h3>Kommentare:</h3>".$Kommentare;
+            
+            //durchschnittliche Antworten ausgeben
+            echo "<h3>Durchschnittliche Antwort:</h3>";
+
+            $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
+
+            echo "<h3>Minimale Antwort:</h3>";
+
+            $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
+
+            echo "<h3>Maximale Antwort:</h3>";
+
+            $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+
+            echo "<h3>Standardabweichung:</h3>";
+
+            $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+        }
+
+
+//header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
+            /*} else {
                 $Kurs = $_POST['auswertungKurs'];
                 $Fragebogen = $_POST['fragebogen'];
-                exit();
-            }
+            }*/
+            
 
-             if (!isset($_GET['ergebnis'])) {
+            //if (!isset($_GET['ergebnis'])) {
+                
                 //Falls kein GET existiert, wird nichts gemacht und das Skript abgebrochen. 
-                exit();
-            } else {
+                //exit();
+            //} else {
                 //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
-                $ergebnisAngefragt = $_GET['ergebnis'];
-                if ($ergebnisAngefragt == "kursergebnisse") {
- 
-                    $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-                    $ErgebnisArray =  $ergebnisVObject->showBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                //$ergebnisAngefragt = $_GET['ergebnis'];
+                //if ($ergebnisAngefragt == "kursergebnisse") {
 
-                    echo "<p class='success'>Hier sind die Ergebnisse von Kurs </p>".$Kurs;
-                    echo "<h2>Ergebnisse: ?</h2>";
-                    echo "<h3>Kommentare: ?</h3>".$Kommentare;
-                    echo "<h3>Durchschnittliche Antwort: ?</h3>".$ErgebnisArray[0];
-                    echo "<h3>Minimale Antwort: ?</h3>".$ErgebnisArray[1];
-                    echo "<h3>Maximale Antwort: ?</h3>".$ErgebnisArray[2];
-
-
-
-                    echo "<h3>Standardabweichung: ?</h3>".$ErgebnisArray[3];
-
-
+             //exit();
+                //} elseif ($ergebnisAngefragt == "keineAntworten"){
                     
-                    exit();
-                } elseif ($ergebnisAngefragt == "keineAntworten"){
+                //}
                     
-                }
-            }
-
-                    
-            ?>
-        </select></br>
+    ?>
+    </select></br>
     </form>
 
 </body>
