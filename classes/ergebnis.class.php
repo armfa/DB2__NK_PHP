@@ -1,164 +1,175 @@
 <?php
-//Dana Gessler 30.04.2020
+//Dana Gessler 11.05.2020
 // Klasse zur Ergebnisauswertung
-//Diese Klasse wertet Fragebögen aus. Die Auswertung erfolgt nach Auswahl von auszuwertendem Fragebogen und ausgewähltem Kurs.
-//Kommentare und Auswertungen beziehen sich auf den ausgewählten Kurs.
+//Diese Klasse fragt die benötigten Werte zur Auswertung der Fragebögen aus der Datenbank ab. 
 
 
-class Ergebnis extends dbh{
+class Ergebnis extends dbh
+{
 
-//   NOT TESTED YET
-    // Kommentare je Fragebogen & Kurs abfragen, Ausgabe erfolgt kurseweise mit Zeilenumbruch zwischen jedem Kommentar
-    protected function getKommentareStmt($Fragebogen , $Kurs){
-        {
+
+    // Kommentare je Fragebogen & Kurs abfragen, Ausgabe erfolgt kursweise
+    protected function getKommentareStmt($Fragebogen, $Kurs)
+    { {
             try {
-                $sql = "SELECT Kommentar 
+                $sql = "SELECT bear.Kommentar 
                 FROM        bearbeitet bear,    
-                            beantwortet bean, 
                             student s                
                 WHERE   bear.Matrikelnummer = s.Matrikelnummer  
-                AND bear.Matrikelnummer = bean.Matrikelnummer  
-                AND s.Matrikelnummer = bean.Matrikelnummer  
                 AND bear.Abgabestatus = 1
-                AND bean.Fragenummer = bear.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.kursname = ?";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
-                $kommentarArray = $stmt->fetch(PDO::FETCH_ASSOC); 
+                $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach($kommentarArray as $zeile) {
-                //Zeilenumbruch zu nach jedem Kommentar
-                echo '<br>';
-                echo '<br>' . $zeile['Kommentar'];
                 return $kommentarArray;
-                }
             } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+                //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+                echo $e;
             }
         }
     }
 
-//   NOT TESTED YET
-    //Antworten je Fragebogen & Kurs abfragen, Berechnung der durchnittlichen Antwort. 
 
-    protected function getAvgAnswerStmt($Fragebogen, $Kurs){
-        {
-            try {
-                $sql = "SELECT avg(Antwort) 
-                FROM        bearbeitet bear,    
-                            beantwortet bean, 
-                            student s 
-                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
-                AND bear.Matrikelnummer = bean.Matrikelnummer  
-                AND s.Matrikelnummer = bean.Matrikelnummer  
-                AND bear.Abgabestatus = 1
-                AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $avgAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
- //               return $ergebnis;
-                return $avgAnswer;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
-            }
+    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der durchnittlichen Antwort. 
+
+    protected function getAvgAnswerStmt($Fragebogen, $Kurs)
+    {
+        try {
+            $sql = "SELECT bean.Fragenummer, avg(bean.Antwort) 
+            FROM        bearbeitet bear,    
+                        beantwortet bean, 
+                        student s, 
+                        fragen f  
+            WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+            AND bear.Matrikelnummer = bean.Matrikelnummer  
+            AND s.Matrikelnummer = bean.Matrikelnummer  
+            AND bear.Abgabestatus = 1
+            AND bean.Kuerzel = bear.Kuerzel
+            AND f.Fragenummer = bean.Fragenummer
+            AND f.Kuerzel = bear.Kuerzel
+            AND bean.Kuerzel = f.Kuerzel
+            AND bear.Kuerzel = ?
+            AND s.Kursname = ?
+            GROUP BY bean.Fragenummer";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $avgAnswers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $avgAnswers;
+        } catch (PDOException $e) {
+            // header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e;
         }
     }
 
-    //   NOT TESTED YET
-    //Antworten je Fragebogen & Kurs abfragen, Berechnung der minimalen Antwort. 
-    protected function getMinAnswerStmt($Fragebogen, $Kurs){
-        {
-            try {
-                $sql = "SELECT min(bean.Antwort) 
-                FROM        bearbeitet bear,    
-                            beantwortet bean, 
-                            student s 
-                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
-                AND bear.Matrikelnummer = bean.Matrikelnummer  
-                AND s.Matrikelnummer = bean.Matrikelnummer  
-                AND bear.Abgabestatus = 1
-                AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $minAnswer = $stmt->fetch(PDO::FETCH_ASSOC); 
-               // return $ergebnis;
-               return $minAnswer;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
-            }
+    //Funktion zur Abfrage des Frageinhalts anhand des Kürzels
+    protected function getInhaltFrage($Fragebogen)
+    {
+        try {
+            $sql = "SELECT f.Fragenummer, f.InhaltFrage
+            FROM        fragen f, fragebogen fb 
+            WHERE f.Kuerzel = fb.Kuerzel
+            AND f.Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen]);
+            $fragenummerInhaltFrage = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $fragenummerInhaltFrage;
+        } catch (PDOException $e) {
+            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e;
         }
     }
 
-    //   NOT TESTED YET
-    //Antworten je Fragebogen & Kurs abfragen, Berechnung der maximalen Antwort. 
+    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der minimalen Antworten. 
+    protected function getMinAnswerStmt($Fragebogen, $Kurs)
+    {
+        try {
+            $sql = "SELECT bean.Fragenummer, min(bean.Antwort) 
+            FROM        bearbeitet bear,    
+                        beantwortet bean, 
+                        student s, 
+                        fragen f
+            WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+            AND bear.Matrikelnummer = bean.Matrikelnummer  
+            AND s.Matrikelnummer = bean.Matrikelnummer  
+            AND bear.Abgabestatus = 1
+            AND bean.Kuerzel = bear.Kuerzel
+            AND f.Fragenummer = bean.Fragenummer
+            AND f.Kuerzel = bear.Kuerzel
+            AND bean.Kuerzel = f.Kuerzel
+            AND bear.Kuerzel = ?
+            AND s.Kursname = ?
+            GROUP BY bean.Fragenummer";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $minAnswer = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $minAnswer;
+        } catch (PDOException $e) {
+            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e;
+        }
+    }
 
-    protected function getMaxAnswerStmt($Fragebogen, $Kurs){
-        {
+    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der maximalen Antworten. 
+    protected function getMaxAnswerStmt($Fragebogen, $Kurs)
+    { {
             try {
-                $sql = "SELECT max(bean.Antwort) 
+                $sql = "SELECT bean.Fragenummer, max(bean.Antwort) 
                 FROM        bearbeitet bear,    
                             beantwortet bean, 
-                            student s 
+                            student s,
+                            fragen f
                 WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Matrikelnummer = bean.Matrikelnummer  
                 AND s.Matrikelnummer = bean.Matrikelnummer  
                 AND bear.Abgabestatus = 1
-                AND bean.Fragenummer = bear.Kuerzel
+                AND bean.Kuerzel = bear.Kuerzel
+                AND f.Fragenummer = bean.Fragenummer
+                AND f.Kuerzel = bear.Kuerzel
+                AND bean.Kuerzel = f.Kuerzel
                 AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
+                AND s.Kursname = ?
+                GROUP BY bean.Fragenummer";
                 $stmt = $this->connect()->prepare($sql);
                 $stmt->execute([$Fragebogen, $Kurs]);
-                $maxAnswer = $stmt->fetch(PDO::FETCH_ASSOC);
+                $maxAnswer = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $maxAnswer;
             } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
+                //    header("Location: ../DB2__NK_PHP/indexFehler.php");
+                echo $e;
             }
         }
     }
 
-//   NOT TESTED YET
-    //Antworten je Fragebogen & Kurs abfragen, Berechnung der Standardabweichung der Antworten. 
-
-    protected function getStandDevStmt($Fragebogen, $Kurs){
-        {
-            try {
-                $sql = "SELECT bean.Antwort
-                FROM        bearbeitet bear,    
-                            beantwortet bean, 
-                            student s 
-                WHERE   bear.Matrikelnummer = s.Matrikelnummer  
-                AND bear.Matrikelnummer = bean.Matrikelnummer  
-                AND s.Matrikelnummer = bean.Matrikelnummer  
-                AND bear.Abgabestatus = 1
-                AND bean.Fragenummer = bear.Kuerzel
-                AND bear.Kuerzel = ?
-                AND s.kurs = ?
-                GROUP BY s.kurs";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $standDev = $stmt->fetch(PDO::FETCH_ASSOC); 
-// Berechnung der Standardabweichung hier: 
-                $num = count($standDev);
-                $avg = array_sum($standDev) / $num;
-                $abweichung = 0;
-                foreach ($standDev as $elem) {
-                    $abweichung += ($elem - $avg) * ($elem - $avg);
-                }
-                $standDev = sqrt( (1/($num-1)) * $abweichung);
-                return $standDev;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
-            }
+    //   NOT TESTED YET
+    //Antworten je Fragebogen & Kurs abfragen, Abfrage der Werte für die Berechnung der Standardabweichung der Antworten. 
+    protected function getStandDevArrayStmt($Fragebogen, $Kurs)
+    {
+        try {
+            $sql = "SELECT bean.Fragenummer, bean.Antwort
+            FROM        bearbeitet bear,    
+                        beantwortet bean, 
+                        student s,
+                        fragen f 
+            WHERE   bear.Matrikelnummer = s.Matrikelnummer  
+            AND bear.Matrikelnummer = bean.Matrikelnummer  
+            AND s.Matrikelnummer = bean.Matrikelnummer  
+            AND bear.Abgabestatus = 1
+            AND bean.Kuerzel = bear.Kuerzel
+            AND f.Fragenummer = bean.Fragenummer
+            AND f.Kuerzel = bear.Kuerzel
+            AND bean.Kuerzel = f.Kuerzel
+            AND bear.Kuerzel = ?
+            AND s.Kursname = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            //Array für die Werte die zur Berechnung der Standardabweichung gebraucht werden
+            $valueForStandDev = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $valueForStandDev;
+        } catch (PDOException $e) {
+            // header("Location: ../DB2__NK_PHP/indexFehler.php");
+            echo $e;
         }
     }
-
 }

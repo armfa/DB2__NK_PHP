@@ -26,6 +26,10 @@ include_once 'classes/befragungController.php';
 //Login
 include_once 'classes/benutzer.class.php';
 
+//Ergebnis auswerten
+include_once 'classes/ergebnis.class.php';
+include_once 'classes/ergebnisController.php';
+
 session_start();
 
 
@@ -34,7 +38,7 @@ class Dbh
   private $host = "localhost";
   private $user = "root";
   private $pwd = "";
-  private $dbName = "db";
+  private $dbName = "dhbw";
 
   protected function connect()
   {
