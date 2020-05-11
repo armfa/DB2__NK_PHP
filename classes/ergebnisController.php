@@ -1,6 +1,5 @@
 <?php
-// Dana Geßler 30.4.2020
-
+// Dana Geßler 11.05.2020
 class ErgebnisView extends Ergebnis
 {
 
@@ -9,94 +8,101 @@ class ErgebnisView extends Ergebnis
   }*/
 
   //Aufruf getKommentareStmt
-  function showKommentare($Fragebogen, $Kurs){
+  function showKommentare($Fragebogen, $Kurs)
+  {
     $kommentarString = "";
     //  $kommentarArray = $this->kommentarArray;
     $alleKommentare =  $this->getKommentareStmt($Fragebogen, $Kurs);
     //    $alleKommentare = $kommentarArray; 
 
-    if ($alleKommentare == null ){
-        // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noComments");
-    }  elseif ($alleKommentare !== null){
-        $kommentarString = '';
-        foreach($alleKommentare as $kommentar){
-            $kommentarString = $kommentarString.$kommentar['Kommentar'];
-            If ($kommentarString != '') $kommentarString = $kommentarString."<br>";
-        }
+    if ($alleKommentare == null) {
+      $kommentarString = "Kein Student hat einen Kommentar abgegeben!";
+    } elseif ($alleKommentare !== null) {
+      $kommentarString = '';
+      foreach ($alleKommentare as $kommentar) {
+        $kommentarString = $kommentarString . $kommentar['Kommentar'];
+        if ($kommentarString != '') $kommentarString = $kommentarString . "<br>";
+      }
     }
     return $kommentarString;
   }
 
   public function structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs)
-  {   
+  {
+    $auswertung = array();
 
-    // Aufrufe für Antworten (avg, min, max, standDev)
-    // $avgAnswer = $this->avgAnswer;
+    // Aufrufe für Antworten, Abspeicherung in Arrays (avg, min, max, standDev)
+
+    //Durchschnittsantworten
     $avgAnswers = $this->getAvgAnswerStmt($Fragebogen, $Kurs);
-    if ($avgAnswers == null ){
+    if ($avgAnswers == null) {
       // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-    } elseif($avgAnswers !== null ){
-      foreach($avgAnswers As $row){
-        $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
+    } elseif ($avgAnswers !== null) {
+      foreach ($avgAnswers as $row) {
+        if ($auswertung == null) {
+          $auswertung[$row['Fragenummer']] = array('avgAnswer' => $row["avg(bean.Antwort)"]);
+        } else {
+          $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
+        }
       }
-
     }
-    // $minAnswer = $this->minAnswer;
+
+    //Minimale Antwort
     $minAnswer =   $this->getMinAnswerStmt($Fragebogen, $Kurs);
-    if ($minAnswer == null ){
+    if ($minAnswer == null) {
       // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-    }elseif($minAnswer !== null ){
-      foreach($minAnswer As $row){
+    } elseif ($minAnswer !== null) {
+      foreach ($minAnswer as $row) {
         $auswertung[$row['Fragenummer']]['minAnswer'] = $row["min(bean.Antwort)"];
       }
     }
 
-    // $maxAnswer = $this->maxAnswer;
+    //Maximale Antwort
     $maxAnswer = $this->getMaxAnswerStmt($Fragebogen, $Kurs);
-    if ($maxAnswer == null ){
+    if ($maxAnswer == null) {
       //  header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-    }elseif($maxAnswer !== null ){
-      foreach($maxAnswer As $row){
+    } elseif ($maxAnswer !== null) {
+      foreach ($maxAnswer as $row) {
         $auswertung[$row['Fragenummer']]['maxAnswer'] = $row["max(bean.Antwort)"];
       }
     }
 
-    // $standDev = $this->standDev;
+    //Abspeicherung der Daten für die Berechnung der Standardabweichungen in multidim. Array
     $standDevArray = $this->getStandDevArrayStmt($Fragebogen, $Kurs);
-    if ($standDevArray == null ){
-    //  header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-    } elseif ($standDevArray !== null ){
+
+    if ($standDevArray == null) {
+      //  header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
+    } elseif ($standDevArray !== null) {
       $fragenummern = array();
       $antworten = array(array());
-  
+
       //Fragenummern suchen
-      foreach ($standDevArray as $row){
-        if( !in_array($row['Fragenummer'], $fragenummern)){ 
-            array_push($fragenummern,$row['Fragenummer'] );
+      foreach ($standDevArray as $row) {
+        if (!in_array($row['Fragenummer'], $fragenummern)) {
+          array_push($fragenummern, $row['Fragenummer']);
         }
-      }  
+      }
 
       $index = 0;
       // Antworten zu zugehörigen Fragenummern gliedern
       // Bsp.: $antworten[0] gibt die antworten zurück, die zu $fragenummern[0] gehören
-      for ($i = 0; $i<count($standDevArray); $i++){
-        for($j = 0; $j< count($fragenummern); $j++){
-          if($fragenummern[$j] == $standDevArray[$i]['Fragenummer']){
-              $index = $j; 
+      for ($i = 0; $i < count($standDevArray); $i++) {
+        for ($j = 0; $j < count($fragenummern); $j++) {
+          if ($fragenummern[$j] == $standDevArray[$i]['Fragenummer']) {
+            $index = $j;
           }
         }
         $antworten[$index][] = $standDevArray[$i]['Antwort'];
       }
-    
-    
+
+
       //Standardabweichung pro Fragenummer berechnen (+Ausgabe)
-      for ($i = 0; $i<count($antworten); $i++){
-          
+      for ($i = 0; $i < count($antworten); $i++) {
+
         $standDev = calculateStandDev($antworten[$i]);
-      
+
         $auswertung[$fragenummern[$i]]['standDev'] = $standDev;
       }
-
     }
 
     // {19 : {"avgAnswer":wert; "minAnswer":wert; "maxAnswer":wert; "standDev":wert}; 20 : {"minAnswer":wert; ...} }
@@ -105,32 +111,42 @@ class ErgebnisView extends Ergebnis
     return $auswertung;
   }
 
-  function displayValues($ergebnisArray, $type, $fragebogen) {
-    For ($i = 0; $i < count(array_keys($ergebnisArray)); $i++){
-                  
-      $fragenummerInhaltFrage = $this->getInhaltFrage($fragebogen);
+  function displayValues($auswertung, $type, $fragebogen)
+  {
+    $fragenummerInhaltFrage = $this->getInhaltFrage($fragebogen);
+    //var_dump($fragenummerInhaltFrage);
+    $fragenindex = 0;
+    for ($i = 0; $i < count($fragenummerInhaltFrage); $i++) {
 
-      echo $fragenummerInhaltFrage[$i]['InhaltFrage'].": ";
 
-      echo $ergebnisArray[$fragenummerInhaltFrage[$i]['Fragenummer']][$type];
-  
+      echo $fragenummerInhaltFrage[$i]['InhaltFrage'] . ": ";
+      //echo " - ".$fragenummerInhaltFrage[$i]['Fragenummer']." - ";
+
+      //If statement: existiert eine Antwort zu der Frage?
+      if ( $fragenindex < count(array_keys($auswertung)) ) {
+        echo $auswertung[$fragenummerInhaltFrage[$i]['Fragenummer']][$type];
+        $fragenindex++;
+      } else {
+        echo "Diese Frage wurde noch nicht beantwortet!";
+      }
+
       echo "<br>";
+    }
   }
-  }
-
 }
 
-function calculateStandDev($eingabeWerte) {
+//Funktion zur Berechnung der Standardabweichung
+function calculateStandDev($eingabeWerte)
+{
   $num_elem = count($eingabeWerte);
   $abweichung = 0.0;
-  $avg = array_sum($eingabeWerte)/$num_elem;
-  foreach($eingabeWerte as $j){
+  $avg = array_sum($eingabeWerte) / $num_elem;
+  foreach ($eingabeWerte as $j) {
     $abweichung += pow(($j - $avg), 2);
   }
-  return (float)sqrt($abweichung/$num_elem);
+  return (float) sqrt($abweichung / $num_elem);
 }
 
 //1. Keine Kommentare (Meldung)
-//2. Fehler keine Antworten
+//2. Fehler keine Antworten JE FRAGE
 //
-

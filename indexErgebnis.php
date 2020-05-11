@@ -34,12 +34,12 @@ $kurs = new Kurs();
             <li><a href="indexLogin.php">Logout</a></li>
         </ul>
     </header>
-    
+
     <h1>Ergbnisdarstellung</h1>
 
     <h3>Bitte wählen Sie, wie Sie auswerten möchten!</h3>
 
-    
+
     <form class='auswertung' action="" method="post">
         <label>Welchen Kurs möchten Sie auswerten?</label>
         <select name="auswertungKurs">
@@ -56,21 +56,21 @@ $kurs = new Kurs();
         <label>Welchen Fragebogen möchten Sie auswerten?</label>
 
         <form action="" method="POST">
-        <!--Drop-Down Menü, das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
-        <select name='fragebogen'>
-            <?php
-            $auswertungsObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
-            ?>
-        </select>
-<br>
-<br>
-        <input type="submit" name="fragebogenAuswerten" value="Fragebogen auswerten" />
-    </form>
+            <!--Drop-Down Menü, das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
+            <select name='fragebogen'>
+                <?php
+                $auswertungsObj->showFragebogenVonBenutzer($_SESSION['benutzername']);
+                ?>
+            </select>
+            <br>
+            <br>
+            <input type="submit" name="fragebogenAuswerten" value="Fragebogen auswerten" />
+        </form>
 
 </body>
 
-<?php 
-   // Fehlermeldung zu Fragebogen freigeben
+<?php
+// Fehlermeldung zu Fragebogen freigeben
 if (!isset($_GET['fehler'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
@@ -86,67 +86,66 @@ if (!isset($_GET['fehler'])) {
     }
 }
 ?>
-    <?php 
-        $ergebnisVObject = new ErgebnisView();
+<?php
+$ergebnisVObject = new ErgebnisView();
 
 
-        if (isset($_POST["fragebogenAuswerten"])) {
-            $Kurs = $_POST['auswertungKurs'];
-            $Fragebogen = $_POST['fragebogen'];
-            
-            $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-            $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);              
-            echo "<p class='success'>Hier sind die Ergebnisse von Kurs ".$Kurs.": </p>";
-            echo "<h2>Ergebnisse: </h2>";
-            echo "<h3>Kommentare:</h3>".$Kommentare;
-            
-            //durchschnittliche Antworten ausgeben
-            echo "<h3>Durchschnittliche Antwort:</h3>";
+if (isset($_POST["fragebogenAuswerten"])) {
+    $Kurs = $_POST['auswertungKurs'];
+    $Fragebogen = $_POST['fragebogen'];
 
-            $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
+    $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+    $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+    echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
+    echo "<h2>Ergebnisse: </h2>";
+    echo "<h3>Kommentare:</h3>" . $Kommentare;
 
-            echo "<h3>Minimale Antwort:</h3>";
+    //durchschnittliche Antworten ausgeben
+    echo "<h3>Durchschnittliche Antwort:</h3>";
 
-            $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
+    $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
 
-            echo "<h3>Maximale Antwort:</h3>";
+    echo "<h3>Minimale Antwort:</h3>";
 
-            $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+    $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
 
-            echo "<h3>Standardabweichung:</h3>";
+    echo "<h3>Maximale Antwort:</h3>";
 
-            $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
-        }
+    $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+
+    echo "<h3>Standardabweichung:</h3>";
+
+    $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+}
 
 
 //header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
-            /*} else {
+/*} else {
                 $Kurs = $_POST['auswertungKurs'];
                 $Fragebogen = $_POST['fragebogen'];
             }*/
-            
 
-            //if (!isset($_GET['ergebnis'])) {
-                
-                //Falls kein GET existiert, wird nichts gemacht und das Skript abgebrochen. 
-                //exit();
-            //} else {
-                //Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
-                //$ergebnisAngefragt = $_GET['ergebnis'];
-                //if ($ergebnisAngefragt == "kursergebnisse") {
 
-             //exit();
-                //} elseif ($ergebnisAngefragt == "keineAntworten"){
-                    
-                //}
-                    
-    ?>
-    </select></br>
-    </form>
+//if (!isset($_GET['ergebnis'])) {
+
+//Falls kein GET existiert, wird nichts gemacht und das Skript abgebrochen. 
+//exit();
+//} else {
+//Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
+//$ergebnisAngefragt = $_GET['ergebnis'];
+//if ($ergebnisAngefragt == "kursergebnisse") {
+
+//exit();
+//} elseif ($ergebnisAngefragt == "keineAntworten"){
+
+//}
+
+?>
+</select></br>
+</form>
 
 </body>
 
 </html>
 
 </body>
-
