@@ -38,7 +38,7 @@ class Dbh
   private $host = "localhost";
   private $user = "root";
   private $pwd = "";
-  private $dbName = "dhbw";
+  private $dbName = "db";
 
   protected function connect()
   {

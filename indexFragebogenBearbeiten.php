@@ -26,7 +26,6 @@ $fragebogenObj = new Fragebogen();
 
 // Das übergebene "kuerzel" wird hier in der Variable gespeichert.
 $kuerzel = $_GET['kuerzel'];
-
 ?>
 
 <!doctype HTML>
@@ -41,7 +40,7 @@ $kuerzel = $_GET['kuerzel'];
 
 <body>
 
-    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <!--Link um zurück auf die Startseite bzw. Logout zu kommen-->
     <header style="background-color:lightGray;">
         <ul>
             <li><a href="indexFragebogen.php">Zurück zum Fragebogen</a></li>
@@ -53,9 +52,8 @@ $kuerzel = $_GET['kuerzel'];
     
     <h4>Frage löschen</h4>
     <form action="" method="POST">
-        <!--Drop-Down Menü das alle Fragen anzeigt, die zu dem zuvor - auf der "indesFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
+        <!--Drop-Down Menü, das alle Fragen anzeigt, die zu dem zuvor - auf der "indesFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
         <select name='fragen'>
-
         <?php
         $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
             
@@ -79,7 +77,6 @@ $kuerzel = $_GET['kuerzel'];
 
 </body>
 </html>
-
 <?php
 
 // Frage löschen

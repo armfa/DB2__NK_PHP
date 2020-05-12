@@ -40,7 +40,7 @@ $kuerzel = $_GET['kuerzel'];
 </head>
 
 <body>
-    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <!--Link um zurück auf die Startseite bzw. Logout zu kommen-->
     <header style="background-color:lightGray;">
         <ul>
             <li><a href="indexFragebogen.php">Zurück zum Fragebogen</a></li>
@@ -66,7 +66,6 @@ $kuerzel = $_GET['kuerzel'];
 </body>
 
 </html>
-
 <?php
 // Fragen hinzufügen
 if (isset($_POST['fragenHinzufuegen'])) {
@@ -112,5 +111,4 @@ if (!isset($_GET['s'])) {
         exit();
     }
 }
-
 ?>
