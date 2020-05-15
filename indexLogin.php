@@ -24,7 +24,7 @@ unset($_SESSION['matrikelnummer']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="utf-8">

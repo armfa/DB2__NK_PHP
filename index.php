@@ -15,7 +15,7 @@ if (isset($_SESSION['benutzername']) == false and isset($_SESSION['matrikelnumme
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
