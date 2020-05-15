@@ -21,7 +21,7 @@ class ErgebnisView extends Ergebnis
       $kommentarString = '';
       foreach ($alleKommentare as $kommentar) {
         $kommentarString = $kommentarString . $kommentar['Kommentar'];
-        if ($kommentarString != '') $kommentarString = $kommentarString . "<br>";
+        if ($kommentarString != '') $kommentarString = $kommentarString . "<br><br>";
       }
     }
     return $kommentarString;
