@@ -119,28 +119,6 @@ if (isset($_POST["fragebogenAuswerten"])) {
     $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
 }
 
-
-//header("Location: ../DB2__NK_PHP/indexErgebnis.php?ergebnis=kursergebnisse");
-/*} else {
-                $Kurs = $_POST['auswertungKurs'];
-                $Fragebogen = $_POST['fragebogen'];
-            }*/
-
-
-//if (!isset($_GET['ergebnis'])) {
-
-//Falls kein GET existiert, wird nichts gemacht und das Skript abgebrochen. 
-//exit();
-//} else {
-//Falls ein GET existiert, wird nach der Zuordnung ausgewertet. 
-//$ergebnisAngefragt = $_GET['ergebnis'];
-//if ($ergebnisAngefragt == "kursergebnisse") {
-
-//exit();
-//} elseif ($ergebnisAngefragt == "keineAntworten"){
-
-//}
-
 ?>
 </select></br>
 </form>
