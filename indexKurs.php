@@ -139,7 +139,7 @@ if (!isset($_GET['k'])) {
         echo "<p class='error'>Diesen Kurs gibt es schon!</p>";
         exit();
     } elseif ($kurserstellen == "success") {
-        echo "<p class='success'>Sie haben den Kurs erfolgreich erstellt.!</p>";
+        echo "<p class='success'>Sie haben den Kurs erfolgreich erstellt!</p>";
         exit();
     }
 }
@@ -162,7 +162,7 @@ if (!isset($_GET['s'])) {
         echo "<p class='error'>Diesen Student gibt es schon!</p>";
         exit();
     } elseif ($studentstellen == "success") {
-        echo "<p class='success'>Sie haben den Sudent erfolgreich erstellt.!</p>";
+        echo "<p class='success'>Sie haben den Student erfolgreich erstellt.</p>";
         exit();
     }
 }
