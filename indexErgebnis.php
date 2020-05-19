@@ -36,7 +36,7 @@ $kurs = new Kurs();
         </ul>
     </header>
 
-    <h1>Ergbnisdarstellung</h1>
+    <h1>Ergebnisdarstellung</h1>
 
     <h3>Bitte wählen Sie, wie Sie auswerten möchten!</h3>
 
