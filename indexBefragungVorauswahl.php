@@ -39,7 +39,7 @@ $befragungControll = new BefragungController();
 
     //Darf ein Student ein Fragebogen aufrufen -> Array mit Liste der Fragebögen, 
     //die für diesen Studenten freigegeben sind, und die dieser noch nicht abgegeben hat
-    $resultx = $befragungControll->darfStudentFragebogenausfuellen($_SESSION['matrikelnummer']);
+    $resultx = $befragungControll->darfStudentFragebogenausfuellen();
     ?>
 
     <?php

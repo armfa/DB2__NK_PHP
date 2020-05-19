@@ -53,7 +53,7 @@ class BefragungController extends Befragung
     }
 
     //Darf ein Student einen Fragebogen ausfüllen? -> Funktion gibt Array mit den Fragebögen zurück
-    public function darfStudentFragebogenausfuellen($Matrikelnummer)
+    public function darfStudentFragebogenausfuellen()
     {
         //Alle Fragebögen des Studenten, die abgegeben sind. 
         $fragebogen = $this->getFragebogenfromStudentAbgabestatusStnmt($_SESSION['matrikelnummer'], 1);
