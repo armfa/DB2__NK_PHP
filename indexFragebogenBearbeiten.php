@@ -44,7 +44,10 @@ $kuerzel = $_GET['kuerzel'];
         </ul>
     </header>
     
-    <h3>Frage löschen</h3>
+    <h4>Fragebogen bearbeiten</h4>
+    <br>
+    
+    <h4>Frage löschen</h4>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragen anzeigt, die zu dem zuvor - auf der "indesFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
         <select name='fragen'>
@@ -64,7 +67,7 @@ $kuerzel = $_GET['kuerzel'];
     </form>
     <br>
 
-    <h3>Frage hinzufügen</h3>
+    <h4>Frage hinzufügen</h4>
     <form action="" method="POST">
         <input type="text" name="inhaltFrage" maxlength="100" required>
         <input type="submit" name="frageHinzufuegen" value="Frage hinzufügen" /><br>
@@ -102,11 +105,17 @@ if (!isset($_GET['u'])) {
 if (isset($_POST['frageHinzufuegen'])) {
     // Wenn der Button geklickt wurde, wird das Textfeld "inhaltFrage" einer Variable zugeordnet.
     $inhaltFrage = $_POST["inhaltFrage"];
+    // Prüfen, ob das Textfeld leer ist.
+    if (empty($inhaltFrage)) {
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?login=empty");
+        exit();
+    }
     // Prüfen, ob die Frage im Fragebogen schon existiert.
-    if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
+    elseif ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
         header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=nosuccess&kuerzel=$kuerzel");
         exit();
-    } else {
+    } 
+    else {
         // Die Frage wird dem Fragebogen hinzugefügt.
         $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
         header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=success&kuerzel=$kuerzel");
@@ -121,7 +130,10 @@ if (!isset($_GET['s'])) {
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $frageHinzufuegen = $_GET['s'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
-    if ($frageHinzufuegen == "nosuccess") {
+    if ($frageHinzufuegen == "empty") {
+        echo "<p class='error'>Bitte füllen Sie das Textfeld aus!</p>";
+        exit();
+    } elseif ($frageHinzufuegen == "nosuccess") {
         echo "<p class='error'>Diese Frage existiert bereits!</p>";
         exit();
     } elseif ($frageHinzufuegen == "success") {
