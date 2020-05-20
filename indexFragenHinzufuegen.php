@@ -69,23 +69,30 @@ $kuerzel = $_GET['kuerzel'];
 if (isset($_POST['fragenHinzufuegen'])) {
     // Wenn der Button geklickt wurde, wird der Inhalt der Textfelder "inhaltFragen[]" einer Variable zugeordnet.
     $inhaltFragenArray = $_POST["inhaltFragen"];
-
+    
     if (count($inhaltFragenArray) == $anzahlFragen) {
         for ($z = 0; $z < $anzahlFragen; $z++) {
             $inhaltFrage = $inhaltFragenArray[$z];
+            // Prüfen, ob das Textfeld leer ist.
+            if (empty($inhaltFrage)) {
+                header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=empty&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+                exit();
+            }
             // Prüfen, ob die Frage im Fragebogen schon existiert.
-            if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
+            elseif ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
                 header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=nosuccess&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
                 exit();
-            } else {
+            } 
+            else {
                 // Wennn nicht, wird die Frage hinzugefügt.
                 $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
             }
         }
-
+        // Wenn die Fragen erfolgreich hinzugefügt wurden, wird eine Meldung ausgegeben.
         header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=success&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
         exit();
     } else {
+        // Wenn die Länge des Arrays nicht der Anzahl der Fragen entspricht, wird einer Fehlermeldung ausgegeben.
         header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?s=wrong&kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
         exit();
     }
@@ -98,7 +105,10 @@ if (!isset($_GET['s'])) {
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $frageAnlegen = $_GET['s'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
-    if ($frageAnlegen == "wrong") {
+    if ($frageAnlegen == "empty") {
+        echo "<p class='error'>Bitte füllen Sie die Textfelder aus!</p>";
+        exit();
+    } elseif ($frageAnlegen == "wrong") {
         echo "<p class='error'>Es ist ein Fehler aufgetreten! Bitte versuchen Sie es erneut!</p>";
         exit();
     } elseif ($frageAnlegen == "nosuccess") {
