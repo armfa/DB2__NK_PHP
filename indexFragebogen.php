@@ -38,7 +38,7 @@ $kurs = new Kurs();
         </ul>
     </header>
 
-    <h4>Fragebogen anlegen</h4>
+    <h3>Fragebogen anlegen</h3>
     <form action="" method="POST">
         <label for="TitelFragebogen">Titel Fragebogen:</label>
         <input type="text" name="titel" maxlength="100" required> <br><br>
@@ -48,7 +48,7 @@ $kurs = new Kurs();
     </form>
     <br>
 
-    <h4>Fragebogen freigeben</h4>
+    <h3>Fragebogen freigeben</h3>
     <form action="" method="POST">
         <!--Drop-Down Menü, das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name='fragebogen'>
@@ -69,11 +69,11 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="freigeben" value="Fragebogen freigeben" />
+        <input type="submit" name="freigeben" value="Fragebogen freigeben" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?>/>
     </form>
     <br>
 
-    <h4>Fragebogen bearbeiten</h4>
+    <h3>Fragebogen bearbeiten</h3>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenBearbeiten">
@@ -82,12 +82,12 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" />
-        <input type="submit" name="loeschen" value="Fragebogen loeschen" /><br>
+        <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?>/>
+        <input type="submit" name="loeschen" value="Fragebogen loeschen" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?> /><br>
     </form>
 
     <br>
-    <h4>Fragebogen kopieren</h4>
+    <h3>Fragebogen kopieren</h3>
     <h5>Die Fragen aus dem linken Fragebogen werden in den rechten Fragebogen kopiert.</h5>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
@@ -104,12 +104,10 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="kopieren" value="Fragebogen kopieren" />
+        <input type="submit" name="kopieren" value="Fragebogen kopieren" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?>/>
     </form>
 
 </body>
-
-</html>
 
 <?php
 
@@ -275,6 +273,5 @@ if (!isset($_GET['s'])) {
     }
 }
 
-
-
-?>
+?> 
+</html>
