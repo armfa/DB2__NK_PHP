@@ -38,7 +38,7 @@ $kurs = new Kurs();
         </ul>
     </header>
 
-    <h3>Fragebogen anlegen</h3>
+    <h4>Fragebogen anlegen</h4>
     <form action="" method="POST">
         <label for="TitelFragebogen">Titel Fragebogen:</label>
         <input type="text" name="titel" maxlength="100" required> <br><br>
@@ -48,7 +48,7 @@ $kurs = new Kurs();
     </form>
     <br>
 
-    <h3>Fragebogen freigeben</h3>
+    <h4>Fragebogen freigeben</h4>
     <form action="" method="POST">
         <!--Drop-Down Menü, das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name='fragebogen'>
@@ -69,11 +69,11 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="freigeben" value="Fragebogen freigeben" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?>/>
+        <input type="submit" name="freigeben" value="Fragebogen freigeben" />
     </form>
     <br>
 
-    <h3>Fragebogen bearbeiten</h3>
+    <h4>Fragebogen bearbeiten</h4>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
         <select name="fragebogenBearbeiten">
@@ -82,12 +82,12 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?> />
-        <input type="submit" name="loeschen" value="Fragebogen loeschen" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?> /><br>
+        <input type="submit" name="fragenLoeschenHinzufuegen" value="Frage/n löschen/hinzufügen" />
+        <input type="submit" name="loeschen" value="Fragebogen loeschen" /><br>
     </form>
 
     <br>
-    <h3>Fragebogen kopieren</h3>
+    <h4>Fragebogen kopieren</h4>
     <h5>Die Fragen aus dem linken Fragebogen werden in den rechten Fragebogen kopiert.</h5>
     <form action="" method="POST">
         <!--Drop-Down Menü das alle Fragebögen anzeigt die ein Benutzer angelegt hat.-->
@@ -104,7 +104,7 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <input type="submit" name="kopieren" value="Fragebogen kopieren" <?php if($fragebogenObj->getFragebogenVonBenutzer($_SESSION['benutzername']) == null) echo $disabled='disabled';?> />
+        <input type="submit" name="kopieren" value="Fragebogen kopieren" />
     </form>
 
 </body>
@@ -118,16 +118,22 @@ if (isset($_POST['fragebogenAnlegen'])) {
     // Wenn der Button geklickt wurde, werden die Textfelder "titel" und "anzahlFragen" jeweils einer Variable zugeordnet.
     $titelFragebogen = $_POST['titel'];
     $anzahlFragen = $_POST['anzahlFragen'];
+    // Prüfen, ob die Textfelder leer sind.
+    if (empty($titelFragebogen) || empty($anzahlFragen)) {
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?login=empty");
+        exit();
+    }
     // Prüfen, ob das Textfeld "anzahlFragen" richtig ausgefüllt wurde.
-    if ((!preg_match("/[0-9]/", $anzahlFragen)) and ($anzahlFragen <= 20)) {
+    elseif ((!preg_match("/[0-9]/", $anzahlFragen)) and ($anzahlFragen <= 20)) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=char");
         exit();
     }
     // Prüfen, ob der Fragebogen schon existiert.
-    if ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
+    elseif ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
         exit();
-    } else {
+    } 
+    else {
         // Existiert der Fragebogen noch nicht, wird dieser erstellt und die Seite "indexFragenHinzufuegen.php" aufgerufen
         // und die Variabelen "kuerzel" und "anzahlFragen" übergeben.
         $fragebogenObj->setFragebogen($titelFragebogen, $_SESSION['benutzername']);
@@ -144,7 +150,10 @@ if (!isset($_GET['k'])) {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $fragebogenAnlegen = $_GET['k'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
-    if ($fragebogenAnlegen == "char") {
+    if ($fragebogenAnlegen == "empty") {
+        echo "<p class='error'>Bitte füllen Sie die Felder aus!</p>";
+        exit();
+    } elseif ($fragebogenAnlegen == "char") {
         echo "<p class='error'>Bitte füllen Sie das Feld mit Zahlenwerten aus!</p>";
         exit();
     } elseif ($fragebogenAnlegen == "nosuccess") {
