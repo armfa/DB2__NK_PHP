@@ -62,8 +62,6 @@ $kuerzel = $_GET['kuerzel'];
     </form>
 </body>
 
-</html>
-
 <?php
 // Fragen hinzufügen
 if (isset($_POST['fragenHinzufuegen'])) {
@@ -121,3 +119,4 @@ if (!isset($_GET['s'])) {
 }
 
 ?>
+</html>
