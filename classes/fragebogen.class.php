@@ -8,10 +8,12 @@
 // - setFragebogen() --> Fügt einen Fragebogen in die DB ein.
 // - getKuerzelVonFragebogen() --> Gibt das Kuerzel von einem Fragebogen zurück.
 // - getFragebogenVonBenutzer() --> Gibt ein Array mit Fragebögen des ausgewählten Benutzers zurück.
+// - checkObFragebogenInBefragung() --> Gibt zurück, ob der Fragebogen bereits Teil einer Umfrage ist.
 // - deleteFragebogen() --> Löscht den ausgewählten Fragebogen in der DB. 
 // - checkObFrageExistiert() --> Gibt zurück, ob der Inhalt der Frage bereits vergeben ist.
 // - setFrage() --> Fügt eine Frage in die DB ein.
 // - getFragenVonFragebogen() --> Gibt ein Array mit Fragen des ausgewählten Fragebogens zurück.
+// - checkObFragebogenInBefragung() --> Gibt zurück, ob die Frage bereits Teil einer Umfrage ist.
 // - deleteFrage() --> Löscht doe ausgewählte Frage in der DB. 
 // - checkObFreischaltungExistiert() --> Gibt zurück, ob der Fragebogen bereits dem Kurs freigegeben ist.
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
@@ -83,6 +85,19 @@ class Fragebogen extends Dbh {
         }
     }
 
+    public function checkObFragebogenInBefragung($kuerzelFragebogen) {
+        try {
+            $sql = "SELECT * from bearbeitet Where Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kuerzelFragebogen]);
+            $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $fragebogenInBearbeitung;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+            exit();
+        }
+    }
+
     public function deleteFragebogen($kuerzel){
         try{
             $sql = "DELETE FROM fragebogen WHERE Kuerzel = ?";
@@ -125,6 +140,19 @@ class Fragebogen extends Dbh {
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragenArray;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+            exit();
+        }
+    }
+
+    public function checkObFrageInBefragung($fragenummer) {
+        try {
+            $sql = "SELECT * from beantwortet Where Fragenummer = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$fragenummer]);
+            $frageInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $frageInBearbeitung;
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
             exit();
