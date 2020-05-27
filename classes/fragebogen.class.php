@@ -13,7 +13,6 @@
 // - checkObFrageExistiert() --> Gibt zurück, ob der Inhalt der Frage bereits vergeben ist.
 // - setFrage() --> Fügt eine Frage in die DB ein.
 // - getFragenVonFragebogen() --> Gibt ein Array mit Fragen des ausgewählten Fragebogens zurück.
-// - checkObFragebogenInBefragung() --> Gibt zurück, ob die Frage bereits Teil einer Umfrage ist.
 // - deleteFrage() --> Löscht doe ausgewählte Frage in der DB. 
 // - checkObFreischaltungExistiert() --> Gibt zurück, ob der Fragebogen bereits dem Kurs freigegeben ist.
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
@@ -37,7 +36,7 @@ class Fragebogen extends Dbh {
     
     public function checkObFragebogenExistiert($titelFragebogen) {
         try {
-            $sql = "SELECT * from fragebogen Where Titel = ?";
+            $sql = "SELECT Titel from fragebogen Where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$titelFragebogen]);
             $fragebogenExistiert = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,7 +86,7 @@ class Fragebogen extends Dbh {
 
     public function checkObFragebogenInBefragung($kuerzelFragebogen) {
         try {
-            $sql = "SELECT * from bearbeitet Where Kuerzel = ?";
+            $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzelFragebogen]);
             $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -135,24 +134,11 @@ class Fragebogen extends Dbh {
     
     public function getFragenVonFragebogen($kuerzel){
         try{
-            $sql = "SELECT fra.InhaltFrage FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
+            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragenArray;
-        } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-            exit();
-        }
-    }
-
-    public function checkObFrageInBefragung($fragenummer) {
-        try {
-            $sql = "SELECT * from beantwortet Where Fragenummer = ?";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$fragenummer]);
-            $frageInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $frageInBearbeitung;
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
             exit();
@@ -172,7 +158,7 @@ class Fragebogen extends Dbh {
 
     public function checkObFreischaltungExistiert($kuerzel, $kursname){
         try {
-            $sql = "SELECT * from freischalten Where Kuerzel = ? and Kursname = ?";
+            $sql = "SELECT Kuerzel from freischalten Where Kuerzel = ? and Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel, $kursname]);
             $freigabe = $stmt->fetch(PDO::FETCH_ASSOC);
