@@ -127,7 +127,7 @@ if (isset($_POST['fragebogenAnlegen'])) {
         exit();
     }
     // Prüfen, ob der Fragebogen schon existiert.
-    elseif ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) != false) {
+    elseif ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) == true) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
         exit();
     } 
@@ -173,7 +173,7 @@ if (isset($_POST['loeschen'])) {
     // Der im Drop-Down Menü ausgewählte Fragebogen wird gelöscht.
     $kuerzel = $_POST['fragebogenBearbeiten'];
     // Prüfen, ob der Fragebogen bereits in Bearbeitung ist.
-    if($fragebogenObj->checkObFragebogenInBefragung($kuerzel) != false){
+    if($fragebogenObj->checkObFragebogenInBefragung($kuerzel) == true){
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?u=nosuccess");
         exit();
     } else{
@@ -208,7 +208,6 @@ if (isset($_POST['kopieren'])) {
     } else {
         // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
         $fragenArray = $fragebogenObj->getFragenVonFragebogen($fragebogen1);
-        print_r($fragenArray);
         // In der ersten Ebene des Arrays steht folgendes -> [0]=>Array
         foreach ($fragenArray as $Index => $Array) {
             // In der zweiten Ebene des Arrays steht folgendes -> [InhaltFrage] => Frage
@@ -246,7 +245,7 @@ if (isset($_POST['freigeben'])) {
     $kuerzel = $_POST['fragebogen'];
     $kursname = $_POST['kurse'];
     // Prüfen, ob der Fragebogen bereits für den Kurs freigegeben wurde.
-    if ($fragebogenObj->checkObFreischaltungExistiert($kuerzel, $kursname) != false) {
+    if ($fragebogenObj->checkObFreischaltungExistiert($kuerzel, $kursname) == true) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=nosuccess");
         exit();
     } else {
