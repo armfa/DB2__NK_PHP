@@ -54,7 +54,9 @@ $kuerzel = $_GET['kuerzel'];
             
         $i = 0;
         while($i < count($fragenArray)){
-            echo "<option value='".$fragenArray[$i]['Fragenummer']."'>".$fragenArray[$i]['InhaltFrage']."</option>";
+            $fragenummer = htmlspecialchars($fragenArray[$i]['Fragenummer'], ENT_QUOTES, 'UTF-8');
+            $inhaltFrage = htmlspecialchars($fragenArray[$i]['InhaltFrage'], ENT_QUOTES, 'UTF-8');
+            echo "<option value='".$fragenummer."'>".$inhaltFrage."</option>";
             $i++;
         } 
         ?>
