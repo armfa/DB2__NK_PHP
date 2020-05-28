@@ -41,11 +41,7 @@ class ErgebnisView extends Ergebnis
       //Durchschnittsantworten
       $avgAnswers = $this->getAvgAnswerStmt($Fragebogen, $Kurs);
       foreach ($avgAnswers as $row) {
-        if ($auswertung == null) {
-          $auswertung[$row['Fragenummer']] = array('avgAnswer' => $row["avg(bean.Antwort)"]);
-        } else {
-          $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
-        }
+        $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
       }
 
 
