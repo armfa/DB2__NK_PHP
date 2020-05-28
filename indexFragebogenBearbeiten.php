@@ -60,7 +60,7 @@ $kuerzel = $_GET['kuerzel'];
         ?>
         </select>
 
-        <input type="submit" name="frageLoeschen" value="Frage löschen" <?php if($fragebogenObj->checkObFragebogenInBefragung($kuerzel) == true) echo $disabled='disabled';?> />
+        <input type="submit" name="frageLoeschen" value="Frage löschen" <?php if(($fragebogenObj->checkObFragebogenInBefragung($kuerzel) == true) or (count($fragenArray) == null)) echo $disabled='disabled';?> />
         <br>
         <h5>Wenn der Button ausgegraut ist, befindet sich der Fragebogen in Bearbeitung durch die Studenten.</h5>
     </form>
