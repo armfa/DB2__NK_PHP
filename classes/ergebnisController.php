@@ -21,8 +21,7 @@ class ErgebnisView extends Ergebnis
         $kommentarString = "Kein Student hat einen Kommentar abgegeben!";
       } elseif ($alleKommentare != null) {
         foreach ($alleKommentare as $kommentar) {
-          $kommentarString = $kommentarString . $kommentar['Kommentar'];
-          if ($kommentarString != '') $kommentarString = $kommentarString . "<br><br>";
+          $kommentarString = $kommentarString . $kommentar['Kommentar']. "<br><br>";
         }
       }
       return $kommentarString;
@@ -93,7 +92,7 @@ class ErgebnisView extends Ergebnis
         }
 
 
-        //Standardabweichung pro Fragenummer berechnen + Speicherung is auswertung-Array
+        //Standardabweichung pro Fragenummer berechnen + Speicherung is $auswertung-Array
         for ($i = 0; $i < count($antworten); $i++) {
 
           $standDev = $this->calculateStandDev($antworten[$i]);
