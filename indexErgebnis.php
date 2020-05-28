@@ -53,7 +53,7 @@ $kurs = new Kurs();
             }
             ?>
         </select>
-        </select></br>
+        </br>
         <label>Welchen Fragebogen möchten Sie auswerten?</label>
 
         <form action="" method="POST">
@@ -68,7 +68,7 @@ $kurs = new Kurs();
             <input type="submit" name="fragebogenAuswerten" value="Fragebogen auswerten" />
         </form>
 
-</body>
+
 
 <?php
 // Fehlermeldung zu Fragebogen freigeben
@@ -86,8 +86,7 @@ if (!isset($_GET['fehler'])) {
         exit();
     }
 }
-?>
-<?php
+
 $ergebnisVObject = new ErgebnisView();
 
 
@@ -120,11 +119,7 @@ if (isset($_POST["fragebogenAuswerten"])) {
 }
 
 ?>
-</select></br>
-</form>
 
 </body>
-
 </html>
 
-</body>

@@ -1,15 +1,18 @@
 <?php
 //Dana Geßler
+// 11.05.2020
 
 //______________________KLASSENBESCHREIBUNG______________________
-//Diese Klasse selektiert Benutzername und Passwort zur Abprüfung auf die Datenbank, 
-//und kann neue Registrierungen bei nicht vorhandenen Nutzern durchführen.
-
+//Diese Klasse enthält die SQL-Statements zur Abprüfung von Nutzername und Passwort bei Login auf die Datenbank
+//setBenutzerStmt() --> fügt neuen Benutzer mit eingegebenen Daten in DB ein
+//getBenutzerStmt() --> prüft DB auf existierenden Benutzer
+//getStudentStmt() --> prüft DB auf existierenden Studenten
 
 include_once 'classes/dbh.class.php';
 
 class Benutzer extends Dbh {
 
+	//
 		public function setBenutzerStmt($Benutzername, $Passwort){
 			try{
 			$sql="INSERT INTO benutzer (Benutzername, Passwort) VALUES (?, ?)";
@@ -27,18 +30,6 @@ class Benutzer extends Dbh {
 			$stmt->execute([$Benutzername]);
 			$benutzer = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $benutzer;
-		} catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-		}
-		}
-
-		public function checkPasswordStmt($Passwort){
-			try{
-			$sql="SELECT Count benutzer FROM benutzer WHERE Passwort = ?";
-			$stmt = $this->connect()->prepare($sql);
-			$stmt->execute([$Passwort]);
-			$count = $stmt->fetch(PDO::FETCH_ASSOC);
-			return $count;
 		} catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
 		}
