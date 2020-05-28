@@ -13,22 +13,21 @@
 class Ergebnis extends dbh
 {
     protected function getKommentareStmt($Fragebogen, $Kurs)
-    { {
-            try {
-                $sql = "SELECT bear.Kommentar 
+    {
+        try {
+            $sql = "SELECT bear.Kommentar 
                 FROM        bearbeitet bear,    
                             student s                
                 WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Abgabestatus = 1
                 AND bear.Kuerzel = ?
                 AND s.kursname = ?";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $kommentarArray;
-            } catch (PDOException $e) {
-                header("Location: ../DB2__NK_PHP/indexFehler.php");
-            }
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $kommentarArray;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 

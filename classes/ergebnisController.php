@@ -21,7 +21,7 @@ class ErgebnisView extends Ergebnis
         $kommentarString = "Kein Student hat einen Kommentar abgegeben!";
       } elseif ($alleKommentare != null) {
         foreach ($alleKommentare as $kommentar) {
-          $kommentarString = $kommentarString . $kommentar['Kommentar']. "<br><br>";
+          $kommentarString = $kommentarString . $kommentar['Kommentar'] . "<br><br>";
         }
       }
       return $kommentarString;
