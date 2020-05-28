@@ -25,7 +25,9 @@ class Fragebogen extends Dbh {
             $titelArray = $this->getFragebogenVonBenutzer($benutzername);
             $i = 0;
             while($i < count($titelArray)){
-                echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
+                $kuerzelFragebogen = htmlspecialchars($titelArray[$i]['Kuerzel'], ENT_QUOTES, 'UTF-8');
+                $titelFragebogen = htmlspecialchars($titelArray[$i]['Titel'], ENT_QUOTES, 'UTF-8');
+                echo "<option value='".$kuerzelFragebogen."'>". $titelFragebogen."</option>";
                 $i++;
             }
         } catch (PDOException $e) {
