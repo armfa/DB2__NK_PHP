@@ -3,15 +3,15 @@
 // Isabelle Scheffler
 
 //______________________KLASSENBESCHREIBUNG______________________
-// Diese PHP-Seite ist für die Bearbeitung des Fragebogens zuständig.
-// Es werden dafür Funktionen in den Klasse "Fragebogen.class" ausgelagert. 
+// Diese PHP-Seite ist für die Bearbeitung des Fragebogens insbesondere Fragen löschen und hinzufügen zuständig.
+// Es werden dafür Funktionen in die Klasse "Fragebogen.class.php" ausgelagert. 
 
 include_once 'classes/dbh.class.php';
 
-// Diese Seite akzeptiert nur Benutzer
+// Diese Seite akzeptiert nur Benutzer.
 if (isset($_SESSION['benutzername']) == false) {
-    // Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
-    // Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    // Falls Benutzer nicht eingeloggt sind, wird dieser auf die index-Seite weitergeleitet.
+    // Ist dieser dort auch nicht eingeloggt, wird dieser auf die Login-Seite weitergeleitet.
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
@@ -36,7 +36,7 @@ $kuerzel = $_GET['kuerzel'];
 
 <body>
 
-    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <!--Link um zurück auf die Startseite  bzw. Logout zu kommen-->
     <header style="background-color:lightGray;">
         <ul>
             <li><a href="indexFragebogen.php">Zurück zum Fragebogen</a></li>
@@ -46,7 +46,7 @@ $kuerzel = $_GET['kuerzel'];
    
     <h3>Frage löschen</h3>
     <form action="" method="POST">
-        <!--Drop-Down Menü das alle Fragen anzeigt, die zu dem zuvor - auf der "indesFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
+        <!--Drop-Down Menü das alle Fragen anzeigt, die zu dem zuvor - auf der "indexFragebogen.php" Seite - ausgewählten Fragebogen gehören.-->
         <select name='fragen'>
 
         <?php
@@ -80,18 +80,18 @@ $kuerzel = $_GET['kuerzel'];
 if (isset($_POST['frageLoeschen'])) {
     // Die im Drop-Down Menü ausgewählte Frage wird gelöscht.
     $fragenummer = $_POST["fragen"];
-    // Fragen können nur gelöscht werden, wenn diese nicht in Bearbeitung durch die Studenten ist.
+    // Fragen die ausgewählt werden können, können immer gelöscht werden.
     $fragebogenObj->deleteFrage($fragenummer);
-    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?u=success&kuerzel=$kuerzel");
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageLoeschen=success&kuerzel=$kuerzel");
     exit();
 }
   
 // Fehlermeldung zu Frage löschen
-if (!isset($_GET['u'])) {
+if (!isset($_GET['frageLoeschen'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else { 
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $frageLoeschen = $_GET['u'];
+    $frageLoeschen = $_GET['frageLoeschen'];
     // Es wird eine Meldung an der Oberfläche ausgegeben.
     if ($frageLoeschen  == "success") {
         echo "<p class='success'>Sie haben die Frage erfolgreich gelöscht!</p>";
@@ -104,28 +104,28 @@ if (isset($_POST['frageHinzufuegen'])) {
     $inhaltFrage = $_POST["inhaltFrage"];
     // Prüfen, ob das Textfeld leer ist.
     if (empty($inhaltFrage)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?login=empty");
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=empty&kuerzel=$kuerzel");
         exit();
     }
     // Prüfen, ob die Frage im Fragebogen schon existiert.
     elseif ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=nosuccess&kuerzel=$kuerzel");
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=nosuccess&kuerzel=$kuerzel");
         exit();
     } 
     else {
         // Die Frage wird dem Fragebogen hinzugefügt.
         $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?s=success&kuerzel=$kuerzel");
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=success&kuerzel=$kuerzel");
         exit();
     }
 }
     
 // Fehlermeldung zu Frage hinzufügen
-if (!isset($_GET['s'])) {
+if (!isset($_GET['frageHinzufuegen'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else { 
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $frageHinzufuegen = $_GET['s'];
+    $frageHinzufuegen = $_GET['frageHinzufuegen'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($frageHinzufuegen == "empty") {
         echo "<p class='error'>Bitte füllen Sie das Textfeld aus!</p>";
