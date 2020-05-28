@@ -13,7 +13,7 @@
 // - checkObFrageExistiert() --> Gibt zurück, ob der Inhalt der Frage bereits vergeben ist.
 // - setFrage() --> Fügt eine Frage in die DB ein.
 // - getFragenVonFragebogen() --> Gibt ein Array mit Fragen des ausgewählten Fragebogens zurück.
-// - deleteFrage() --> Löscht doe ausgewählte Frage in der DB. 
+// - deleteFrage() --> Löscht die ausgewählte Frage in der DB. 
 // - checkObFreischaltungExistiert() --> Gibt zurück, ob der Fragebogen bereits dem Kurs freigegeben ist.
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
 
