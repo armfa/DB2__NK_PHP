@@ -85,7 +85,7 @@ class BefragungController extends Befragung
                 }
             }
         } else {
-            //Keine Treffer -> keine Fragebögen freigechaötet bzw alle schon abgeschlossen. 
+            //Keine Treffer -> keine Fragebögen freigeschaltet bzw. alle schon abgeschlossen. 
             return $resultx = null;
         }
     }
