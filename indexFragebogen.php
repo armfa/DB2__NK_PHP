@@ -122,7 +122,7 @@ if (isset($_POST['fragebogenAnlegen'])) {
         exit();
     }
     // Prüfen, ob das Textfeld "anzahlFragen" richtig ausgefüllt wurde.
-    elseif (!preg_match("/^[1-9][0-9]/", $anzahlFragen)) {
+    elseif (!preg_match("/^[1-9]?[0-9]/", $anzahlFragen)) {
         header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebAnlegen=char");
         exit();
     }
