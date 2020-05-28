@@ -98,7 +98,8 @@ $kurs = new Kurs();
             $kursArray = $kurs->getKurses();
             $i = 0;
             while ($i < count($kursArray)) {
-                echo "<option value='" . $kursArray[$i]['Kursname'] . "'>" . $kursArray[$i]['Kursname'] . "</option>";
+                $kursname = htmlspecialchars($kursArray[$i]['Kursname'], ENT_QUOTES, 'UTF-8');
+                echo "<option value='" . $kursname . "'>" . $kursname . "</option>";
                 $i++;
             }
             ?>
