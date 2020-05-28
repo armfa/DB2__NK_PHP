@@ -70,13 +70,14 @@ if (isset($_POST['benutzerLogin'])) {
 
     $benutzername = $_POST['Benutzername'];
     $passwort = $_POST['Passwort'];
-    $hashedpwd = password_hash($passwort, PASSWORD_DEFAULT);
+    $hashedpwd = password_hash($passwort, PASSWORD_DEFAULT); //Der Hash hat nun eine Länge von 60 Zeichen. 
 
     //Prüfen, ob Feld Benutzername leer ist
     if (empty($benutzername)) {
         header("Location: ../DB2__NK_PHP/indexLogin.php?login=empty");
         exit();
-        //Prüfen, handelt es sich um einen Studenten, d.h. 7 Stellige Matrikelnummer  
+        //Prüfen, handelt es sich um einen Studenten, d.h. 7 Stellige Matrikelnummer
+        //Regex-Beschreibung, siehe unten.  
     } elseif ($userObjekt->getStudentStmt($benutzername) == true and preg_match("/^\d{7}(?:\d{2})?$/", $benutzername) == true) {
         $_SESSION['matrikelnummer'] = $benutzername;
         header("Location: ../DB2__NK_PHP/index.php");
@@ -144,4 +145,18 @@ if (!isset($_GET['login'])) {
         exit();
     }
 }
+
+/*REGEX-Beschreibung -> getestet auf https://regex101.com/
+
+/^\d{7}(?:\d{2})?$
+
+^       asserts position at start of the string
+\d{7}   matches a digit (equal to [0-9])
+{7}     Quantifier — Matches exactly 7 times
+            Non-capturing group (?:\d{2})?
+            ?       Quantifier — Matches between zero and one times, as many times as possible, giving back as needed (greedy)
+            \d{2}   matches a digit (equal to [0-9])
+            {2}     Quantifier — Matches exactly 2 times
+$       asserts position at the end of the string, or before the line terminator right at the end of the string (if any)
+*/
 ?>
