@@ -4,16 +4,16 @@
 
 //______________________KLASSENBESCHREIBUNG______________________
 // Diese PHP-Seite ist für die Darstellung und Bearbeitung des Fragebogens zuständig.
-// Es werden dafür Funktionen in den Klasse "Fragebogen.class" ausgelagert. 
+// Es werden dafür Funktionen in die Klasse "Fragebogen.class.php" ausgelagert. 
 // Zudem wird zu einer neuen Seite weitergeleitet, wenn man die Fragen zu einem Fragebogen hinzufügen will oder man den Fragebogen bearbeiten will.
 
 
 include_once 'classes/dbh.class.php';
 
-// Diese Seite akzeptiert nur Benutzer
+// Diese Seite akzeptiert nur Benutzer.
 if (!isset($_SESSION['benutzername'])) {
-    // Falls Benutzer nicht eingeloggt wird dieser auf die index-Seite weitergeleitet.
-    // Ist dieser dort auch nicht eingeloggt auf die Login-Seite. 
+    // Falls Benutzer nicht eingeloggt sind, wird dieser auf die index-Seite weitergeleitet.
+    // Ist dieser dort auch nicht eingeloggt, wird dieser auf die Login-Seite weitergeleitet. 
     header("Location: ../DB2__NK_PHP/index.php");
     exit();
 }
@@ -30,7 +30,7 @@ $kurs = new Kurs();
 </head>
 
 <body>
-    <!--Link um zurück auf die Startseite zu kommen bzw. Logout-->
+    <!--Link um zurück auf die Startseite bzw. Logout zu kommen-->
     <header style="background-color:lightGray;">
         <ul>
             <li><a href="index.php">Zurück zur Startseite</a></li>
@@ -92,7 +92,7 @@ $kurs = new Kurs();
             ?>
         </select>
 
-        <!--Drop-Down Menü das alle Kurs anzeigt die ein Benutzer angelegt hat.-->
+        <!--Drop-Down Menü das alle Kurs anzeigt die alle Benutzer angelegt haben.-->
         <select name="kurse">
             <?php
             $kursArray = $kurs->getKurses();
@@ -118,17 +118,17 @@ if (isset($_POST['fragebogenAnlegen'])) {
     $anzahlFragen = $_POST['anzahlFragen'];
     // Prüfen, ob die Textfelder leer sind.
     if (empty($titelFragebogen) || empty($anzahlFragen)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?login=empty");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebAnlegen=empty");
         exit();
     }
     // Prüfen, ob das Textfeld "anzahlFragen" richtig ausgefüllt wurde.
-    elseif ((!preg_match("/[0-9]/", $anzahlFragen)) and ($anzahlFragen <= 20)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=char");
+    elseif (!preg_match("/^[1-9][0-9]/", $anzahlFragen)) {
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebAnlegen=char");
         exit();
     }
     // Prüfen, ob der Fragebogen schon existiert.
     elseif ($fragebogenObj->checkObFragebogenExistiert($titelFragebogen) == true) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?k=nosuccess");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebAnlegen=nosuccess");
         exit();
     } 
     else {
@@ -142,20 +142,18 @@ if (isset($_POST['fragebogenAnlegen'])) {
 }
 
 // Fehlermeldung zu Fragebogen anlegen
-if (!isset($_GET['k'])) {
+if (!isset($_GET['fragebAnlegen'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $fragebogenAnlegen = $_GET['k'];
+    $fragebogenAnlegen = $_GET['fragebAnlegen'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($fragebogenAnlegen == "empty") {
         echo "<p class='error'>Bitte füllen Sie die Felder aus!</p>";
     } elseif ($fragebogenAnlegen == "char") {
-        echo "<p class='error'>Bitte füllen Sie das Feld mit Zahlenwerten aus!</p>";
+        echo "<p class='error'>Bitte füllen Sie das Feld mit korrekten Zahlenwerten aus!</p>";
     } elseif ($fragebogenAnlegen == "nosuccess") {
         echo "<p class='error'>Dieser Fragebogen existiert bereits!</p>";
-    } elseif ($fragebogenAnlegen == "success") {
-        echo "<p class='success'>Sie haben den Fragebogen erfolgreich angelegt!</p>";
     }
 }
 
@@ -174,21 +172,21 @@ if (isset($_POST['loeschen'])) {
     $kuerzel = $_POST['fragebogenBearbeiten'];
     // Prüfen, ob der Fragebogen bereits in Bearbeitung ist.
     if($fragebogenObj->checkObFragebogenInBefragung($kuerzel) == true){
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?u=nosuccess");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebLoeschen=nosuccess");
         exit();
     } else{
         $fragebogenObj->deleteFragebogen($kuerzel);
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?u=success");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebLoeschen=success");
         exit();
     }
 }
 
 // Fehlermeldung zu Fragebogen löschen
-if (!isset($_GET['u'])) {
+if (!isset($_GET['fragebLoeschen'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $fragebogenLoeschen = $_GET['u'];
+    $fragebogenLoeschen = $_GET['fragebLoeschen'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($fragebogenLoeschen == "nosuccess") {
         echo "<p class='success'>Sie können den Fragebogen nicht löschen, da dieser bereits in der Bearbeitung durch die Studenten ist!</p>";
@@ -203,7 +201,7 @@ if (isset($_POST['kopieren'])) {
     $fragebogen1 = $_POST['fragebogenKopieren1'];
     $fragebogen2 = $_POST['fragebogenKopieren2'];
     if ($fragebogen1 == $fragebogen2) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=wrong");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=wrong");
         exit();
     } else {
         // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
@@ -216,19 +214,22 @@ if (isset($_POST['kopieren'])) {
                 if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0) {
                     $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
                 }
+                else{
+                    header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=nosuccess"); 
+                }
             }
         }
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?s=success");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=success");
         exit();
     }
 }
 
 // Fehlermeldung zu Fragebogen kopieren
-if (!isset($_GET['s'])) {
+if (!isset($_GET['fragebKopieren'])) {
     //Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $fragebogenKopieren = $_GET['s'];
+    $fragebogenKopieren = $_GET['fragebKopieren'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($fragebogenKopieren == "wrong") {
         echo "<p class='error'>Bitte wählen Sie verschiedene Fragebögen aus!</p>";
@@ -246,22 +247,22 @@ if (isset($_POST['freigeben'])) {
     $kursname = $_POST['kurse'];
     // Prüfen, ob der Fragebogen bereits für den Kurs freigegeben wurde.
     if ($fragebogenObj->checkObFreischaltungExistiert($kuerzel, $kursname) == true) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=nosuccess");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebFreigeben=nosuccess");
         exit();
     } else {
         // Wenn nicht, dann wird der Fragebogen für den Kurs freigegeben.
         $fragebogenObj->setFreischaltung($kuerzel, $kursname);
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?t=success");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebFreigeben=success");
         exit();
     }
 }
 
 // Fehlermeldung zu Fragebogen freigeben
-if (!isset($_GET['t'])) {
+if (!isset($_GET['fragebFreigeben'])) {
     // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
 } else {
     // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $fragebogenFreigeben = $_GET['t'];
+    $fragebogenFreigeben = $_GET['fragebFreigeben'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
     if ($fragebogenFreigeben == "nosuccess") {
         echo "<p class='error'>Diese Freigabe existiert bereits!</p>";
