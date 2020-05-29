@@ -17,15 +17,12 @@ if (isset($_SESSION['benutzername']) == false) {
 }
 
 // Wenn kein "kürzel" weitergeben wird, leitet es den Nutzer zurück auf die "indexFragebogen.php" Seite.
-if (!isset($_GET['kuerzel'])){
+if (!isset($_SESSION['kuerzel'])){
     header("Location: ../DB2__NK_PHP/indexFragebogen.php");
     exit;
 }
 
 $fragebogenObj = new Fragebogen();
-
-// Das übergebene "kuerzel" wird hier in der Variable gespeichert.
-$kuerzel = $_GET['kuerzel'];
 
 ?>
 <!doctype HTML>
@@ -50,7 +47,7 @@ $kuerzel = $_GET['kuerzel'];
         <select name='fragen'>
 
         <?php
-        $fragenArray = $fragebogenObj->getFragenVonFragebogen($kuerzel);
+        $fragenArray = $fragebogenObj->getFragenVonFragebogen($_SESSION['kuerzel']);
             
         $i = 0;
         while($i < count($fragenArray)){
@@ -62,7 +59,7 @@ $kuerzel = $_GET['kuerzel'];
         ?>
         </select>
 
-        <input type="submit" name="frageLoeschen" value="Frage löschen" <?php if(($fragebogenObj->checkObFragebogenInBefragung($kuerzel) == true) or (count($fragenArray) == null)) echo $disabled='disabled';?> />
+        <input type="submit" name="frageLoeschen" value="Frage löschen" <?php if(($fragebogenObj->checkObFragebogenInBefragung($_SESSION['kuerzel']) == true) or (count($fragenArray) == null)) echo $disabled='disabled';?> />
         <br>
         <h5>Wenn der Button ausgegraut ist, befindet sich der Fragebogen in Bearbeitung durch die Studenten.</h5>
     </form>
@@ -84,7 +81,7 @@ if (isset($_POST['frageLoeschen'])) {
     $fragenummer = $_POST["fragen"];
     // Fragen die ausgewählt werden können, können immer gelöscht werden.
     $fragebogenObj->deleteFrage($fragenummer);
-    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageLoeschen=success&kuerzel=$kuerzel");
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageLoeschen=success");
     exit();
 }
   
@@ -106,18 +103,18 @@ if (isset($_POST['frageHinzufuegen'])) {
     $inhaltFrage = $_POST["inhaltFrage"];
     // Prüfen, ob das Textfeld leer ist.
     if (empty($inhaltFrage)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=empty&kuerzel=$kuerzel");
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=empty");
         exit();
     }
     // Prüfen, ob die Frage im Fragebogen schon existiert.
-    elseif ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $kuerzel)) {
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=nosuccess&kuerzel=$kuerzel");
+    elseif ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $_SESSION['kuerzel'])) {
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=nosuccess");
         exit();
     } 
     else {
         // Die Frage wird dem Fragebogen hinzugefügt.
-        $fragebogenObj->setFrage($inhaltFrage, $kuerzel);
-        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=success&kuerzel=$kuerzel");
+        $fragebogenObj->setFrage($inhaltFrage, $_SESSION['kuerzel']);
+        header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?frageHinzufuegen=success");
         exit();
     }
 }
