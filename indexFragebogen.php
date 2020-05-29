@@ -18,6 +18,9 @@ if (!isset($_SESSION['benutzername'])) {
     exit();
 }
 
+unset($_SESSION['kuerzel']);
+unset($_SESSION['anzahlfragen']);
+
 $fragebogenObj = new Fragebogen();
 $kurs = new Kurs();
 ?>
@@ -137,7 +140,11 @@ if (isset($_POST['fragebogenAnlegen'])) {
         // und die Variabelen "kuerzel" und "anzahlFragen" übergeben.
         $fragebogenObj->setFragebogen($titelFragebogen, $_SESSION['benutzername']);
         $kuerzel = $fragebogenObj->getKuerzelVonFragebogen($titelFragebogen);
-        header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php?kuerzel=$kuerzel&anzahlFragen=$anzahlFragen");
+        // Die Anzahl an Fragen und das Kuerzel des neu erstellten Fragebogens werden in die Sessionvariablen gespeichert.
+        $_SESSION['anzahlFragen'] = $anzahlFragen;
+        $_SESSION['kuerzel'] = $kuerzel;
+        // Der Benutzer wird auf die Seite "indexFragenHinzufuegen" weitergeleitet.
+        header("Location: ../DB2__NK_PHP/indexFragenHinzufuegen.php");
         exit();
     }
 }
@@ -163,8 +170,10 @@ if (!isset($_GET['fragebAnlegen'])) {
 if (isset($_POST['fragenLoeschenHinzufuegen'])) {
     // Die Auswahl im Drop-Down Menü wird in einer Variable gespeichert.
     $kuerzel = $_POST['fragebogenBearbeiten'];
+    // Das Kuerzel des ausgewählten Fragebogens wird in die Sessionvariablen gespeichert.
+    $_SESSION['kuerzel'] = $kuerzel;
     // Die Seite "indexFragebogenBearbeiten" wird aufgerufen und die Variable mitgegeben.
-    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php?kuerzel=$kuerzel");
+    header("Location: ../DB2__NK_PHP/indexFragebogenBearbeiten.php");
 }
 
 //Fragebogen Löschen
@@ -202,7 +211,7 @@ if (isset($_POST['kopieren'])) {
     $fragebogen1 = $_POST['fragebogenKopieren1'];
     $fragebogen2 = $_POST['fragebogenKopieren2'];
     if ($fragebogen1 == $fragebogen2) {
-        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=wrong");
+        header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=nosucess");
         exit();
     } else {
         // Die Fragen des ausgewählten Fragebogens, werden in ein mehrdimensionales Array gespeichert.
@@ -214,9 +223,6 @@ if (isset($_POST['kopieren'])) {
                 // Es ist wird überprüft, ob die Frage schon im Fragebogen existiert, wenn nicht wird sie hinzugefügt.
                 if ($fragebogenObj->checkObFrageExistiert($inhaltFrage, $fragebogen2) == 0) {
                     $fragebogenObj->setFrage($inhaltFrage, $fragebogen2);
-                }
-                else{
-                    header("Location: ../DB2__NK_PHP/indexFragebogen.php?fragebKopieren=nosuccess"); 
                 }
             }
         }
@@ -232,10 +238,8 @@ if (!isset($_GET['fragebKopieren'])) {
     //Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
     $fragebogenKopieren = $_GET['fragebKopieren'];
     // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
-    if ($fragebogenKopieren == "wrong") {
+    if ($fragebogenKopieren == "nosucess") {
         echo "<p class='error'>Bitte wählen Sie verschiedene Fragebögen aus!</p>";
-    } elseif ($fragebogenKopieren == "nosuccess") {
-        echo "<p class='error'>Diese Frage existiert bereits!</p>";
     } elseif ($fragebogenKopieren == "success") {
         echo "<p class='success'>Sie haben den Fragebogen erfolgreich kopiert!</p>";
     }
