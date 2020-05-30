@@ -8,11 +8,12 @@
 // - setFragebogen() --> Fügt einen Fragebogen in die DB ein.
 // - getKuerzelVonFragebogen() --> Gibt das Kuerzel von einem Fragebogen zurück.
 // - getFragebogenVonBenutzer() --> Gibt ein Array mit Fragebögen des ausgewählten Benutzers zurück.
+// - checkObFragebogenInBefragung() --> Gibt zurück, ob der Fragebogen bereits Teil einer Umfrage ist.
 // - deleteFragebogen() --> Löscht den ausgewählten Fragebogen in der DB. 
 // - checkObFrageExistiert() --> Gibt zurück, ob der Inhalt der Frage bereits vergeben ist.
 // - setFrage() --> Fügt eine Frage in die DB ein.
 // - getFragenVonFragebogen() --> Gibt ein Array mit Fragen des ausgewählten Fragebogens zurück.
-// - deleteFrage() --> Löscht doe ausgewählte Frage in der DB. 
+// - deleteFrage() --> Löscht die ausgewählte Frage in der DB. 
 // - checkObFreischaltungExistiert() --> Gibt zurück, ob der Fragebogen bereits dem Kurs freigegeben ist.
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
 
@@ -35,7 +36,7 @@ class Fragebogen extends Dbh {
     
     public function checkObFragebogenExistiert($titelFragebogen) {
         try {
-            $sql = "SELECT * from fragebogen Where Titel = ?";
+            $sql = "SELECT Titel from fragebogen Where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$titelFragebogen]);
             $fragebogenExistiert = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -83,6 +84,19 @@ class Fragebogen extends Dbh {
         }
     }
 
+    public function checkObFragebogenInBefragung($kuerzelFragebogen) {
+        try {
+            $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kuerzelFragebogen]);
+            $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $fragebogenInBearbeitung;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+            exit();
+        }
+    }
+
     public function deleteFragebogen($kuerzel){
         try{
             $sql = "DELETE FROM fragebogen WHERE Kuerzel = ?";
@@ -120,7 +134,7 @@ class Fragebogen extends Dbh {
     
     public function getFragenVonFragebogen($kuerzel){
         try{
-            $sql = "SELECT fra.InhaltFrage FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
+            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -144,7 +158,7 @@ class Fragebogen extends Dbh {
 
     public function checkObFreischaltungExistiert($kuerzel, $kursname){
         try {
-            $sql = "SELECT * from freischalten Where Kuerzel = ? and Kursname = ?";
+            $sql = "SELECT Kuerzel from freischalten Where Kuerzel = ? and Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel, $kursname]);
             $freigabe = $stmt->fetch(PDO::FETCH_ASSOC);
