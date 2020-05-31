@@ -1,38 +1,35 @@
 <?php
 //Dana Gessler 11.05.2020
-// Klasse zur Ergebnisauswertung
-//Diese Klasse fragt die benötigten Werte zur Auswertung der Fragebögen aus der Datenbank ab. 
 
+//______________________KLASSENBESCHREIBUNG______________________
+//Diese Klasse fragt die benötigten Werte zur Auswertung der Fragebögen aus der Datenbank ab. 
+// getKommentareStmt() --> fragt alle abgegebenen Kommentare aus der Tabelle "bearbeitet" je Fragebogen je Kurs ab
+// getAvgAnswerStmt() --> durchschnittliche Antworten je Fragebogen, je Frage, je Kurs abfragen
+// getInhaltFrage() -->  Funktion zur Abfrage des Frageinhalts anhand des Kürzels
+// getMinAnswerStmt() --> minimale Antworten je Fragebogen, je Frage, je Kurs abfragen
+// getMaxAnswerStmt() --> maximale Antworten je Fragebogen, je Frage, je Kurs abfragen
+// getStandDevArrayStmt() --> Selektion der Werte zur späteren Berechnung der Standardabweichung
 
 class Ergebnis extends dbh
 {
-
-
-    // Kommentare je Fragebogen & Kurs abfragen, Ausgabe erfolgt kursweise
     protected function getKommentareStmt($Fragebogen, $Kurs)
-    { {
-            try {
-                $sql = "SELECT bear.Kommentar 
+    {
+        try {
+            $sql = "SELECT bear.Kommentar 
                 FROM        bearbeitet bear,    
                             student s                
                 WHERE   bear.Matrikelnummer = s.Matrikelnummer  
                 AND bear.Abgabestatus = 1
                 AND bear.Kuerzel = ?
                 AND s.kursname = ?";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                return $kommentarArray;
-            } catch (PDOException $e) {
-                //    header("Location: ../DB2__NK_PHP/indexFehler.php");
-                echo $e;
-            }
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $kommentarArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $kommentarArray;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
-
-
-    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der durchnittlichen Antwort. 
 
     protected function getAvgAnswerStmt($Fragebogen, $Kurs)
     {
@@ -58,12 +55,10 @@ class Ergebnis extends dbh
             $avgAnswers = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $avgAnswers;
         } catch (PDOException $e) {
-            // header("Location: ../DB2__NK_PHP/indexFehler.php");
-            echo $e;
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    //Funktion zur Abfrage des Frageinhalts anhand des Kürzels
     protected function getInhaltFrage($Fragebogen)
     {
         try {
@@ -76,12 +71,11 @@ class Ergebnis extends dbh
             $fragenummerInhaltFrage = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $fragenummerInhaltFrage;
         } catch (PDOException $e) {
-            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
-            echo $e;
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der minimalen Antworten. 
+
     protected function getMinAnswerStmt($Fragebogen, $Kurs)
     {
         try {
@@ -106,16 +100,14 @@ class Ergebnis extends dbh
             $minAnswer = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $minAnswer;
         } catch (PDOException $e) {
-            //    header("Location: ../DB2__NK_PHP/indexFehler.php");
-            echo $e;
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    //Antworten je Fragebogen & Kurs abfragen, Rückgabe der maximalen Antworten. 
     protected function getMaxAnswerStmt($Fragebogen, $Kurs)
-    { {
-            try {
-                $sql = "SELECT bean.Fragenummer, max(bean.Antwort) 
+    {
+        try {
+            $sql = "SELECT bean.Fragenummer, max(bean.Antwort) 
                 FROM        bearbeitet bear,    
                             beantwortet bean, 
                             student s,
@@ -131,19 +123,15 @@ class Ergebnis extends dbh
                 AND bear.Kuerzel = ?
                 AND s.Kursname = ?
                 GROUP BY bean.Fragenummer";
-                $stmt = $this->connect()->prepare($sql);
-                $stmt->execute([$Fragebogen, $Kurs]);
-                $maxAnswer = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $maxAnswer;
-            } catch (PDOException $e) {
-                //    header("Location: ../DB2__NK_PHP/indexFehler.php");
-                echo $e;
-            }
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Fragebogen, $Kurs]);
+            $maxAnswer = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $maxAnswer;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 
-    //   NOT TESTED YET
-    //Antworten je Fragebogen & Kurs abfragen, Abfrage der Werte für die Berechnung der Standardabweichung der Antworten. 
     protected function getStandDevArrayStmt($Fragebogen, $Kurs)
     {
         try {
@@ -164,12 +152,11 @@ class Ergebnis extends dbh
             AND s.Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$Fragebogen, $Kurs]);
-            //Array für die Werte die zur Berechnung der Standardabweichung gebraucht werden
+            //Array für die Werte, die zur Berechnung der Standardabweichung gebraucht werden
             $valueForStandDev = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $valueForStandDev;
         } catch (PDOException $e) {
-            // header("Location: ../DB2__NK_PHP/indexFehler.php");
-            echo $e;
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
         }
     }
 }

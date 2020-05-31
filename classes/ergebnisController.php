@@ -1,26 +1,27 @@
 <?php
 // Dana Geßler 11.05.2020
+//______________________KLASSENBESCHREIBUNG______________________
+// Das Ziel dieser Klasse ist die Verarbeitung der Datenbankwerte zur Speicherung der Auswertungsergebnisse in einem Array mit Darstellung
+// showKommentare() --> Befüllung des Kommentarstrings. Iteration durch den Kommentararray aus der Datenbank, nach jedem Kommentar Leerzeile.
+//                      Wenn keine Kommentare vorhanden, entsprechende Ausgabe
+// structureBerechnungenJeFragejeKurs() --> Strukturierung von avg, min, max, standDev in einem Ergebnis-Array. 
+// displayValues() --> Zur Darstellung der Antworten je Frage. Ausgabe über Frageninhalt, da Fragekürzel nicht aussagekräftig ist.
+// calculateStandDev() --> Funktion zur Berechnung der Standardabweichung
+
+
 class ErgebnisView extends Ergebnis
 {
-
-
-
-  //Aufruf getKommentareStmt
   function showKommentare($Fragebogen, $Kurs)
   {
     $kommentarString = "";
-    //  $kommentarArray = $this->kommentarArray;
     try {
       $alleKommentare =  $this->getKommentareStmt($Fragebogen, $Kurs);
-      //    $alleKommentare = $kommentarArray; 
 
       if ($alleKommentare == null) {
         $kommentarString = "Kein Student hat einen Kommentar abgegeben!";
-      } elseif ($alleKommentare !== null) {
-        $kommentarString = '';
+      } elseif ($alleKommentare != null) {
         foreach ($alleKommentare as $kommentar) {
-          $kommentarString = $kommentarString . $kommentar['Kommentar'];
-          if ($kommentarString != '') $kommentarString = $kommentarString . "<br><br>";
+          $kommentarString = $kommentarString . $kommentar['Kommentar'] . "<br><br>";
         }
       }
       return $kommentarString;
@@ -39,48 +40,35 @@ class ErgebnisView extends Ergebnis
 
       //Durchschnittsantworten
       $avgAnswers = $this->getAvgAnswerStmt($Fragebogen, $Kurs);
-      if ($avgAnswers == null) {
-        // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-      } elseif ($avgAnswers !== null) {
-        foreach ($avgAnswers as $row) {
-          if ($auswertung == null) {
-            $auswertung[$row['Fragenummer']] = array('avgAnswer' => $row["avg(bean.Antwort)"]);
-          } else {
-            $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
-          }
-        }
+      foreach ($avgAnswers as $row) {
+        $auswertung[$row['Fragenummer']]['avgAnswer'] = $row["avg(bean.Antwort)"];
       }
+
 
       //Minimale Antwort
       $minAnswer =   $this->getMinAnswerStmt($Fragebogen, $Kurs);
-      if ($minAnswer == null) {
-        // header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-      } elseif ($minAnswer !== null) {
-        foreach ($minAnswer as $row) {
-          $auswertung[$row['Fragenummer']]['minAnswer'] = $row["min(bean.Antwort)"];
-        }
+      foreach ($minAnswer as $row) {
+        $auswertung[$row['Fragenummer']]['minAnswer'] = $row["min(bean.Antwort)"];
       }
+
 
       //Maximale Antwort
       $maxAnswer = $this->getMaxAnswerStmt($Fragebogen, $Kurs);
-      if ($maxAnswer == null) {
-        //  header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-      } elseif ($maxAnswer !== null) {
-        foreach ($maxAnswer as $row) {
-          $auswertung[$row['Fragenummer']]['maxAnswer'] = $row["max(bean.Antwort)"];
-        }
+      foreach ($maxAnswer as $row) {
+        $auswertung[$row['Fragenummer']]['maxAnswer'] = $row["max(bean.Antwort)"];
       }
+
 
       //Abspeicherung der Daten für die Berechnung der Standardabweichungen in multidim. Array
       $standDevArray = $this->getStandDevArrayStmt($Fragebogen, $Kurs);
 
       if ($standDevArray == null) {
-        //  header("Location: ../DB2__NK_PHP/indexErgebnis.php?fehler=noValues");
-      } elseif ($standDevArray !== null) {
+        // Do nothing
+      } elseif ($standDevArray != null) {
         $fragenummern = array();
         $antworten = array(array());
 
-        //Fragenummern suchen
+        //Distinct Fragenummern suchen, da es zu einer Fragenummer meherere Antworten geben kann
         foreach ($standDevArray as $row) {
           if (!in_array($row['Fragenummer'], $fragenummern)) {
             array_push($fragenummern, $row['Fragenummer']);
@@ -100,7 +88,7 @@ class ErgebnisView extends Ergebnis
         }
 
 
-        //Standardabweichung pro Fragenummer berechnen (+Ausgabe)
+        //Standardabweichung pro Fragenummer berechnen + Speicherung is $auswertung-Array
         for ($i = 0; $i < count($antworten); $i++) {
 
           $standDev = $this->calculateStandDev($antworten[$i]);
@@ -124,15 +112,16 @@ class ErgebnisView extends Ergebnis
   {
     try {
       $fragenummerInhaltFrage = $this->getInhaltFrage($fragebogen);
-      //var_dump($fragenummerInhaltFrage);
       $fragenindex = 0;
       for ($i = 0; $i < count($fragenummerInhaltFrage); $i++) {
 
-
+        // Ausgabe von Frageinhalt, da Fragenummer (in DB Kürzel nur zur internen Verarbeitung) nicht aussagekräftig ist und der Nutzer den Inhalt der Frage anhand des Kürzels nicht sofort erkennen kann
         echo $fragenummerInhaltFrage[$i]['InhaltFrage'] . ": ";
-        //echo " - ".$fragenummerInhaltFrage[$i]['Fragenummer']." - ";
 
         //If statement: existiert eine Antwort zu der Frage?
+        //wenn ja, entsprechende Ausgabe aus Ergebnisarray
+        //nur bis dahin, wo noch Fragen vorhanden sind
+
         if ($fragenindex < count(array_keys($auswertung))) {
           echo $auswertung[$fragenummerInhaltFrage[$i]['Fragenummer']][$type];
           $fragenindex++;
@@ -149,6 +138,11 @@ class ErgebnisView extends Ergebnis
   }
 
   //Funktion zur Berechnung der Standardabweichung
+  //Funktion zur Berechnung der Standardabweichung (Standardabweichung = Streuungsmaß. --> Umfang der Abweichung der Daten vom Durchschnittswert)
+  // 1. Durchschnitt berechnen
+  // 2. Differenz von jedem Wert zum Durchschitt berechnen & Ergebnis quadrieren, addieren in $abweichung
+  // 3. quadrierte Differenz durch Anzahl Ergebnisse dividieren und davon Wurzel ziehen
+
   function calculateStandDev($eingabeWerte)
   {
     try {

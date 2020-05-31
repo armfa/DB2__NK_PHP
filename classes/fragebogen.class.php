@@ -18,14 +18,16 @@
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
 
 
-class Fragebogen extends Dbh {
+class Fragebogen extends Dbh
+{
 
-    public function showFragebogenVonBenutzer($benutzername){
+    public function showFragebogenVonBenutzer($benutzername)
+    {
         try {
             $titelArray = $this->getFragebogenVonBenutzer($benutzername);
             $i = 0;
-            while($i < count($titelArray)){
-                echo "<option value='".$titelArray[$i]['Kuerzel']."'>".$titelArray[$i]['Titel']."</option>";
+            while ($i < count($titelArray)) {
+                echo "<option value='" . $titelArray[$i]['Kuerzel'] . "'>" . $titelArray[$i]['Titel'] . "</option>";
                 $i++;
             }
         } catch (PDOException $e) {
@@ -33,8 +35,9 @@ class Fragebogen extends Dbh {
             exit();
         }
     }
-    
-    public function checkObFragebogenExistiert($titelFragebogen) {
+
+    public function checkObFragebogenExistiert($titelFragebogen)
+    {
         try {
             $sql = "SELECT Titel from fragebogen Where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -46,9 +49,10 @@ class Fragebogen extends Dbh {
             exit();
         }
     }
-    
-    public function setFragebogen($fragebogen, $benutzername){
-        try{
+
+    public function setFragebogen($fragebogen, $benutzername)
+    {
+        try {
             $sql = "INSERT INTO fragebogen (Titel, Benutzername) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fragebogen, $benutzername]);
@@ -58,8 +62,9 @@ class Fragebogen extends Dbh {
         }
     }
 
-    public function getKuerzelVonFragebogen($titelFragebogen){
-        try{
+    public function getKuerzelVonFragebogen($titelFragebogen)
+    {
+        try {
             $sql = "SELECT Kuerzel FROM fragebogen where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$titelFragebogen]);
@@ -70,9 +75,10 @@ class Fragebogen extends Dbh {
             exit();
         }
     }
-    
-    public function getFragebogenVonBenutzer($benutzername){
-        try{
+
+    public function getFragebogenVonBenutzer($benutzername)
+    {
+        try {
             $sql = "SELECT fr.* FROM fragebogen fr, benutzer b WHERE fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$benutzername]);
@@ -84,31 +90,21 @@ class Fragebogen extends Dbh {
         }
     }
 
-    public function checkObFragebogenInBefragung($kuerzelFragebogen) {
-        try {
-            $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$kuerzelFragebogen]);
-            $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $fragebogenInBearbeitung;
-        } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-            exit();
-        }
-    }
 
-    public function deleteFragebogen($kuerzel){
-        try{
+    public function deleteFragebogen($kuerzel)
+    {
+        try {
             $sql = "DELETE FROM fragebogen WHERE Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
             exit();
-        }        
+        }
     }
 
-    public function checkObFrageExistiert($inhaltFrage, $kuerzel){
+    public function checkObFrageExistiert($inhaltFrage, $kuerzel)
+    {
         try {
             $sql = "SELECT Fragenummer from fragen Where InhaltFrage = ? and Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -121,8 +117,9 @@ class Fragebogen extends Dbh {
         }
     }
 
-    public function setFrage($inhaltFrage, $kuerzel){
-        try{
+    public function setFrage($inhaltFrage, $kuerzel)
+    {
+        try {
             $sql = "INSERT INTO fragen (InhaltFrage, Kuerzel) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$inhaltFrage, $kuerzel]);
@@ -131,10 +128,11 @@ class Fragebogen extends Dbh {
             exit();
         }
     }
-    
-    public function getFragenVonFragebogen($kuerzel){
-        try{
-            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
+
+    public function getFragenVonFragebogen($kuerzel)
+    {
+        try {
+            $sql = "SELECT fra.InhaltFrage FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -145,8 +143,9 @@ class Fragebogen extends Dbh {
         }
     }
 
-    public function deleteFrage($fragenummer){
-        try{
+    public function deleteFrage($fragenummer)
+    {
+        try {
             $sql = "DELETE FROM fragen WHERE Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$fragenummer]);
@@ -156,7 +155,8 @@ class Fragebogen extends Dbh {
         }
     }
 
-    public function checkObFreischaltungExistiert($kuerzel, $kursname){
+    public function checkObFreischaltungExistiert($kuerzel, $kursname)
+    {
         try {
             $sql = "SELECT Kuerzel from freischalten Where Kuerzel = ? and Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -168,9 +168,10 @@ class Fragebogen extends Dbh {
             exit();
         }
     }
-    
-    public function setFreischaltung($kuerzel, $kursname){
-        try{
+
+    public function setFreischaltung($kuerzel, $kursname)
+    {
+        try {
             $sql = "INSERT INTO freischalten (Kuerzel, Kursname) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel, $kursname]);

@@ -1,6 +1,6 @@
 <?php
 
-//Dana Geßler + Fabrice Armbruster
+//Fabrice Armbruster
 
 //_______________________BESCHREIBUNG______________________
 //Diese Seite benhaltet alle Login-Funktionalitäten. 
@@ -98,7 +98,7 @@ if (isset($_POST['benutzerLogin'])) {
             header("Location: ../DB2__NK_PHP/indexLogin.php?login=6username");
             exit();
         }
-        //Prüfen, ob Passwort aus mindestens 8 und höchsetns 64 Zeichen besteht.
+        //Prüfen, ob Passwort aus mindestens 8 und höchstens 64 Zeichen besteht.
         if (strlen($passwort) < 8 or strlen($passwort) > 64) {
             header("Location: ../DB2__NK_PHP/indexLogin.php?login=pwdreqirementsnotmeet");
             exit();
