@@ -77,34 +77,40 @@ $kurs = new Kurs();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (isset($_POST["fragebogenAuswerten"])) {
+                if (isset($Kurs) and isset($Fragebogen)) {
                 $Kurs = htmlspecialchars(stripslashes(trim($_POST['auswertungKurs'])));
                 $Fragebogen = htmlspecialchars(stripslashes(trim($_POST['fragebogen'])));
 
-                $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-                $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
-                echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
-                echo "<h2>Ergebnisse: </h2>";
-                echo "<h3>Kommentare:</h3>" . $Kommentare;
+               
 
-                //durchschnittliche Antworten ausgeben
-                echo "<h3>Durchschnittliche Antwort:</h3>";
+                    $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                    $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                    echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
+                    echo "<h2>Ergebnisse: </h2>";
+                    echo "<h3>Kommentare:</h3>" . $Kommentare;
 
-                $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
+                    //durchschnittliche Antworten ausgeben
+                    echo "<h3>Durchschnittliche Antwort:</h3>";
 
-                //minimale Antworten ausgeben
-                echo "<h3>Minimale Antwort:</h3>";
+                    $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
 
-                $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
+                    //minimale Antworten ausgeben
+                    echo "<h3>Minimale Antwort:</h3>";
 
-                //maximale Antworten ausgeben
-                echo "<h3>Maximale Antwort:</h3>";
+                    $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
 
-                $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+                    //maximale Antworten ausgeben
+                    echo "<h3>Maximale Antwort:</h3>";
 
-                //Standardabweichung ausgeben
-                echo "<h3>Standardabweichung:</h3>";
+                    $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
 
-                $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+                    //Standardabweichung ausgeben
+                    echo "<h3>Standardabweichung:</h3>";
+
+                    $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+                } else {
+                    echo "Kurs und Fragebögen müssen zum jeweiligen Nutzer existieren und ausgewählt werden, um eine Auswertung vorzunehmen!";
+                }
             }
         }
         ?>
