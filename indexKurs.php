@@ -68,7 +68,7 @@ if (isset($_SESSION['benutzername']) == false) {
 <?php
 //Kurs anlegen
 if (isset($_POST['kursAnlegen'])) {
-    $kursname = $_POST['Kurs'];
+    $kursname = htmlspecialchars($_POST['Kurs']);
     //Prüfen, ob Feld "Kursname" ist leer
     if (empty($kursname)) {
         header("Location: ../DB2__NK_PHP/indexKurs.php?k=empty");
@@ -95,8 +95,8 @@ if (isset($_POST['kursAnlegen'])) {
 //Student anlegen
 if (isset($_POST['studentAnlegen'])) {
     $kursname = $_POST['kurses'];
-    $matrikelnummer = $_POST['matrikelnummer'];
-    $studentenname = $_POST['studentenname'];
+    $matrikelnummer = htmlspecialchars($_POST['matrikelnummer']);
+    $studentenname = htmlspecialchars($_POST['studentenname']);
     //Prüfen, ob alle Felder ausgefüllt worden sind
     if (empty($kursname) || empty($matrikelnummer) || empty($studentenname)) {
         header("Location: ../DB2__NK_PHP/indexKurs.php?s=empty");

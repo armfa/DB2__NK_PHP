@@ -67,7 +67,7 @@ if (isset($_POST['vorherigeFrage'])) {
     //Check, ob es vorletzte Frage ist 
     if ($_SESSION["aktuelleSeite"] == ($_SESSION["anzahlSeiten"] - 1)) {
         //Falls ja, wird der Kommentar in DB gespeichert oder geupdated
-        $kommentar = $_POST['kommentar'];
+        $kommentar = htmlspecialchars($_POST['kommentar']);
         $befragungC->createOrUpdateKommentarStmt($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], $kommentar);
     }
     //Check, ob Antwort abgegeben wurde
@@ -83,7 +83,7 @@ if (isset($_POST['vorherigeFrage'])) {
 
 //Kommentar in db speichern und Fragebogen als abgeschlossen markieren
 if (isset($_POST['fragebogenFertig'])) {
-    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 1, $_POST['kommentar']);
+    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 1, htmlspecialchars($_POST['kommentar']));
 }
 
 //Abgegebene Antworten aus DB laden

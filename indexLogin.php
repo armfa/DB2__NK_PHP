@@ -67,9 +67,9 @@ unset($_SESSION['matrikelnummer']);
 <?php
 $userObjekt = new Benutzer();
 if (isset($_POST['benutzerLogin'])) {
-
-    $benutzername = $_POST['Benutzername'];
-    $passwort = $_POST['Passwort'];
+    //htmlspecialchars gegen Cross-Site-Scripting 
+    $benutzername = htmlspecialchars($_POST['Benutzername']);
+    $passwort = htmlspecialchars($_POST['Passwort']);
     $hashedpwd = password_hash($passwort, PASSWORD_DEFAULT); //Der Hash hat nun eine Länge von 60 Zeichen. 
 
     //Prüfen, ob Feld Benutzername leer ist
