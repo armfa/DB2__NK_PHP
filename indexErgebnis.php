@@ -36,7 +36,7 @@ $kurs = new Kurs();
         </ul>
     </header>
 
-    <h1>Ergbnisdarstellung</h1>
+    <h1>Ergebnisdarstellung</h1>
 
     <h3>Bitte wählen Sie, wie Sie auswerten möchten!</h3>
 
@@ -53,7 +53,7 @@ $kurs = new Kurs();
             }
             ?>
         </select>
-        </select></br>
+        </br>
         <label>Welchen Fragebogen möchten Sie auswerten?</label>
 
         <form action="" method="POST">
@@ -68,63 +68,47 @@ $kurs = new Kurs();
             <input type="submit" name="fragebogenAuswerten" value="Fragebogen auswerten" />
         </form>
 
-</body>
-
-<?php
-// Fehlermeldung zu Fragebogen freigeben
-if (!isset($_GET['fehler'])) {
-    // Falls nicht, wird nichts gemacht und das Skript abgebrochen. 
-} else {
-    // Falls ein GET existiert, wird nach der Zuordnung ausgewertet.
-    $fehler = $_GET['fehler'];
-    // Je nachdem, was für ein Fehler aufgetreten ist oder ob der Vorgang erfolgreich war, wird eine Meldung an der Oberfläche ausgegeben.
-    if ($fehler == "noComment") {
-        echo "<p class='error'>Es existieren keine Kommentare!</p>";
-        exit();
-    } elseif ($fehler == "noValues") {
-        echo "<p class='error'>Es existieren keine beantworteten Fragebögen zur Auswertung!</p>";
-        exit();
-    }
-}
-?>
-<?php
-$ergebnisVObject = new ErgebnisView();
 
 
-if (isset($_POST["fragebogenAuswerten"])) {
-    $Kurs = $_POST['auswertungKurs'];
-    $Fragebogen = $_POST['fragebogen'];
+        <?php
 
-    $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-    $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
-    echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
-    echo "<h2>Ergebnisse: </h2>";
-    echo "<h3>Kommentare:</h3>" . $Kommentare;
+        $ergebnisVObject = new ErgebnisView();
 
-    //durchschnittliche Antworten ausgeben
-    echo "<h3>Durchschnittliche Antwort:</h3>";
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
+            if (isset($_POST["fragebogenAuswerten"])) {
+                $Kurs = htmlspecialchars(stripslashes(trim($_POST['auswertungKurs'])));
+                $Fragebogen = htmlspecialchars(stripslashes(trim($_POST['fragebogen'])));
 
-    echo "<h3>Minimale Antwort:</h3>";
+                $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
+                echo "<h2>Ergebnisse: </h2>";
+                echo "<h3>Kommentare:</h3>" . $Kommentare;
 
-    $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
+                //durchschnittliche Antworten ausgeben
+                echo "<h3>Durchschnittliche Antwort:</h3>";
 
-    echo "<h3>Maximale Antwort:</h3>";
+                $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
 
-    $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+                //minimale Antworten ausgeben
+                echo "<h3>Minimale Antwort:</h3>";
 
-    echo "<h3>Standardabweichung:</h3>";
+                $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
 
-    $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
-}
+                //maximale Antworten ausgeben
+                echo "<h3>Maximale Antwort:</h3>";
 
-?>
-</select></br>
-</form>
+                $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+
+                //Standardabweichung ausgeben
+                echo "<h3>Standardabweichung:</h3>";
+
+                $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+            }
+        }
+        ?>
 
 </body>
 
 </html>
-
-</body>
