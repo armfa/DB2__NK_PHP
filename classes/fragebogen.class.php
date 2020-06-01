@@ -21,8 +21,7 @@
 class Fragebogen extends Dbh
 {
 
-    public function showFragebogenVonBenutzer($benutzername)
-    {
+    public function showFragebogenVonBenutzer($benutzername){
         try {
             $titelArray = $this->getFragebogenVonBenutzer($benutzername);
             $i = 0;
@@ -36,8 +35,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function checkObFragebogenExistiert($titelFragebogen)
-    {
+    public function checkObFragebogenExistiert($titelFragebogen){
         try {
             $sql = "SELECT Titel from fragebogen Where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -50,8 +48,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function setFragebogen($fragebogen, $benutzername)
-    {
+    public function setFragebogen($fragebogen, $benutzername){
         try {
             $sql = "INSERT INTO fragebogen (Titel, Benutzername) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
@@ -62,8 +59,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function getKuerzelVonFragebogen($titelFragebogen)
-    {
+    public function getKuerzelVonFragebogen($titelFragebogen){
         try {
             $sql = "SELECT Kuerzel FROM fragebogen where Titel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -76,8 +72,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function getFragebogenVonBenutzer($benutzername)
-    {
+    public function getFragebogenVonBenutzer($benutzername){
         try {
             $sql = "SELECT fr.* FROM fragebogen fr, benutzer b WHERE fr.Benutzername = b.Benutzername AND b.Benutzername = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -91,8 +86,7 @@ class Fragebogen extends Dbh
     }
 
 
-    public function deleteFragebogen($kuerzel)
-    {
+    public function deleteFragebogen($kuerzel){
         try {
             $sql = "DELETE FROM fragebogen WHERE Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -103,8 +97,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function checkObFrageExistiert($inhaltFrage, $kuerzel)
-    {
+    public function checkObFrageExistiert($inhaltFrage, $kuerzel){
         try {
             $sql = "SELECT Fragenummer from fragen Where InhaltFrage = ? and Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -117,8 +110,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function setFrage($inhaltFrage, $kuerzel)
-    {
+    public function setFrage($inhaltFrage, $kuerzel){
         try {
             $sql = "INSERT INTO fragen (InhaltFrage, Kuerzel) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
@@ -129,10 +121,9 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function getFragenVonFragebogen($kuerzel)
-    {
+    public function getFragenVonFragebogen($kuerzel){
         try {
-            $sql = "SELECT fra.InhaltFrage FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
+            $sql = "SELECT fra.* FROM fragen fra, fragebogen fr WHERE fra.Kuerzel = fr.Kuerzel and fr.Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel]);
             $fragenArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -143,8 +134,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function deleteFrage($fragenummer)
-    {
+    public function deleteFrage($fragenummer){
         try {
             $sql = "DELETE FROM fragen WHERE Fragenummer = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -155,8 +145,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function checkObFreischaltungExistiert($kuerzel, $kursname)
-    {
+    public function checkObFreischaltungExistiert($kuerzel, $kursname){
         try {
             $sql = "SELECT Kuerzel from freischalten Where Kuerzel = ? and Kursname = ?";
             $stmt = $this->connect()->prepare($sql);
@@ -169,8 +158,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function setFreischaltung($kuerzel, $kursname)
-    {
+    public function setFreischaltung($kuerzel, $kursname){
         try {
             $sql = "INSERT INTO freischalten (Kuerzel, Kursname) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
