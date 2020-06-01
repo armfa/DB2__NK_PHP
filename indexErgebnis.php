@@ -77,7 +77,7 @@ $kurs = new Kurs();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (isset($_POST["fragebogenAuswerten"])) {
-                if (isset($Kurs) and isset($Fragebogen)) {
+                if (isset($_POST['auswertungKurs']) and isset($_POST['fragebogen'])) {
                 $Kurs = htmlspecialchars(stripslashes(trim($_POST['auswertungKurs'])));
                 $Fragebogen = htmlspecialchars(stripslashes(trim($_POST['fragebogen'])));
 
