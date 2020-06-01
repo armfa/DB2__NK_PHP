@@ -83,7 +83,7 @@ if (isset($_POST['vorherigeFrage'])) {
 
 //Kommentar in db speichern und Fragebogen als abgeschlossen markieren
 if (isset($_POST['fragebogenFertig'])) {
-    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 1, htmlspecialchars($_POST['kommentar']));
+    $befragungC->createKommentarFragebogenFertig($_SESSION["kuerzel"], $_SESSION['matrikelnummer'], 1);
 }
 
 //Abgegebene Antworten aus DB laden

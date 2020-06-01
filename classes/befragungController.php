@@ -30,10 +30,10 @@ class BefragungController extends Befragung
     }
 
     //Fragebogen abschließen
-    public function createKommentarFragebogenFertig($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar)
+    public function createKommentarFragebogenFertig($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus)
     {
         //Kommentar auf 1 = Abgegeben setzten
-        $this->setKommentarUpdateStmt($Fragebogenkuerzel, $Matrikelnummer, 1, $kommentar);
+        $this->setKommentarUpdateStmt2($Fragebogenkuerzel, $Matrikelnummer, 1);
         //Weiterleiten auf Fragebogen-Auswahlseite, erfolgreicher Status mitgeben
         header("Location: ../DB2__NK_PHP/indexBefragungVorauswahl.php?f=success");
     }

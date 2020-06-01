@@ -98,6 +98,16 @@ class Befragung extends Dbh{
         }
     }
 
+    public function setKommentarUpdateStmt2($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus){
+        try {
+            $sql = "UPDATE bearbeitet SET Abgabestatus = ? where Kuerzel = ? AND Matrikelnummer = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$Abgabestatus, $Fragebogenkuerzel, $Matrikelnummer]);
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+        }
+    }
+
     public function setKommentarStmt($Fragebogenkuerzel, $Matrikelnummer, $Abgabestatus, $kommentar){
         try {
             $sql = "INSERT INTO bearbeitet (Kuerzel, Matrikelnummer, Abgabestatus, Kommentar) VALUES (?, ?, ?, ?)";
