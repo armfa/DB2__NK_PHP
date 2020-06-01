@@ -84,6 +84,18 @@ class Fragebogen extends Dbh{
         }
     }
 
+    public function checkObFragebogenInBefragung($kuerzelFragebogen){
+        try {
+            $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$kuerzelFragebogen]);
+            $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $fragebogenInBearbeitung;
+        } catch (PDOException $e) {
+            header("Location: ../DB2__NK_PHP/indexFehler.php");
+            exit();
+        }
+    }
 
     public function deleteFragebogen($kuerzel){
         try {
@@ -162,19 +174,6 @@ class Fragebogen extends Dbh{
             $sql = "INSERT INTO freischalten (Kuerzel, Kursname) VALUES (?, ?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$kuerzel, $kursname]);
-        } catch (PDOException $e) {
-            header("Location: ../DB2__NK_PHP/indexFehler.php");
-            exit();
-        }
-    }
-
-    public function checkObFragebogenInBefragung($kuerzelFragebogen){
-        try {
-            $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([$kuerzelFragebogen]);
-            $fragebogenInBearbeitung = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $fragebogenInBearbeitung;
         } catch (PDOException $e) {
             header("Location: ../DB2__NK_PHP/indexFehler.php");
             exit();
