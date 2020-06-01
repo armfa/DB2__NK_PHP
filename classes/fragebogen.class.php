@@ -18,8 +18,7 @@
 // - setFreischaltung() --> Fügt einen Kurs und einen Fragebogen in die Tabelle freischalten in der DB ein.
 
 
-class Fragebogen extends Dbh
-{
+class Fragebogen extends Dbh{
 
     public function showFragebogenVonBenutzer($benutzername){
         try {
@@ -169,7 +168,7 @@ class Fragebogen extends Dbh
         }
     }
 
-    public function checkObFragebogenInBefragung($kuerzelFragebogen) {
+    public function checkObFragebogenInBefragung($kuerzelFragebogen){
         try {
             $sql = "SELECT Kuerzel from bearbeitet Where Kuerzel = ?";
             $stmt = $this->connect()->prepare($sql);
