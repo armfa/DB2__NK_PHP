@@ -20,7 +20,7 @@ if (isset($_SESSION['benutzername']) == false) {
 
 $auswertungsObj = new Fragebogen();
 $kurs = new Kurs();
-
+$ergebnisVObject = new ErgebnisView();
 ?>
 
 
@@ -72,7 +72,7 @@ $kurs = new Kurs();
 
         <?php
 
-        $ergebnisVObject = new ErgebnisView();
+
 
 
 
