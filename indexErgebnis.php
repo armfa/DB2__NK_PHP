@@ -74,42 +74,53 @@ $kurs = new Kurs();
 
         $ergebnisVObject = new ErgebnisView();
 
+
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
 
             if (isset($_POST["fragebogenAuswerten"])) {
                 if (isset($_POST['auswertungKurs']) and isset($_POST['fragebogen'])) {
-                $Kurs = htmlspecialchars(stripslashes(trim($_POST['auswertungKurs'])));
-                $Fragebogen = htmlspecialchars(stripslashes(trim($_POST['fragebogen'])));
 
-               
 
-                    $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
-                    $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
-                    echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
-                    echo "<h2>Ergebnisse: </h2>";
-                    echo "<h3>Kommentare:</h3>" . $Kommentare;
+                    $Kurs = htmlspecialchars(stripslashes(trim($_POST['auswertungKurs'])));
+                    $Fragebogen = htmlspecialchars(stripslashes(trim($_POST['fragebogen'])));
 
-                    //durchschnittliche Antworten ausgeben
-                    echo "<h3>Durchschnittliche Antwort:</h3>";
+                    // Prüfen, ob der Fragebogen bereits für den Kurs freigegeben wurde.
+                    if ($auswertungsObj->checkObFreischaltungExistiert($Fragebogen, $Kurs) == false) {
+                        echo "Der Fragebogen wurde für diesen Kurs noch nicht freigegeben!";
+                        exit();
+                    } elseif ($auswertungsObj->checkObFreischaltungExistiert($Fragebogen, $Kurs) == true) {
 
-                    $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
+                        $Kommentare =  $ergebnisVObject->showKommentare($Fragebogen, $Kurs);
+                        $ergebnisArray =  $ergebnisVObject->structureBerechnungenJeFragejeKurs($Fragebogen, $Kurs);
+                        echo "<p class='success'>Hier sind die Ergebnisse von Kurs " . $Kurs . ": </p>";
+                        echo "<h2>Ergebnisse: </h2>";
+                        echo "<h3>Kommentare:</h3>" . $Kommentare;
 
-                    //minimale Antworten ausgeben
-                    echo "<h3>Minimale Antwort:</h3>";
+                        //durchschnittliche Antworten ausgeben
+                        echo "<h3>Durchschnittliche Antwort:</h3>";
 
-                    $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
+                        $ergebnisVObject->displayValues($ergebnisArray, "avgAnswer", $Fragebogen);
 
-                    //maximale Antworten ausgeben
-                    echo "<h3>Maximale Antwort:</h3>";
+                        //minimale Antworten ausgeben
+                        echo "<h3>Minimale Antwort:</h3>";
 
-                    $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+                        $ergebnisVObject->displayValues($ergebnisArray, "minAnswer", $Fragebogen);
 
-                    //Standardabweichung ausgeben
-                    echo "<h3>Standardabweichung:</h3>";
+                        //maximale Antworten ausgeben
+                        echo "<h3>Maximale Antwort:</h3>";
 
-                    $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
-                } else {
-                    echo "Kurs und Fragebögen müssen zum jeweiligen Nutzer existieren und ausgewählt werden, um eine Auswertung vorzunehmen!";
+                        $ergebnisVObject->displayValues($ergebnisArray, "maxAnswer", $Fragebogen);
+
+                        //Standardabweichung ausgeben
+                        echo "<h3>Standardabweichung:</h3>";
+
+                        $ergebnisVObject->displayValues($ergebnisArray, "standDev", $Fragebogen);
+                    } else {
+                        echo "Kurs und Fragebögen müssen zum jeweiligen Nutzer existieren und ausgewählt werden, um eine Auswertung vorzunehmen!";
+                    }
                 }
             }
         }
